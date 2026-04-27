@@ -33,6 +33,7 @@ export default defineConfig([
         { allowConstantExport: true },
       ],
       'react-compiler/react-compiler': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
     },
     languageOptions: {
       parserOptions: {
