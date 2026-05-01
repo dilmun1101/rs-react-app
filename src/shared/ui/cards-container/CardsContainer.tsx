@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import Button from '../button/Button';
 import type { ReactNode } from 'react';
+import { UI_MESSAGES } from '../../constants/messages';
 
 interface ICardsContainerProps {
   children: ReactNode;
@@ -25,11 +26,11 @@ class CardsContainer extends Component<ICardsContainerProps> {
         <div className="cards">{children}</div>
         <div className="pagination-controls">
           <Button onClick={onPrevClick} disabled={isPrevDisabled}>
-            Previous
+            {UI_MESSAGES.BUTTON_PREV}
           </Button>
 
           <Button onClick={onNextClick} disabled={isNextDisabled}>
-            Next
+            {UI_MESSAGES.BUTTON_NEXT}
           </Button>
         </div>
       </div>

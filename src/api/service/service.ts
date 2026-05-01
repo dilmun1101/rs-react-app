@@ -3,6 +3,11 @@ import { scryfallApi } from '../api';
 interface ScryfallCard {
   id: string;
   name: string;
+  oracle_text: string;
+  image_uris?: {
+    small?: string;
+    normal?: string;
+  };
 }
 
 interface ScryfallListResponse {

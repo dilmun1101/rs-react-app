@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import Input from '../input/Input';
 import Button from '../button/Button';
+import { UI_MESSAGES } from '../../constants/messages';
 
 interface IFormProps extends React.FormHTMLAttributes<HTMLFormElement> {
   onSearch?: (query: string) => void;
@@ -36,7 +37,7 @@ class SearchForm extends Component<IFormProps, IFormState> {
             value={this.state.query}
             onChange={this.handleInputChange}
           />
-          <Button type="submit">Search</Button>
+          <Button type="submit">{UI_MESSAGES.BUTTON_SEARCH}</Button>
         </div>
       </form>
     );
