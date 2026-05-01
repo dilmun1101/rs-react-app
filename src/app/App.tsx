@@ -1,10 +1,10 @@
 import './App.css';
-import SearchForm from '../shared/ui/search-form/SearchForm';
+import MainPage from '../pages/main-page/MainPage';
 
 function App() {
   return (
     <>
-      <SearchForm />
+      <MainPage />
     </>
   );
 }
