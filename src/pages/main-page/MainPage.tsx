@@ -9,19 +9,10 @@ import {
 import { UI_MESSAGES } from '../../shared/constants/messages';
 import Card from '../../shared/ui/card/Card';
 import styles from './main-page.module.scss';
-
-interface ScryfallCard {
-  id: string;
-  name: string;
-  oracle_text: string;
-  image_uris?: {
-    small?: string;
-    normal?: string;
-  };
-}
+import type { CardItem } from '../../shared/constants/types';
 
 interface IMainPageState {
-  items: ScryfallCard[];
+  items: CardItem[];
   isLoading: boolean;
   error: string | null;
   currentPage: number;
@@ -53,8 +44,8 @@ class MainPage extends Component<{}, IMainPageState> {
       const response = await scryfallService.searchCards(query, page);
 
       this.setState({
-        items: response.data.slice(0, 20),
-        hasMore: response.has_more,
+        items: response.items,
+        hasMore: response.hasMore,
         isLoading: false,
       });
     } catch (error) {
@@ -117,8 +108,8 @@ class MainPage extends Component<{}, IMainPageState> {
                   <Card
                     key={item.id}
                     name={item.name}
-                    description={item.oracle_text || UI_MESSAGES.NO_DESCRIPTION}
-                    imageUrl={item.image_uris?.small}
+                    description={item.description}
+                    imageUrl={item.imageUrl}
                   />
                 ))
               ) : (

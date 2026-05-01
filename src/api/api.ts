@@ -4,7 +4,7 @@ import { DEFAULT_ERROR_MESSAGE } from '../shared/constants/messages';
 const SCRYFALL_API = 'https://api.scryfall.com';
 
 export const scryfallApi = {
-  async fetchData(endpoint: string) {
+  async fetchData<T>(endpoint: string): Promise<T> {
     try {
       const response = await fetch(`${SCRYFALL_API}${endpoint}`, {
         method: 'GET',
