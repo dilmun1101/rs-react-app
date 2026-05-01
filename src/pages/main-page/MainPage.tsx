@@ -8,6 +8,7 @@ import {
 } from '../../shared/utils/storage';
 import { UI_MESSAGES } from '../../shared/constants/messages';
 import Card from '../../shared/ui/card/Card';
+import styles from './main-page.module.scss';
 
 interface ScryfallCard {
   id: string;
@@ -52,7 +53,7 @@ class MainPage extends Component<{}, IMainPageState> {
       const response = await scryfallService.searchCards(query, page);
 
       this.setState({
-        items: response.data,
+        items: response.data.slice(0, 20),
         hasMore: response.has_more,
         isLoading: false,
       });
@@ -95,14 +96,14 @@ class MainPage extends Component<{}, IMainPageState> {
     const { items, isLoading, error, currentPage, hasMore } = this.state;
 
     return (
-      <main className="main-page">
-        <div className="top-controls">
+      <main className={styles.mainPage}>
+        <div className={styles.topControls}>
           <SearchForm onSearch={this.handleSearch} />
         </div>
 
-        <div className="content-area">
+        <div className={styles.contentArea}>
           {isLoading && <div className="loader">{UI_MESSAGES.LOADING}</div>}
-          {error && <div className="error-message">Error: {error}</div>}
+          {error && <div className={styles.errorMessage}>Error: {error}</div>}
 
           {!isLoading && !error && (
             <CardsContainer

@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import styles from './card.module.scss';
 
 interface ICardProps {
   name: string;
@@ -11,7 +12,7 @@ class Card extends Component<ICardProps> {
     const { name, description, imageUrl } = this.props;
 
     return (
-      <div className="card">
+      <div className={styles.card}>
         {imageUrl && <img src={imageUrl} alt={name} />}
         <h3>{name}</h3>
         <p>{description}</p>

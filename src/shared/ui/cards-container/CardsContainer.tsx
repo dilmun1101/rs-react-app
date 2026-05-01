@@ -2,6 +2,7 @@ import { Component } from 'react';
 import Button from '../button/Button';
 import type { ReactNode } from 'react';
 import { UI_MESSAGES } from '../../constants/messages';
+import styles from './cards-container.module.scss';
 
 interface ICardsContainerProps {
   children: ReactNode;
@@ -23,7 +24,7 @@ class CardsContainer extends Component<ICardsContainerProps> {
 
     return (
       <div className="results-section">
-        <div className="cards">{children}</div>
+        <div className={styles.cards}>{children}</div>
         <div className="pagination-controls">
           <Button onClick={onPrevClick} disabled={isPrevDisabled}>
             {UI_MESSAGES.BUTTON_PREV}

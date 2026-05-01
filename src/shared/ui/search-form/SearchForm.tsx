@@ -2,6 +2,7 @@ import { Component } from 'react';
 import Input from '../input/Input';
 import Button from '../button/Button';
 import { UI_MESSAGES } from '../../constants/messages';
+import styles from './search-form.module.scss';
 
 interface IFormProps extends React.FormHTMLAttributes<HTMLFormElement> {
   onSearch?: (query: string) => void;
@@ -28,7 +29,7 @@ class SearchForm extends Component<IFormProps, IFormState> {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} className={styles.searchForm}>
         <div>
           <Input
             label="search"
@@ -36,8 +37,12 @@ class SearchForm extends Component<IFormProps, IFormState> {
             type="search"
             value={this.state.query}
             onChange={this.handleInputChange}
+            className={styles.input}
+            hideLabel
           />
-          <Button type="submit">{UI_MESSAGES.BUTTON_SEARCH}</Button>
+          <Button type="submit" className={styles.button}>
+            {UI_MESSAGES.BUTTON_SEARCH}
+          </Button>
         </div>
       </form>
     );
