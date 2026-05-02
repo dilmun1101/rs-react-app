@@ -1,7 +1,7 @@
 const SEARCH_QUERY_KEY = 'searchQuery';
 
 export const getSavedSearchQuery = (): string => {
-  return localStorage.getItem(SEARCH_QUERY_KEY) || '';
+  return localStorage.getItem(SEARCH_QUERY_KEY) ?? '';
 };
 
 export const saveSearchQuery = (query: string): void => {

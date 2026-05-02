@@ -20,8 +20,8 @@ interface IMainPageState {
   hasMore: boolean;
 }
 
-class MainPage extends Component<{}, IMainPageState> {
-  constructor(props: {}) {
+class MainPage extends Component<never, IMainPageState> {
+  constructor(props: never) {
     super(props);
     this.state = {
       items: [],
@@ -34,7 +34,7 @@ class MainPage extends Component<{}, IMainPageState> {
   }
 
   componentDidMount() {
-    this.fetchData(this.state.searchQuery, this.state.currentPage);
+    void this.fetchData(this.state.searchQuery, this.state.currentPage);
   }
 
   fetchData = async (query: string, page: number) => {
@@ -61,27 +61,27 @@ class MainPage extends Component<{}, IMainPageState> {
     saveSearchQuery(searchText);
 
     this.setState({ searchQuery: searchText, currentPage: 1 }, () => {
-      this.fetchData(searchText, 1);
+      void this.fetchData(searchText, 1);
     });
   };
 
-  handleNextPage = () => {
-    if (this.state.hasMore) {
-      const nextPage = this.state.currentPage + 1;
-      this.setState({ currentPage: nextPage }, () => {
-        this.fetchData(this.state.searchQuery, nextPage);
-      });
-    }
-  };
+  // handleNextPage = () => {
+  //   if (this.state.hasMore) {
+  //     const nextPage = this.state.currentPage + 1;
+  //     this.setState({ currentPage: nextPage }, () => {
+  //     this.fetchData(this.state.searchQuery, nextPage);
+  //     });
+  //   }
+  // };
 
-  handlePrevPage = () => {
-    if (this.state.currentPage > 1) {
-      const prevPage = this.state.currentPage - 1;
-      this.setState({ currentPage: prevPage }, () => {
-        this.fetchData(this.state.searchQuery, prevPage);
-      });
-    }
-  };
+  // handlePrevPage = () => {
+  //   if (this.state.currentPage > 1) {
+  //     const prevPage = this.state.currentPage - 1;
+  //     this.setState({ currentPage: prevPage }, () => {
+  //       this.fetchData(this.state.searchQuery, prevPage);
+  //     });
+  //   }
+  // };
 
   render() {
     const { items, isLoading, error, currentPage, hasMore } = this.state;
@@ -98,12 +98,10 @@ class MainPage extends Component<{}, IMainPageState> {
 
           {!isLoading && !error && (
             <CardsContainer
-              onNextClick={this.handleNextPage}
-              onPrevClick={this.handlePrevPage}
               isPrevDisabled={currentPage === 1}
               isNextDisabled={!hasMore}
             >
-              {items && items.length > 0 ? (
+              {items.length > 0 ? (
                 items.map((item) => (
                   <Card
                     key={item.id}

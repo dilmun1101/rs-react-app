@@ -6,8 +6,8 @@ import styles from './cards-container.module.scss';
 
 interface ICardsContainerProps {
   children: ReactNode;
-  onNextClick: () => void;
-  onPrevClick: () => void;
+  onNextClick?: () => void;
+  onPrevClick?: () => void;
   isPrevDisabled?: boolean;
   isNextDisabled?: boolean;
 }
