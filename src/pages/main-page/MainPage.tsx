@@ -66,57 +66,39 @@ class MainPage extends Component<unknown, IMainPageState> {
     });
   };
 
-  // handleNextPage = () => {
-  //   if (this.state.hasMore) {
-  //     const nextPage = this.state.currentPage + 1;
-  //     this.setState({ currentPage: nextPage }, () => {
-  //     this.fetchData(this.state.searchQuery, nextPage);
-  //     });
-  //   }
-  // };
-
-  // handlePrevPage = () => {
-  //   if (this.state.currentPage > 1) {
-  //     const prevPage = this.state.currentPage - 1;
-  //     this.setState({ currentPage: prevPage }, () => {
-  //       this.fetchData(this.state.searchQuery, prevPage);
-  //     });
-  //   }
-  // };
-
   render() {
-    const { items, isLoading, error, currentPage, hasMore } = this.state;
+    const { items, isLoading, error } = this.state;
 
     return (
       <main className={styles.mainPage}>
         <div className={styles.topControls}>
-          <SearchForm onSearch={this.handleSearch} />
-          <ErrorTest />
+          <div className={styles.topControlsWrapper}>
+            <SearchForm onSearch={this.handleSearch} />
+            <ErrorTest />
+          </div>
         </div>
-
         <div className={styles.contentArea}>
-          {isLoading && <div className="loader">{UI_MESSAGES.LOADING}</div>}
-          {error && <div className={styles.errorMessage}>Error: {error}</div>}
+          <div className={styles.contentAreaWrapper}>
+            {isLoading && <div className="loader">{UI_MESSAGES.LOADING}</div>}
+            {error && <div className={styles.errorMessage}>Error: {error}</div>}
 
-          {!isLoading && !error && (
-            <CardsContainer
-              isPrevDisabled={currentPage === 1}
-              isNextDisabled={!hasMore}
-            >
-              {items.length > 0 ? (
-                items.map((item) => (
-                  <Card
-                    key={item.id}
-                    name={item.name}
-                    description={item.description}
-                    imageUrl={item.imageUrl}
-                  />
-                ))
-              ) : (
-                <p>{UI_MESSAGES.NO_RESULTS}</p>
-              )}
-            </CardsContainer>
-          )}
+            {!isLoading && !error && (
+              <CardsContainer>
+                {items.length > 0 ? (
+                  items.map((item) => (
+                    <Card
+                      key={item.id}
+                      name={item.name}
+                      description={item.description}
+                      imageUrl={item.imageUrl}
+                    />
+                  ))
+                ) : (
+                  <p>{UI_MESSAGES.NO_RESULTS}</p>
+                )}
+              </CardsContainer>
+            )}
+          </div>
         </div>
       </main>
     );

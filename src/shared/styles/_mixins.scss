@@ -1,0 +1,16 @@
+@use './fonts.scss' as *;
+@use './variables.scss' as vars;
+
+@mixin typography(
+  $size: 1rem,
+  $lh: 1,
+  $weight: 400,
+  $family: 'Сause',
+  $color: vars.$dark-text-color
+) {
+  font-family: $family, sans-serif;
+  font-size: $size;
+  line-height: $lh;
+  font-weight: $weight;
+  color: $color;
+}

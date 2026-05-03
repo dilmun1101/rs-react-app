@@ -10,7 +10,7 @@ const mapCardToCardItem = (card: ScryfallCardDTO): CardItem => ({
   id: card.id,
   name: card.name,
   description: card.oracle_text ?? UI_MESSAGES.NO_DESCRIPTION,
-  imageUrl: card.image_uris?.small,
+  imageUrl: card.image_uris?.art_crop,
 });
 
 export const scryfallService = {

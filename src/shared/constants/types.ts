@@ -3,8 +3,7 @@ export interface ScryfallCardDTO {
   name: string;
   oracle_text?: string;
   image_uris?: {
-    small?: string;
-    normal?: string;
+    art_crop?: string;
   };
 }
 

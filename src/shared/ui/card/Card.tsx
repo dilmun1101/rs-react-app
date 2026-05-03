@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import styles from './card.module.scss';
+import classNames from 'classnames';
 
 interface ICardProps {
   name: string;
@@ -12,10 +13,13 @@ class Card extends Component<ICardProps> {
     const { name, description, imageUrl } = this.props;
 
     return (
-      <div className={styles.card}>
-        {imageUrl && <img src={imageUrl} alt={name} />}
-        <h3>{name}</h3>
-        <p>{description}</p>
+      <div className={classNames(styles.card, classNames)}>
+        <p className={classNames(styles.title, classNames)}>{name}</p>
+        <div
+          className={classNames(styles.image, classNames)}
+          style={{ backgroundImage: imageUrl ? `url(${imageUrl})` : undefined }}
+        ></div>
+        <p className={classNames(styles.info, classNames)}>{description}</p>
       </div>
     );
   }
