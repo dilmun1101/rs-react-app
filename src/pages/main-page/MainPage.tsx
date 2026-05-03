@@ -10,6 +10,7 @@ import { UI_MESSAGES } from '../../shared/constants/messages';
 import Card from '../../shared/ui/card/Card';
 import styles from './main-page.module.scss';
 import type { CardItem } from '../../shared/constants/types';
+import ErrorTest from '../../features/error-test/ErrorTest';
 
 interface IMainPageState {
   items: CardItem[];
@@ -20,8 +21,8 @@ interface IMainPageState {
   hasMore: boolean;
 }
 
-class MainPage extends Component<never, IMainPageState> {
-  constructor(props: never) {
+class MainPage extends Component<unknown, IMainPageState> {
+  constructor(props: unknown) {
     super(props);
     this.state = {
       items: [],
@@ -90,6 +91,7 @@ class MainPage extends Component<never, IMainPageState> {
       <main className={styles.mainPage}>
         <div className={styles.topControls}>
           <SearchForm onSearch={this.handleSearch} />
+          <ErrorTest />
         </div>
 
         <div className={styles.contentArea}>
