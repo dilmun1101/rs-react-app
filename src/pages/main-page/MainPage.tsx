@@ -9,8 +9,8 @@ import {
 import { UI_MESSAGES } from '../../shared/constants/messages';
 import styles from './main-page.module.scss';
 import type { CardItem } from '../../shared/constants/types';
-import ErrorTest from '../../features/error-test/ErrorTest';
-import CardsSkeletonLoader from '../../features/card-skeleton-loader/CardSkeletonLoader';
+import ErrorTest from '../../shared/ui/error-test/ErrorTest';
+import CardsSkeletonLoader from '../../shared/ui/card-skeleton-loader/CardSkeletonLoader';
 import { chunkArrayCards } from '../../shared/utils/chunk-array-cards';
 import CardRowSlider from '../../shared/ui/cards-row-slider/CardRowSlider';
 

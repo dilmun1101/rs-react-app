@@ -34,6 +34,15 @@ export default defineConfig([
       ],
       'react-compiler/react-compiler': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
     },
     languageOptions: {
       parserOptions: {

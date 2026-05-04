@@ -1,0 +1,11 @@
+@use '../../styles/variables' as *;
+
+.main {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: $light-bg-color;
+}

@@ -22,7 +22,13 @@ class SearchForm extends Component<IFormProps> {
   };
 
   render() {
-    const { query, className, ...rest } = this.props;
+    const {
+      query,
+      onQueryChange: _onQueryChange,
+      onSearch: _onSearch,
+      className,
+      ...rest
+    } = this.props;
     return (
       <form
         {...rest}

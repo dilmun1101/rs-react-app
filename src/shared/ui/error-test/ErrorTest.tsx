@@ -1,5 +1,6 @@
 import { Component } from 'react';
-import Button from '../../shared/ui/button/Button';
+import Button from '../button/Button';
+import styles from './error-test.module.scss';
 
 interface State {
   shouldThrowError: boolean;
@@ -20,7 +21,11 @@ class ErrorTest extends Component<unknown, State> {
       throw new Error('Test error');
     }
 
-    return <Button onClick={this.handleClick}>Test Error</Button>;
+    return (
+      <Button className={styles.button} onClick={this.handleClick}>
+        Test Error
+      </Button>
+    );
   }
 }
 

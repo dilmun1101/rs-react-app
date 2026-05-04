@@ -1,5 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
-import Button from '../../shared/ui/button/Button';
+import Button from '../button/Button';
+import styles from './error-boundary.module.scss';
 
 interface IErrorBoundaryProps {
   children: ReactNode;
@@ -34,7 +35,7 @@ class ErrorBoundary extends Component<IErrorBoundaryProps, ErrorBoundaryState> {
   render() {
     if (this.state.hasError) {
       return (
-        <main>
+        <main className={styles.main}>
           <p>Something went wrong</p>
           <Button onClick={this.handleReset}>Go back</Button>
           <Button onClick={this.handleReload}>Reload the application</Button>
