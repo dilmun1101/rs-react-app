@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import styles from './button.module.scss';
+import classNames from 'classnames';
 
 interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   onClick?: () => void;
@@ -7,10 +8,10 @@ interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 class Button extends Component<IButtonProps> {
   render() {
-    const { children, ...rest } = this.props;
+    const { children, className, ...rest } = this.props;
 
     return (
-      <button {...rest} className={styles.button}>
+      <button className={classNames(styles.button, className)} {...rest}>
         {children}
       </button>
     );

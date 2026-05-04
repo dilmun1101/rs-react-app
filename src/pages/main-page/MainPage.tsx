@@ -7,11 +7,12 @@ import {
   saveSearchQuery,
 } from '../../shared/utils/storage';
 import { UI_MESSAGES } from '../../shared/constants/messages';
-import Card from '../../shared/ui/card/Card';
 import styles from './main-page.module.scss';
 import type { CardItem } from '../../shared/constants/types';
 import ErrorTest from '../../features/error-test/ErrorTest';
 import CardsSkeletonLoader from '../../features/card-skeleton-loader/CardSkeletonLoader';
+import { chunkArrayCards } from '../../shared/utils/chunk-array-cards';
+import CardRowSlider from '../../shared/ui/cards-row-slider/CardRowSlider';
 
 interface IMainPageState {
   items: CardItem[];
@@ -69,6 +70,7 @@ class MainPage extends Component<unknown, IMainPageState> {
 
   render() {
     const { items, isLoading, error } = this.state;
+    const sliderRows = chunkArrayCards<CardItem>(items, 4);
 
     return (
       <main className={styles.mainPage}>
@@ -83,22 +85,23 @@ class MainPage extends Component<unknown, IMainPageState> {
             {error && <div className={styles.errorMessage}>Error: {error}</div>}
 
             {!error && (
-              <CardsContainer>
+              <>
                 {isLoading ? (
                   <CardsSkeletonLoader count={10} />
-                ) : items.length > 0 ? (
-                  items.map((item) => (
-                    <Card
-                      key={item.id}
-                      name={item.name}
-                      description={item.description}
-                      imageUrl={item.imageUrl}
-                    />
-                  ))
+                ) : sliderRows.length > 0 ? (
+                  <CardsContainer>
+                    {sliderRows.map((rowCards, rowIndex) => (
+                      <CardRowSlider
+                        key={`row-${String(rowIndex)}`}
+                        cards={rowCards}
+                        rowIndex={rowIndex}
+                      />
+                    ))}
+                  </CardsContainer>
                 ) : (
                   <p>{UI_MESSAGES.NO_RESULTS}</p>
                 )}
-              </CardsContainer>
+              </>
             )}
           </div>
         </div>

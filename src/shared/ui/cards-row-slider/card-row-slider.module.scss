@@ -1,0 +1,38 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .track {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    cursor: grab;
+    flex: 1;
+
+    scrollbar-width: none;
+    &:active {
+      cursor: grabbing;
+    }
+
+    > * {
+      flex-shrink: 0;
+      width: 180px;
+    }
+  }
+
+  .arrow {
+    font-size: 2rem;
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+    flex-shrink: 0;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+  }
+}
