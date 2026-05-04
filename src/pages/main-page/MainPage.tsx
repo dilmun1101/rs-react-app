@@ -68,6 +68,10 @@ class MainPage extends Component<unknown, IMainPageState> {
     });
   };
 
+  handleQueryChange = (value: string) => {
+    this.setState({ searchQuery: value });
+  };
+
   render() {
     const { items, isLoading, error } = this.state;
     const sliderRows = chunkArrayCards<CardItem>(items, 4);
@@ -76,7 +80,11 @@ class MainPage extends Component<unknown, IMainPageState> {
       <main className={styles.mainPage}>
         <div className={styles.topControls}>
           <div className={styles.topControlsWrapper}>
-            <SearchForm onSearch={this.handleSearch} />
+            <SearchForm
+              query={this.state.searchQuery}
+              onQueryChange={this.handleQueryChange}
+              onSearch={this.handleSearch}
+            />
             <ErrorTest />
           </div>
         </div>

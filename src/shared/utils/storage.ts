@@ -1,9 +1,9 @@
-const SEARCH_QUERY_KEY = 'searchQuery';
+import { LOCAL_STORAGE_KEYS } from '../constants/local-storage-keys';
 
 export const getSavedSearchQuery = (): string => {
-  return localStorage.getItem(SEARCH_QUERY_KEY) ?? '';
+  return localStorage.getItem(LOCAL_STORAGE_KEYS.SEARCH_QUERY) ?? '';
 };
 
 export const saveSearchQuery = (query: string): void => {
-  localStorage.setItem(SEARCH_QUERY_KEY, query);
+  localStorage.setItem(LOCAL_STORAGE_KEYS.SEARCH_QUERY, query);
 };

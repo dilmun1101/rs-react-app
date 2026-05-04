@@ -5,26 +5,19 @@ import { UI_MESSAGES } from '../../constants/messages';
 import styles from './search-form.module.scss';
 
 interface IFormProps extends React.FormHTMLAttributes<HTMLFormElement> {
+  query: string;
+  onQueryChange: (value: string) => void;
   onSearch?: (query: string) => void;
 }
 
-interface IFormState {
-  query: string;
-}
-
-class SearchForm extends Component<IFormProps, IFormState> {
-  constructor(props: IFormProps) {
-    super(props);
-    this.state = { query: '' };
-  }
-
-  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ query: event.target.value });
-  };
-
+class SearchForm extends Component<IFormProps> {
   handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
-    this.props.onSearch?.(this.state.query);
+    this.props.onSearch?.(this.props.query);
+  };
+
+  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.props.onQueryChange(event.target.value);
   };
 
   render() {
@@ -35,7 +28,7 @@ class SearchForm extends Component<IFormProps, IFormState> {
             label="search"
             id="search"
             type="search"
-            value={this.state.query}
+            value={this.props.query}
             onChange={this.handleInputChange}
             className={styles.input}
             hideLabel
