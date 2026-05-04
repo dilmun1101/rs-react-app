@@ -20,24 +20,29 @@ interface IMainPageState {
   error: string | null;
   currentPage: number;
   searchQuery: string;
+  submittedQuery: string;
   hasMore: boolean;
 }
 
 class MainPage extends Component<unknown, IMainPageState> {
   constructor(props: unknown) {
     super(props);
+
+    const savedQuery = getSavedSearchQuery();
+
     this.state = {
       items: [],
       isLoading: false,
       error: null,
       currentPage: 1,
-      searchQuery: getSavedSearchQuery(),
+      searchQuery: savedQuery,
+      submittedQuery: savedQuery,
       hasMore: false,
     };
   }
 
   componentDidMount() {
-    void this.fetchData(this.state.searchQuery, this.state.currentPage);
+    void this.fetchData(this.state.submittedQuery, this.state.currentPage);
   }
 
   fetchData = async (query: string, page: number) => {
@@ -61,12 +66,20 @@ class MainPage extends Component<unknown, IMainPageState> {
 
   handleSearch = (query: string) => {
     const searchText = query.trim();
+    const currentSearch = this.state.submittedQuery.trim();
+
+    if (searchText === currentSearch) {
+      return;
+    }
 
     saveSearchQuery(searchText);
 
-    this.setState({ searchQuery: searchText, currentPage: 1 }, () => {
-      void this.fetchData(searchText, 1);
-    });
+    this.setState(
+      { searchQuery: searchText, submittedQuery: searchText, currentPage: 1 },
+      () => {
+        void this.fetchData(searchText, 1);
+      }
+    );
   };
 
   handleQueryChange = (value: string) => {
