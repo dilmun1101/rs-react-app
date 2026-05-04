@@ -13,10 +13,14 @@ class CardsSkeletonLoader extends Component<ICardsSkeletonLoaderProps> {
   render() {
     const { count = 10 } = this.props;
 
+    const skeletonItems = Array.from({ length: count }, (_, number) => {
+      return `skeleton-card-${String(number)}`;
+    });
+
     return (
       <>
-        {Array.from({ length: count }).map((_, index) => (
-          <CardSkeleton key={index} />
+        {skeletonItems.map((skeletonId) => (
+          <CardSkeleton key={skeletonId} />
         ))}
       </>
     );
