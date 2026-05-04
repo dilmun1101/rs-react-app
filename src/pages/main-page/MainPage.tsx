@@ -11,6 +11,7 @@ import Card from '../../shared/ui/card/Card';
 import styles from './main-page.module.scss';
 import type { CardItem } from '../../shared/constants/types';
 import ErrorTest from '../../features/error-test/ErrorTest';
+import CardsSkeletonLoader from '../../features/card-skeleton-loader/CardSkeletonLoader';
 
 interface IMainPageState {
   items: CardItem[];
@@ -79,12 +80,13 @@ class MainPage extends Component<unknown, IMainPageState> {
         </div>
         <div className={styles.contentArea}>
           <div className={styles.contentAreaWrapper}>
-            {isLoading && <div className="loader">{UI_MESSAGES.LOADING}</div>}
             {error && <div className={styles.errorMessage}>Error: {error}</div>}
 
-            {!isLoading && !error && (
+            {!error && (
               <CardsContainer>
-                {items.length > 0 ? (
+                {isLoading ? (
+                  <CardsSkeletonLoader count={10} />
+                ) : items.length > 0 ? (
                   items.map((item) => (
                     <Card
                       key={item.id}
