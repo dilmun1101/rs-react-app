@@ -3,10 +3,12 @@ import Card from '../card/Card';
 import type { CardItem } from '../../constants/types';
 import styles from './card-row-slider.module.scss';
 import Button from '../button/Button';
+import cx from 'classnames';
 
 interface ICardRowProps {
   cards: CardItem[];
   rowIndex: number;
+  className?: string;
 }
 
 class CardRowSlider extends Component<ICardRowProps> {
@@ -42,10 +44,10 @@ class CardRowSlider extends Component<ICardRowProps> {
   };
 
   render() {
-    const { cards } = this.props;
+    const { cards, className } = this.props;
 
     return (
-      <div className={styles.row}>
+      <div className={cx(styles.row, className)}>
         <Button
           className={styles.arrow}
           onClick={() => {

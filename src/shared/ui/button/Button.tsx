@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import styles from './button.module.scss';
-import classNames from 'classnames';
+import cx from 'classnames';
 
 interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   onClick?: () => void;
@@ -8,12 +8,14 @@ interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 class Button extends Component<IButtonProps> {
   render() {
-    const { children, className, ...rest } = this.props;
+    const { className, ...rest } = this.props;
 
     return (
-      <button className={classNames(styles.button, className)} {...rest}>
-        {children}
-      </button>
+      <button
+        className={cx(styles.button, className)}
+        {...rest}
+        children={this.props.children}
+      />
     );
   }
 }

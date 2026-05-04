@@ -1,7 +1,7 @@
 @use '../../styles/variables.scss' as *;
 
 .searchForm {
-  div {
+  .wrapperInput {
     display: flex;
     align-items: center;
     justify-content: center;

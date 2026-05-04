@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import SearchForm from '../../shared/ui/search-form/SearchForm';
 import CardsContainer from '../../shared/ui/cards-container/CardsContainer';
-import { scryfallService } from '../../api/service/service';
+import { scryfallService } from '../../api/service/scryfall-service';
 import {
   getSavedSearchQuery,
   saveSearchQuery,
@@ -49,12 +49,13 @@ class MainPage extends Component<unknown, IMainPageState> {
       this.setState({
         items: response.items,
         hasMore: response.hasMore,
-        isLoading: false,
       });
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : UI_MESSAGES.UNKNOWN_ERROR;
-      this.setState({ error: errorMessage, isLoading: false, items: [] });
+      this.setState({ error: errorMessage, items: [] });
+    } finally {
+      this.setState({ isLoading: false });
     }
   };
 

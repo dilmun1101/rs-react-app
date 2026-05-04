@@ -1,9 +1,6 @@
-import { scryfallApi } from '../api';
-import type {
-  CardItem,
-  ScryfallCardDTO,
-  SearchCardsResult,
-} from '../../shared/constants/types';
+import { scryfallApi } from '../scryfall-api';
+import type { CardItem, SearchCardsResult } from '../../shared/constants/types';
+import type { ScryfallCardDTO } from '../api-types';
 import { UI_MESSAGES } from '../../shared/constants/messages';
 
 const mapCardToCardItem = (card: ScryfallCardDTO): CardItem => ({

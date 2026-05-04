@@ -1,6 +1,6 @@
 import { getErrorMessageByStatus } from '../shared/utils/api-error-messages';
 import { DEFAULT_ERROR_MESSAGE } from '../shared/constants/messages';
-import type { ScryfallListResponseDTO } from '../shared/constants/types';
+import type { ScryfallListResponseDTO } from './api-types';
 
 const SCRYFALL_API = 'https://api.scryfall.com';
 
