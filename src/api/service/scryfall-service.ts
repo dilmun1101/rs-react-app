@@ -1,14 +1,6 @@
 import { scryfallApi } from '../scryfall-api';
-import type { CardItem, SearchCardsResult } from '../../shared/constants/types';
-import type { ScryfallCardDTO } from '../api-types';
-import { UI_MESSAGES } from '../../shared/constants/messages';
-
-const mapCardToCardItem = (card: ScryfallCardDTO): CardItem => ({
-  id: card.id,
-  name: card.name,
-  description: card.oracle_text ?? UI_MESSAGES.NO_DESCRIPTION,
-  imageUrl: card.image_uris?.art_crop,
-});
+import type { SearchCardsResult } from '../../shared/constants/types';
+import { mapSearchCardsResponse } from '../utils/map-search-card-response';
 
 export const scryfallService = {
   async searchCards(query = '', page = 1): Promise<SearchCardsResult> {
@@ -17,10 +9,6 @@ export const scryfallService = {
 
     const response = await scryfallApi.fetchData(endpoint);
 
-    return {
-      items: response.data.map(mapCardToCardItem),
-      hasMore: response.has_more,
-      totalCards: response.total_cards,
-    };
+    return mapSearchCardsResponse(response);
   },
 };
