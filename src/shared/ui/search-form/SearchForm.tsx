@@ -11,10 +11,13 @@ interface IFormProps extends React.FormHTMLAttributes<HTMLFormElement> {
   onSearch?: (query: string) => void;
 }
 
+const trimSearchValue = (value: string) => value.trim();
+
 class SearchForm extends Component<IFormProps> {
   handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
     this.props.onSearch?.(this.props.query);
+    this.props.onSearch?.(trimSearchValue(this.props.query));
   };
 
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,17 +38,17 @@ class SearchForm extends Component<IFormProps> {
         onSubmit={this.handleSubmit}
         className={cx(styles.searchForm, className)}
       >
-        <div className={cx(styles.wrapperInput, className)}>
+        <div className={cx(styles.wrapperInput)}>
           <Input
             label="search"
             id="search"
             type="search"
             value={query}
             onChange={this.handleInputChange}
-            className={cx(styles.input, className)}
+            className={cx(styles.input)}
             hideLabel
           />
-          <Button type="submit" className={cx(styles.button, className)}>
+          <Button type="submit" className={cx(styles.button)}>
             {UI_MESSAGES.BUTTON_SEARCH}
           </Button>
         </div>

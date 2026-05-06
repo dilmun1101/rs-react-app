@@ -5,7 +5,10 @@ export const UI_MESSAGES = {
   BUTTON_NEXT: 'Next',
   BUTTON_PREV: 'Previous',
   BUTTON_SEARCH: 'Search',
+  BUTTON_GO_BACK: 'Go back',
+  BUTTON_RELOAD_APP: 'Reload the application',
   NO_DESCRIPTION: 'No description available',
+  ERROR_BOUNDARY_FALLBACK: 'Something went wrong',
 } as const;
 
 export const HTTPS_ERROR_MESSAGES: Record<number, string> = {

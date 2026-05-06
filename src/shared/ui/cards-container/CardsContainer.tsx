@@ -13,8 +13,8 @@ class CardsContainer extends Component<ICardsContainerProps> {
     const { children, className } = this.props;
 
     return (
-      <div className="results-section">
-        <div className={cx(styles.cards, className)}>{children}</div>
+      <div className={cx(styles.resultsSection, className)}>
+        <div className={cx(styles.cards)}>{children}</div>
       </div>
     );
   }

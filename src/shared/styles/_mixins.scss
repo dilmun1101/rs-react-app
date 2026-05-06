@@ -5,7 +5,7 @@
   $size: 1rem,
   $lh: 1,
   $weight: 400,
-  $family: 'Сause',
+  $family: 'Cause',
   $color: vars.$dark-text-color
 ) {
   font-family: $family, sans-serif;
@@ -13,4 +13,16 @@
   line-height: $lh;
   font-weight: $weight;
   color: $color;
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

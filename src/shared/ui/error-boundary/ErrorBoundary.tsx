@@ -1,6 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import Button from '../button/Button';
 import styles from './error-boundary.module.scss';
+import { UI_MESSAGES } from '../../constants/messages';
 
 interface IErrorBoundaryProps {
   children: ReactNode;
@@ -36,9 +37,13 @@ class ErrorBoundary extends Component<IErrorBoundaryProps, ErrorBoundaryState> {
     if (this.state.hasError) {
       return (
         <main className={styles.main}>
-          <p>Something went wrong</p>
-          <Button onClick={this.handleReset}>Go back</Button>
-          <Button onClick={this.handleReload}>Reload the application</Button>
+          <p>{UI_MESSAGES.ERROR_BOUNDARY_FALLBACK}</p>
+          <Button onClick={this.handleReset}>
+            {UI_MESSAGES.BUTTON_GO_BACK}
+          </Button>
+          <Button onClick={this.handleReload}>
+            {UI_MESSAGES.BUTTON_RELOAD_APP}
+          </Button>
         </main>
       );
     }

@@ -25,7 +25,7 @@ class Input extends Component<IInputProps> {
             {label}
           </label>
         )}
-        <input className={cx(styles.input, className)} id={id} {...rest} />
+        <input className={cx(styles.input)} id={id} {...rest} />
       </div>
     );
   }

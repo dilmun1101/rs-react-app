@@ -65,19 +65,16 @@ class MainPage extends Component<unknown, IMainPageState> {
   };
 
   handleSearch = (query: string) => {
-    const searchText = query.trim();
-    const currentSearch = this.state.submittedQuery.trim();
-
-    if (searchText === currentSearch) {
+    if (query === this.state.submittedQuery) {
       return;
     }
 
-    saveSearchQuery(searchText);
+    saveSearchQuery(query);
 
     this.setState(
-      { searchQuery: searchText, submittedQuery: searchText, currentPage: 1 },
+      { searchQuery: query, submittedQuery: query, currentPage: 1 },
       () => {
-        void this.fetchData(searchText, 1);
+        void this.fetchData(query, 1);
       }
     );
   };
