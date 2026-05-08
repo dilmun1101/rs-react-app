@@ -10,7 +10,10 @@
     "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "prepare": "husky",
-    "format:fix": "prettier --write ."
+    "format:fix": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "classnames": "^2.5.1",
@@ -38,6 +41,7 @@
     "globals": "^17.5.0",
     "husky": "^9.1.7",
     "jsdom": "^28.1.0",
+    "msw": "^2.14.5",
     "prettier": "3.8.3",
     "sass": "^1.99.0",
     "typescript": "~6.0.2",
