@@ -1,0 +1,34 @@
+@use '../../styles/mixins' as *;
+@use '../../styles/variables' as vars;
+
+.card {
+  width: 100%;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+  padding: 5px;
+  overflow: hidden;
+  user-select: none;
+  @include typography($size: 0.8rem, $lh: 1.2, $color: vars.$light-text-color);
+
+  .title {
+    height: 18px;
+    overflow: hidden;
+  }
+
+  .image {
+    width: 100%;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .info {
+    margin: 0;
+    height: 120px;
+  }
+}

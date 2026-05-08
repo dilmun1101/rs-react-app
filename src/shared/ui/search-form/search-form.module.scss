@@ -1,0 +1,13 @@
+@use '../../styles/variables.scss' as *;
+
+.searchForm {
+  .wrapperInput {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .button {
+    border-radius: 0 10px 10px 0;
+  }
+}

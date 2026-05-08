@@ -1,0 +1,63 @@
+@use '../../styles/variables' as vars;
+
+$skeleton-color-base: #e0e0e0;
+$skeleton-color-highlight: #f2f2f2;
+
+@mixin skeletonStyles($width: 70%, $height: 18px) {
+  width: $width;
+  height: $height;
+  background: linear-gradient(
+    90deg,
+    $skeleton-color-base,
+    $skeleton-color-highlight,
+    $skeleton-color-base
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+.card {
+  width: 100%;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border: 1px solid vars.$light-bg-color;
+  border-radius: 5px;
+  padding: 5px;
+  overflow: hidden;
+
+  .title {
+    @include skeletonStyles;
+  }
+
+  .image {
+    @include skeletonStyles($width: 100%, $height: 100px);
+  }
+
+  .info {
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    &Line {
+      @include skeletonStyles($width: 100%, $height: 12px);
+
+      &Short {
+        @include skeletonStyles($width: 80%, $height: 12px);
+      }
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
