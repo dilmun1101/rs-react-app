@@ -7,22 +7,6 @@
     justify-content: center;
   }
 
-  .input {
-    background-color: inherit;
-    color: $dark-text-color;
-    border: 1px solid $dark-bg-color;
-    padding: 5px;
-    border-radius: 10px 0 0 10px;
-    transition: 1.5s;
-
-    &:hover,
-    &:focus,
-    &:active {
-      background-color: $dark-bg-color;
-      color: $light-text-color;
-    }
-  }
-
   .button {
     border-radius: 0 10px 10px 0;
   }

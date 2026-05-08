@@ -2,12 +2,9 @@
 
 .mainPage {
   .topControls {
-    background-color: $light-bg-color;
-
     &Wrapper {
-      max-width: 1290px;
+      max-width: $max-width;
       margin-inline: auto;
-      color: $dark-text-color;
       padding: 20px 0;
       display: flex;
       flex-direction: column;
@@ -17,12 +14,9 @@
   }
 
   .contentArea {
-    background-color: $dark-bg-color;
-
     &Wrapper {
-      max-width: 1290px;
+      max-width: $max-width;
       margin-inline: auto;
-      color: $light-text-color;
       padding-top: 10px;
     }
   }

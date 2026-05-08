@@ -20,7 +20,6 @@ interface IMainPageState {
   error: string | null;
   currentPage: number;
   searchQuery: string;
-  submittedQuery: string;
   hasMore: boolean;
 }
 
@@ -28,21 +27,18 @@ class MainPage extends Component<unknown, IMainPageState> {
   constructor(props: unknown) {
     super(props);
 
-    const savedQuery = getSavedSearchQuery();
-
     this.state = {
       items: [],
       isLoading: false,
       error: null,
       currentPage: 1,
-      searchQuery: savedQuery,
-      submittedQuery: savedQuery,
+      searchQuery: getSavedSearchQuery(),
       hasMore: false,
     };
   }
 
   componentDidMount() {
-    void this.fetchData(this.state.submittedQuery, this.state.currentPage);
+    void this.fetchData(this.state.searchQuery, this.state.currentPage);
   }
 
   fetchData = async (query: string, page: number) => {
@@ -65,18 +61,15 @@ class MainPage extends Component<unknown, IMainPageState> {
   };
 
   handleSearch = (query: string) => {
-    if (query === this.state.submittedQuery) {
+    if (query === getSavedSearchQuery()) {
       return;
     }
 
     saveSearchQuery(query);
 
-    this.setState(
-      { searchQuery: query, submittedQuery: query, currentPage: 1 },
-      () => {
-        void this.fetchData(query, 1);
-      }
-    );
+    this.setState({ searchQuery: query, currentPage: 1 }, () => {
+      void this.fetchData(query, 1);
+    });
   };
 
   handleQueryChange = (value: string) => {

@@ -5,13 +5,13 @@ class CardSkeleton extends Component {
   render() {
     return (
       <div className={styles.card}>
-        <div className={styles.title}></div>
-        <div className={styles.image}></div>
+        <div className={styles.title} />
+        <div className={styles.image} />
         <div className={styles.info}>
-          <div className={styles.infoLine}></div>
-          <div className={styles.infoLine}></div>
-          <div className={styles.infoLine}></div>
-          <div className={styles.infoLineShort}></div>
+          <div className={styles.infoLine} />
+          <div className={styles.infoLine} />
+          <div className={styles.infoLine} />
+          <div className={styles.infoLineShort} />
         </div>
       </div>
     );

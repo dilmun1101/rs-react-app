@@ -1,5 +1,6 @@
 @use './fonts.scss' as *;
 @use './variables.scss' as vars;
+@use 'sass:map';
 
 @mixin typography(
   $size: 1rem,
@@ -25,4 +26,23 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+@mixin theme($theme) {
+  --background: #{map.get($theme, 'background')};
+  --text: #{map.get($theme, 'text')};
+  --accent: #{map.get($theme, 'accent')};
+}
+
+@mixin hover-glow(
+  $shadow-color: var(--accent),
+  $shadow-size: 12px,
+  $text-shadow-size: 12px
+) {
+  &:enabled:hover,
+  &:enabled:focus,
+  &:enabled:active {
+    box-shadow: 0 0 $shadow-size 0 $shadow-color;
+    text-shadow: 0 0 $text-shadow-size $shadow-color;
+  }
 }

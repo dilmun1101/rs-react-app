@@ -10,13 +10,7 @@ class Button extends Component<IButtonProps> {
   render() {
     const { className, ...rest } = this.props;
 
-    return (
-      <button
-        className={cx(styles.button, className)}
-        {...rest}
-        children={this.props.children}
-      />
-    );
+    return <button className={cx(styles.button, className)} {...rest} />;
   }
 }
 

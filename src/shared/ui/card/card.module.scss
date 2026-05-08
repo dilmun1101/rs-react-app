@@ -7,10 +7,11 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  border: 1px solid vars.$light-bg-color;
+  border: 1px solid var(--accent);
   border-radius: 5px;
   padding: 5px;
   overflow: hidden;
+  user-select: none;
   @include typography($size: 0.8rem, $lh: 1.2, $color: vars.$light-text-color);
 
   .title {
