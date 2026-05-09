@@ -19,7 +19,11 @@ class Card extends Component<ICardProps> {
     return (
       <div className={cx(styles.card, className)}>
         <p className={cx(styles.title)}>{name}</p>
-        <div className={cx(styles.image)} style={backgroundStyle} />
+        <div
+          data-testid="card-image"
+          className={cx(styles.image)}
+          style={backgroundStyle}
+        />
         <p className={cx(styles.info)}>{description}</p>
       </div>
     );
