@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import MainPage from './MainPage';
 import * as storage from '../../shared/utils/storage';
-import { server } from '../../api/msw-mocks/server';
+import { server } from '../../api/test-utils/server';
 import { http, HttpResponse } from 'msw';
 import { UI_MESSAGES } from '../../shared/constants/messages';
 import userEvent from '@testing-library/user-event';

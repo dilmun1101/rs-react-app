@@ -50,4 +50,20 @@ describe('SearchForm', () => {
     expect(handleSearch).toHaveBeenCalledTimes(1);
     expect(handleSearch).toHaveBeenCalledWith('react');
   });
+
+  it('calls onSearch with empty string when query contains only spaces', async () => {
+    const user = userEvent.setup();
+    const handleSearch = vi.fn();
+
+    render(
+      <SearchForm query=" " onQueryChange={vi.fn()} onSearch={handleSearch} />
+    );
+
+    await user.click(
+      screen.getByRole('button', { name: UI_MESSAGES.BUTTON_SEARCH })
+    );
+
+    expect(handleSearch).toHaveBeenCalledTimes(1);
+    expect(handleSearch).toHaveBeenCalledWith('');
+  });
 });

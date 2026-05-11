@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { server } from './msw-mocks/server';
+import { server } from './test-utils/server';
 import { http, HttpResponse } from 'msw';
 import { scryfallApi } from './scryfall-api';
 import { getErrorMessageByStatus } from '../shared/utils/api-error-messages';

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { beforeAll, afterEach, afterAll } from 'vitest';
-import { server } from './api/msw-mocks/server';
+import { server } from './api/test-utils/server';
 
 beforeAll(() => {
   server.listen({ onUnhandledRequest: 'error' });
