@@ -16,7 +16,6 @@ const trimSearchValue = (value: string) => value.trim();
 class SearchForm extends Component<IFormProps> {
   handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
-    this.props.onSearch?.(this.props.query);
     this.props.onSearch?.(trimSearchValue(this.props.query));
   };
 
