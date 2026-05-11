@@ -16,4 +16,18 @@ describe('CardsSkeletonLoader', () => {
     const skeletons = screen.getAllByTestId('skeleton-card');
     expect(skeletons).toHaveLength(5);
   });
+
+  it('renders nothing when count is 0', () => {
+    render(<CardsSkeletonLoader count={0} />);
+
+    const skeletons = screen.queryByTestId('skeleton-card');
+    expect(skeletons).toBeNull();
+  });
+
+  it('renders nothing when count is negative', () => {
+    render(<CardsSkeletonLoader count={-1} />);
+
+    const skeletons = screen.queryByTestId('skeleton-card');
+    expect(skeletons).toBeNull();
+  });
 });

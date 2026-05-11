@@ -4,26 +4,32 @@ import CardsContainer from './CardsContainer';
 
 describe('CardsContainer', () => {
   it('renders children', () => {
+    const testName = 'Card content';
+
     render(
       <CardsContainer>
-        <p>Card content</p>
+        <p>{testName}</p>
       </CardsContainer>
     );
 
-    expect(screen.getByText('Card content')).toBeInTheDocument();
+    expect(screen.getByText(testName)).toBeInTheDocument();
   });
 
   it('renders multiple children', () => {
+    const firstCard = 'First card';
+    const secondCard = 'Second card';
+    const thirdCard = 'Third card';
+
     render(
       <CardsContainer>
-        <p>First card</p>
-        <p>Second card</p>
-        <p>Third card</p>
+        <p>{firstCard}</p>
+        <p>{secondCard}</p>
+        <p>{thirdCard}</p>
       </CardsContainer>
     );
 
-    expect(screen.getByText('First card')).toBeInTheDocument();
-    expect(screen.getByText('Second card')).toBeInTheDocument();
-    expect(screen.getByText('Third card')).toBeInTheDocument();
+    expect(screen.getByText(firstCard)).toBeInTheDocument();
+    expect(screen.getByText(secondCard)).toBeInTheDocument();
+    expect(screen.getByText(thirdCard)).toBeInTheDocument();
   });
 });

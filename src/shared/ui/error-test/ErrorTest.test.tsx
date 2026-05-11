@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import ErrorTest from './ErrorTest';
 
@@ -17,15 +17,5 @@ describe('ErrorTest', () => {
     expect(
       screen.getByRole('button', { name: 'Test Error' })
     ).toBeInTheDocument();
-  });
-
-  it('throws error after button click', () => {
-    render(<ErrorTest />);
-
-    const button = screen.getByRole('button', { name: 'Test Error' });
-
-    expect(() => {
-      fireEvent.click(button);
-    }).toThrow('Test error');
   });
 });

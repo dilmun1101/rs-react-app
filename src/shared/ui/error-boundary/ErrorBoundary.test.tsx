@@ -1,9 +1,10 @@
 import { Component } from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import ErrorBoundary from './ErrorBoundary';
 import ErrorTest from '../error-test/ErrorTest';
 import { UI_MESSAGES } from '../../constants/messages';
+import userEvent from '@testing-library/user-event';
 
 class WorkingComponent extends Component {
   render() {
@@ -30,14 +31,16 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText('Everything is fine')).toBeInTheDocument();
   });
 
-  it('shows fallback UI when ErrorTest throws error after click', () => {
+  it('shows fallback UI when ErrorTest throws error after click', async () => {
+    const user = userEvent.setup();
+
     render(
       <ErrorBoundary>
         <ErrorTest />
       </ErrorBoundary>
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Test Error' }));
+    await user.click(screen.getByRole('button', { name: 'Test Error' }));
 
     expect(
       screen.getByText(UI_MESSAGES.ERROR_BOUNDARY_FALLBACK)
@@ -50,5 +53,64 @@ describe('ErrorBoundary', () => {
     expect(
       screen.getByRole('button', { name: UI_MESSAGES.BUTTON_RELOAD_APP })
     ).toBeInTheDocument();
+  });
+
+  it('calls console.error when error occurs', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <ErrorBoundary>
+        <ErrorTest />
+      </ErrorBoundary>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Test Error' }));
+
+    expect(console.error).toHaveBeenCalled();
+  });
+
+  it('resets error state when "Go Back" button is clicked', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <ErrorBoundary>
+        <ErrorTest />
+      </ErrorBoundary>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Test Error' }));
+    expect(
+      screen.getByText(UI_MESSAGES.ERROR_BOUNDARY_FALLBACK)
+    ).toBeInTheDocument();
+
+    await user.click(
+      screen.getByRole('button', { name: UI_MESSAGES.BUTTON_GO_BACK })
+    );
+
+    expect(
+      screen.queryByText(UI_MESSAGES.ERROR_BOUNDARY_FALLBACK)
+    ).not.toBeInTheDocument();
+  });
+
+  it('calls window.location.reload when "Reload" button is clicked', async () => {
+    const user = userEvent.setup();
+    const reloadMock = vi.fn();
+    Object.defineProperty(window, 'location', {
+      value: { reload: reloadMock },
+      writable: true,
+    });
+
+    render(
+      <ErrorBoundary>
+        <ErrorTest />
+      </ErrorBoundary>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Test Error' }));
+    await user.click(
+      screen.getByRole('button', { name: UI_MESSAGES.BUTTON_RELOAD_APP })
+    );
+
+    expect(reloadMock).toHaveBeenCalledTimes(1);
   });
 });
