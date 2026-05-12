@@ -1,32 +1,24 @@
-import { Component } from 'react';
 import Button from '../button/Button';
 import styles from './error-test.module.scss';
+import { useState } from 'react';
+import { UI_MESSAGES } from '../../constants/messages';
 
-interface State {
-  shouldThrowError: boolean;
-}
+function ErrorTest() {
+  const [shouldThrowError, setShouldThrowError] = useState(false);
 
-class ErrorTest extends Component<unknown, State> {
-  constructor(props: unknown) {
-    super(props);
-    this.state = { shouldThrowError: false };
-  }
-
-  handleClick = () => {
-    this.setState({ shouldThrowError: true });
+  const handleClick = () => {
+    setShouldThrowError(true);
   };
 
-  render() {
-    if (this.state.shouldThrowError) {
-      throw new Error('Test error');
-    }
-
-    return (
-      <Button className={styles.button} onClick={this.handleClick}>
-        Test Error
-      </Button>
-    );
+  if (shouldThrowError) {
+    throw new Error(UI_MESSAGES.TEST_ERROR);
   }
+
+  return (
+    <Button className={styles.button} onClick={handleClick}>
+      {UI_MESSAGES.BUTTON_TEST_ERROR}
+    </Button>
+  );
 }
 
 export default ErrorTest;

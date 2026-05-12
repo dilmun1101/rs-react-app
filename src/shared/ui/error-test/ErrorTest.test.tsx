@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import ErrorTest from './ErrorTest';
+import { UI_MESSAGES } from '../../constants/messages';
 
 describe('ErrorTest', () => {
   beforeEach(() => {
@@ -15,7 +16,7 @@ describe('ErrorTest', () => {
     render(<ErrorTest />);
 
     expect(
-      screen.getByRole('button', { name: 'Test Error' })
+      screen.getByRole('button', { name: UI_MESSAGES.BUTTON_TEST_ERROR })
     ).toBeInTheDocument();
   });
 });

@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import Input from '../input/Input';
 import Button from '../button/Button';
 import { UI_MESSAGES } from '../../constants/messages';
@@ -13,47 +12,44 @@ interface IFormProps extends React.FormHTMLAttributes<HTMLFormElement> {
 
 const trimSearchValue = (value: string) => value.trim();
 
-class SearchForm extends Component<IFormProps> {
-  handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
+function SearchForm({
+  query,
+  onQueryChange: _onQueryChange,
+  onSearch: _onSearch,
+  className,
+  ...rest
+}: IFormProps) {
+  const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
-    this.props.onSearch?.(trimSearchValue(this.props.query));
+    _onSearch?.(trimSearchValue(query));
   };
 
-  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.props.onQueryChange(event.target.value);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    _onQueryChange(event.target.value);
   };
 
-  render() {
-    const {
-      query,
-      onQueryChange: _onQueryChange,
-      onSearch: _onSearch,
-      className,
-      ...rest
-    } = this.props;
-    return (
-      <form
-        {...rest}
-        onSubmit={this.handleSubmit}
-        className={cx(styles.searchForm, className)}
-      >
-        <div className={cx(styles.wrapperInput)}>
-          <Input
-            label="search"
-            id="search"
-            type="search"
-            value={query}
-            onChange={this.handleInputChange}
-            className={cx(styles.input)}
-            hideLabel
-          />
-          <Button type="submit" className={cx(styles.button)}>
-            {UI_MESSAGES.BUTTON_SEARCH}
-          </Button>
-        </div>
-      </form>
-    );
-  }
+  return (
+    <form
+      {...rest}
+      onSubmit={handleSubmit}
+      className={cx(styles.searchForm, className)}
+    >
+      <div className={styles.wrapperInput}>
+        <Input
+          label="search"
+          id="search"
+          type="search"
+          value={query}
+          onChange={handleInputChange}
+          className={styles.input}
+          hideLabel
+        />
+        <Button type="submit" className={styles.button}>
+          {UI_MESSAGES.BUTTON_SEARCH}
+        </Button>
+      </div>
+    </form>
+  );
 }
 
 export default SearchForm;
