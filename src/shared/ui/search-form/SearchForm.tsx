@@ -3,29 +3,25 @@ import Button from '../button/Button';
 import { UI_MESSAGES } from '../../constants/messages';
 import styles from './search-form.module.scss';
 import cx from 'classnames';
+import { useState } from 'react';
 
-interface IFormProps extends React.FormHTMLAttributes<HTMLFormElement> {
-  query: string;
-  onQueryChange: (value: string) => void;
-  onSearch?: (query: string) => void;
+interface Props extends React.FormHTMLAttributes<HTMLFormElement> {
+  defaultValue: string;
+  onSearch: (query: string) => void;
 }
 
 const trimSearchValue = (value: string) => value.trim();
 
-function SearchForm({
-  query,
-  onQueryChange: _onQueryChange,
-  onSearch: _onSearch,
-  className,
-  ...rest
-}: IFormProps) {
+function SearchForm({ onSearch, defaultValue, className, ...rest }: Props) {
+  const [query, setQuery] = useState(defaultValue);
+
   const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
-    _onSearch?.(trimSearchValue(query));
+    onSearch(trimSearchValue(query));
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    _onQueryChange(event.target.value);
+    setQuery(event.target.value);
   };
 
   return (
