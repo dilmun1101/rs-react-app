@@ -1,7 +1,30 @@
+@use '../../../shared/styles/variables' as vars;
+@use '../../../shared/styles/mixins' as *;
+
 .pagination {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 5px;
+  justify-content: center;
+  gap: 10px;
   margin-bottom: 20px;
+
+  .link {
+    font: inherit;
+    border: 1px solid vars.$accent-color;
+    color: vars.$accent-color;
+    cursor: pointer;
+    transition: 1.5s;
+    padding: 10px;
+    text-decoration: none;
+
+    &:not(.disabledLink) {
+      @include hover-glow-link;
+    }
+  }
+
+  .disabledLink {
+    opacity: 0.4;
+    cursor: none;
+    pointer-events: none;
+  }
 }

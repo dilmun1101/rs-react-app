@@ -1,34 +1,48 @@
-import Button from '../button/Button';
+import { Link, useSearchParams } from 'react-router';
 import { UI_MESSAGES } from '../../constants/messages';
 import styles from './pagintaion.module.scss';
 import cx from 'classnames';
 
 interface Props {
-  currentPage: number;
   hasMore: boolean;
-  onPageChange: (page: number) => void;
   className?: string;
 }
 
-function Pagination({ className, currentPage, hasMore, onPageChange }: Props) {
-  const handlePrevButton = () => {
-    onPageChange(currentPage - 1);
+function Pagination({ className, hasMore }: Props) {
+  const [searchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get('page') ?? '1');
+
+  const prevParams = new URLSearchParams(searchParams);
+  prevParams.set('page', String(currentPage - 1));
+  const nextParams = new URLSearchParams(searchParams);
+  nextParams.set('page', String(currentPage + 1));
+
+  const preventClick = (event: React.MouseEvent) => {
+    event.preventDefault();
   };
-  const handleNextButton = () => {
-    onPageChange(currentPage + 1);
-  };
+
+  const isPrevDisabled = currentPage <= 1;
+  const isNextDisabled = !hasMore;
 
   return (
     <div className={cx(styles.pagination, className)}>
-      <Button disabled={currentPage === 1} onClick={handlePrevButton}>
+      <Link
+        to={`?${prevParams.toString()}`}
+        className={cx(styles.link, { [styles.disabledLink]: isPrevDisabled })}
+        onClick={isPrevDisabled ? preventClick : undefined}
+      >
         {UI_MESSAGES.BUTTON_PREV}
-      </Button>
+      </Link>
 
-      <span>Page {currentPage}</span>
+      <span>{currentPage}</span>
 
-      <Button disabled={!hasMore} onClick={handleNextButton}>
+      <Link
+        to={`?${nextParams.toString()}`}
+        className={cx(styles.link, { [styles.disabledLink]: isNextDisabled })}
+        onClick={isNextDisabled ? preventClick : undefined}
+      >
         {UI_MESSAGES.BUTTON_NEXT}
-      </Button>
+      </Link>
     </div>
   );
 }

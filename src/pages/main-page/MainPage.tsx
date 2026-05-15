@@ -13,14 +13,19 @@ import CardsSkeletonLoader from '../../shared/ui/card-skeleton-loader/CardSkelet
 import { chunkArrayCards } from '../../shared/utils/chunk-array-cards';
 import CardRowSlider from '../../shared/ui/cards-row-slider/CardRowSlider';
 import { useState, useEffect, useCallback } from 'react';
-import Pagination from '../../shared/ui/pagination/pagination';
+import Pagination from '../../shared/ui/pagination/Pagination';
+import { useSearchParams, useNavigate } from 'react-router';
 
 function MainPage() {
   const [items, setItems] = useState<CardItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
+
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const currentPage = Number(searchParams.get('page') ?? '1');
+  const currentQuery = searchParams.get('q') ?? getSavedSearchQuery();
 
   const fetchData = useCallback(async (query: string, page: number) => {
     setIsLoading(true);
@@ -44,28 +49,19 @@ function MainPage() {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    void fetchData(getSavedSearchQuery(), 1);
-  }, [fetchData]);
+    void fetchData(currentQuery, currentPage);
+  }, [fetchData, currentQuery, currentPage]);
 
   const handleSearch = useCallback(
     (query: string) => {
-      if (query === getSavedSearchQuery()) {
-        return;
-      }
-
       saveSearchQuery(query);
-      setCurrentPage(1);
-      void fetchData(query, 1);
-    },
-    [fetchData]
-  );
 
-  const handlePageChange = useCallback(
-    (page: number) => {
-      setCurrentPage(page);
-      void fetchData(getSavedSearchQuery(), page);
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set('page', '1');
+      newParams.set('q', query);
+      void navigate(`?${newParams.toString()}`, { replace: true });
     },
-    [fetchData]
+    [searchParams, navigate]
   );
 
   const sliderRows = chunkArrayCards<CardItem>(items, 4);
@@ -103,11 +99,7 @@ function MainPage() {
                 <p>{UI_MESSAGES.NO_RESULTS}</p>
               )}
               {!isLoading && sliderRows.length > 0 && (
-                <Pagination
-                  currentPage={currentPage}
-                  hasMore={hasMore}
-                  onPageChange={handlePageChange}
-                />
+                <Pagination hasMore={hasMore} />
               )}
             </>
           )}

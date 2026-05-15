@@ -46,3 +46,16 @@
     text-shadow: 0 0 $text-shadow-size $shadow-color;
   }
 }
+
+@mixin hover-glow-link(
+  $shadow-color: var(--accent),
+  $shadow-size: 12px,
+  $text-shadow-size: 12px
+) {
+  &:hover,
+  &:focus,
+  &:active {
+    box-shadow: 0 0 $shadow-size 0 $shadow-color;
+    text-shadow: 0 0 $text-shadow-size $shadow-color;
+  }
+}
