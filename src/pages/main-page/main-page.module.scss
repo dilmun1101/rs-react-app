@@ -14,7 +14,13 @@
   }
 
   .contentArea {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+
     &Wrapper {
+      flex: 1;
+      min-width: 0;
       max-width: $max-width;
       margin-inline: auto;
       padding-top: 10px;

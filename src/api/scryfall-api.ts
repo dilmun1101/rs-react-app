@@ -1,10 +1,9 @@
 import { getErrorMessageByStatus } from '../shared/utils/api-error-messages';
-import type { ScryfallListResponseDTO } from './api-types';
 
 const SCRYFALL_API = 'https://api.scryfall.com';
 
 export const scryfallApi = {
-  async fetchData(endpoint: string): Promise<ScryfallListResponseDTO> {
+  async fetchData<T>(endpoint: string): Promise<T> {
     const response = await fetch(`${SCRYFALL_API}${endpoint}`, {
       method: 'GET',
       headers: {
@@ -18,6 +17,6 @@ export const scryfallApi = {
     }
 
     const data: unknown = await response.json();
-    return data as ScryfallListResponseDTO;
+    return data as T;
   },
 };

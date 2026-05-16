@@ -1,9 +1,10 @@
 import { Component } from 'react';
-import MainPage from '../pages/main-page/MainPage';
+import { router } from '../router/router';
+import { RouterProvider } from 'react-router';
 
 class App extends Component {
   render() {
-    return <MainPage />;
+    return <RouterProvider router={router} />;
   }
 }
 

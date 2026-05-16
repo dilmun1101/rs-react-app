@@ -14,7 +14,7 @@ import { chunkArrayCards } from '../../shared/utils/chunk-array-cards';
 import CardRowSlider from '../../shared/ui/cards-row-slider/CardRowSlider';
 import { useState, useEffect, useCallback } from 'react';
 import Pagination from '../../shared/ui/pagination/Pagination';
-import { useSearchParams, useNavigate } from 'react-router';
+import { useSearchParams, useNavigate, Outlet } from 'react-router';
 
 function MainPage() {
   const [items, setItems] = useState<CardItem[]>([]);
@@ -59,11 +59,15 @@ function MainPage() {
       const newParams = new URLSearchParams(searchParams);
       newParams.set('page', '1');
       newParams.set('q', query);
-      void navigate(`?${newParams.toString()}`, { replace: true });
+      void navigate(`/?${newParams.toString()}`, { replace: true });
     },
     [searchParams, navigate]
   );
 
+  const handleCloseDetails = useCallback(() => {
+    const newParams = new URLSearchParams(searchParams);
+    void navigate(`/?${newParams.toString()}`, { replace: true });
+  }, [searchParams, navigate]);
   const sliderRows = chunkArrayCards<CardItem>(items, 4);
 
   return (
@@ -104,6 +108,7 @@ function MainPage() {
             </>
           )}
         </div>
+        <Outlet context={{ onClose: handleCloseDetails }} />
       </div>
     </main>
   );

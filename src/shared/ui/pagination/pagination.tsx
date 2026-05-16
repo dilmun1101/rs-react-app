@@ -13,8 +13,10 @@ function Pagination({ className, hasMore }: Props) {
   const currentPage = Number(searchParams.get('page') ?? '1');
 
   const prevParams = new URLSearchParams(searchParams);
+  prevParams.delete('details');
   prevParams.set('page', String(currentPage - 1));
   const nextParams = new URLSearchParams(searchParams);
+  nextParams.delete('details');
   nextParams.set('page', String(currentPage + 1));
 
   const preventClick = (event: React.MouseEvent) => {

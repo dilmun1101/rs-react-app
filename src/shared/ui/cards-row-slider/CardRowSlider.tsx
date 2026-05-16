@@ -78,6 +78,7 @@ class CardRowSlider extends Component<ICardRowProps> {
           {cards.map((card: CardItem) => (
             <Card
               key={card.id}
+              id={card.id}
               name={card.name}
               description={card.description}
               imageUrl={card.imageUrl}
