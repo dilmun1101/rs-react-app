@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from 'react-router';
 import { UI_MESSAGES } from '../../constants/messages';
-import styles from './pagintaion.module.scss';
+import styles from './paginataion.module.scss';
 import cx from 'classnames';
 
 interface Props {

@@ -13,7 +13,7 @@ import CardsSkeletonLoader from '../../shared/ui/card-skeleton-loader/CardSkelet
 import { chunkArrayCards } from '../../shared/utils/chunk-array-cards';
 import CardRowSlider from '../../shared/ui/cards-row-slider/CardRowSlider';
 import { useState, useEffect, useCallback } from 'react';
-import Pagination from '../../shared/ui/pagination/Pagination';
+import Pagination from '../../shared/ui/pagination/pagination';
 import { useSearchParams, useNavigate, Outlet } from 'react-router';
 
 function MainPage() {
