@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import CardRowSlider from './CardRowSlider';
 import type { CardItem } from '../../constants/types';
+import { MemoryRouter } from 'react-router';
 
 vi.mock('../card/Card', () => ({
   default: ({ name }: { name: string }) => <div>{name}</div>,
@@ -36,16 +37,23 @@ const cards: CardItem[] = [
   },
 ];
 
+const renderComponent = () =>
+  render(
+    <MemoryRouter>
+      <CardRowSlider cards={cards} rowIndex={0} />
+    </MemoryRouter>
+  );
+
 describe('CardRowSlider', () => {
   it('renders passed cards', () => {
-    render(<CardRowSlider cards={cards} rowIndex={0} />);
+    renderComponent();
 
     expect(screen.getByText('Card 1')).toBeInTheDocument();
     expect(screen.getByText('Card 2')).toBeInTheDocument();
   });
 
   it('renders two slider buttons', () => {
-    render(<CardRowSlider cards={cards} rowIndex={0} />);
+    renderComponent();
 
     expect(screen.getAllByRole('button')).toHaveLength(2);
   });
