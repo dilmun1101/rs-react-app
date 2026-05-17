@@ -1,11 +1,11 @@
-import Button from '../button/Button';
+import Button from '../../shared/ui/button/Button';
 import { useParams, useOutletContext } from 'react-router';
 import { useState, useEffect } from 'react';
-import { scryfallService } from '../../../api/service/scryfall-service';
-import CardSkeleton from '../card-skeleton/CardSkeleton';
+import { scryfallService } from '../../api/service/scryfall-service';
+import CardSkeleton from '../../shared/ui/card-skeleton/CardSkeleton';
 import styles from './card-details.module.scss';
-import type { CardItem } from '../../constants/types';
-import Card from '../card/Card';
+import type { CardItem } from '../../shared/constants/types';
+import Card from '../../shared/ui/card/Card';
 
 interface OutletContext {
   onClose: () => void;

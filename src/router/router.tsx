@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router';
 import MainPage from '../pages/main-page/MainPage';
-import CardDetails from '../shared/ui/card-details/CardDetails';
+import CardDetails from '../pages/card-details/CardDetails';
 import PageNotFound from '../pages/404/404';
 import AboutPage from '../pages/about-page/AboutPage';
 
