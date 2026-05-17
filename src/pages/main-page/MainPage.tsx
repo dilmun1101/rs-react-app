@@ -20,7 +20,10 @@ function MainPage() {
 
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const currentPage = Number(searchParams.get('page') ?? '1');
+  const pageParam = searchParams.get('page');
+  const parsedPage = Number(pageParam);
+  const isInvalidPage = !Number.isInteger(parsedPage) || parsedPage < 1;
+  const currentPage = isInvalidPage ? 1 : parsedPage;
   const currentQuery = searchParams.get('q') ?? '';
   const { saveSearchQuery } = useSearchQuerySync();
 
@@ -45,9 +48,19 @@ function MainPage() {
   }, []);
 
   useEffect(() => {
+    if (!isInvalidPage) return;
+
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('page', '1');
+    void navigate(`/?${newParams.toString()}`, { replace: true });
+  }, [isInvalidPage, searchParams, navigate]);
+
+  useEffect(() => {
+    if (isInvalidPage) return;
+
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void fetchData(currentQuery, currentPage);
-  }, [fetchData, currentQuery, currentPage]);
+  }, [isInvalidPage, fetchData, currentQuery, currentPage]);
 
   const handleSearch = useCallback(
     (query: string) => {
@@ -71,7 +84,11 @@ function MainPage() {
     <main className={styles.mainPage}>
       <div className={styles.topControls}>
         <div className={styles.topControlsWrapper}>
-          <SearchForm defaultValue={currentQuery} onSearch={handleSearch} />
+          <SearchForm
+            key={currentQuery}
+            defaultValue={currentQuery}
+            onSearch={handleSearch}
+          />
           <Link to="/about" className={styles.aboutLink}>
             About
           </Link>
@@ -84,7 +101,7 @@ function MainPage() {
           {!error && (
             <>
               {isLoading ? (
-                <CardsSkeletonLoader count={10} />
+                <CardsSkeletonLoader count={4} />
               ) : sliderRows.length > 0 ? (
                 <CardsContainer>
                   {sliderRows.map((rowCards, rowIndex) => (

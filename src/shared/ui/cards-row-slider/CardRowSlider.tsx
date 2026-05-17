@@ -19,9 +19,6 @@ interface Props {
 
 function CardRowSlider({ cards, className }: Props) {
   const trackRef = useRef<HTMLDivElement | null>(null);
-  const isDraggingRef = useRef(false);
-  const startXRef = useRef(0);
-  const scrollLeftStartRef = useRef(0);
   const [searchParams] = useSearchParams();
   const dragDistanceRef = useRef(0);
 
@@ -33,28 +30,6 @@ function CardRowSlider({ cards, className }: Props) {
           : -SLIDER_CONFIG.SCROLL_STEP,
       behavior: 'smooth',
     });
-  };
-
-  const onMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
-    isDraggingRef.current = true;
-    startXRef.current = event.pageX - (trackRef.current?.offsetLeft ?? 0);
-    scrollLeftStartRef.current = trackRef.current?.scrollLeft ?? 0;
-  };
-
-  const onMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!isDraggingRef.current) return;
-
-    const currentX = event.pageX - (trackRef.current?.offsetLeft ?? 0);
-    const distance =
-      (currentX - startXRef.current) * SLIDER_CONFIG.DRAG_SCROLL_SPEED;
-
-    if (trackRef.current) {
-      trackRef.current.scrollLeft = scrollLeftStartRef.current - distance;
-    }
-  };
-
-  const stopDrag = () => {
-    isDraggingRef.current = false;
   };
 
   const scrollRight = () => {
@@ -71,14 +46,7 @@ function CardRowSlider({ cards, className }: Props) {
         ‹
       </Button>
 
-      <div
-        className={styles.track}
-        ref={trackRef}
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={stopDrag}
-        onMouseLeave={stopDrag}
-      >
+      <div className={styles.track} ref={trackRef}>
         {cards.map((card) => (
           <Link
             key={card.id}
