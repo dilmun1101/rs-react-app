@@ -4,7 +4,7 @@ interface ICardsSkeletonLoaderProps {
   count?: number;
 }
 
-function CardsSkeletonLoader({ count = 10 }: ICardsSkeletonLoaderProps) {
+function CardsSkeletonLoader({ count = 4 }: ICardsSkeletonLoaderProps) {
   const skeletonItems = Array.from(
     { length: count },
     (_, number) => `skeleton-card-${String(number)}`

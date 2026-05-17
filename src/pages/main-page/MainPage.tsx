@@ -1,20 +1,16 @@
 import SearchForm from '../../shared/ui/search-form/SearchForm';
 import CardsContainer from '../../shared/ui/cards-container/CardsContainer';
 import { scryfallService } from '../../api/service/scryfall-service';
-import {
-  getSavedSearchQuery,
-  saveSearchQuery,
-} from '../../shared/utils/storage';
 import { UI_MESSAGES } from '../../shared/constants/messages';
 import styles from './main-page.module.scss';
 import type { CardItem } from '../../shared/constants/types';
-import ErrorTest from '../../shared/ui/error-test/ErrorTest';
 import CardsSkeletonLoader from '../../shared/ui/card-skeleton-loader/CardSkeletonLoader';
 import { chunkArrayCards } from '../../shared/utils/chunk-array-cards';
 import CardRowSlider from '../../shared/ui/cards-row-slider/CardRowSlider';
 import { useState, useEffect, useCallback } from 'react';
-import Pagination from '../../shared/ui/pagination/pagination';
-import { useSearchParams, useNavigate, Outlet } from 'react-router';
+import Pagination from '../../shared/ui/pagination/Pagination';
+import { useSearchParams, useNavigate, Outlet, Link } from 'react-router';
+import { useSearchQuerySync } from '../../shared/hooks/useSearchQuerySync';
 
 function MainPage() {
   const [items, setItems] = useState<CardItem[]>([]);
@@ -25,7 +21,8 @@ function MainPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const currentPage = Number(searchParams.get('page') ?? '1');
-  const currentQuery = searchParams.get('q') ?? getSavedSearchQuery();
+  const currentQuery = searchParams.get('q') ?? '';
+  const { saveSearchQuery } = useSearchQuerySync();
 
   const fetchData = useCallback(async (query: string, page: number) => {
     setIsLoading(true);
@@ -61,7 +58,7 @@ function MainPage() {
       newParams.set('q', query);
       void navigate(`/?${newParams.toString()}`, { replace: true });
     },
-    [searchParams, navigate]
+    [searchParams, navigate, saveSearchQuery]
   );
 
   const handleCloseDetails = useCallback(() => {
@@ -74,11 +71,10 @@ function MainPage() {
     <main className={styles.mainPage}>
       <div className={styles.topControls}>
         <div className={styles.topControlsWrapper}>
-          <SearchForm
-            defaultValue={getSavedSearchQuery()}
-            onSearch={handleSearch}
-          />
-          <ErrorTest />
+          <SearchForm defaultValue={currentQuery} onSearch={handleSearch} />
+          <Link to="/about" className={styles.aboutLink}>
+            About
+          </Link>
         </div>
       </div>
       <div className={styles.contentArea}>

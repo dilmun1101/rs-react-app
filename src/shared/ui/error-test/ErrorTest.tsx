@@ -2,8 +2,13 @@ import Button from '../button/Button';
 import styles from './error-test.module.scss';
 import { useState } from 'react';
 import { UI_MESSAGES } from '../../constants/messages';
+import cx from 'classnames';
 
-function ErrorTest() {
+interface Props {
+  className?: string;
+}
+
+function ErrorTest({ className }: Props) {
   const [shouldThrowError, setShouldThrowError] = useState(false);
 
   const handleClick = () => {
@@ -15,7 +20,7 @@ function ErrorTest() {
   }
 
   return (
-    <Button className={styles.button} onClick={handleClick}>
+    <Button className={cx(styles.button, className)} onClick={handleClick}>
       {UI_MESSAGES.BUTTON_TEST_ERROR}
     </Button>
   );

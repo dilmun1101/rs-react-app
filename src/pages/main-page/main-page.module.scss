@@ -1,15 +1,28 @@
-@use '../../shared/styles/variables.scss' as *;
+@use '../../shared/styles/variables' as vars;
+@use '../../shared/styles/mixins' as *;
 
 .mainPage {
-  .topControls {
-    &Wrapper {
-      max-width: $max-width;
-      margin-inline: auto;
-      padding: 20px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
+  .topControlsWrapper {
+    max-width: vars.$max-width;
+    margin-inline: auto;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .aboutLink {
+    font: inherit;
+    border: 1px solid vars.$accent-color;
+    color: vars.$accent-color;
+    cursor: pointer;
+    transition: 1.5s;
+    padding: 10px;
+    text-decoration: none;
+
+    &:not(.disabledLink) {
+      @include hover-glow-link;
     }
   }
 
@@ -21,7 +34,7 @@
     &Wrapper {
       flex: 1;
       min-width: 0;
-      max-width: $max-width;
+      max-width: vars.$max-width;
       margin-inline: auto;
       padding-top: 10px;
     }

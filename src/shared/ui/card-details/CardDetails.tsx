@@ -5,6 +5,7 @@ import { scryfallService } from '../../../api/service/scryfall-service';
 import CardSkeleton from '../card-skeleton/CardSkeleton';
 import styles from './card-details.module.scss';
 import type { CardItem } from '../../constants/types';
+import Card from '../card/Card';
 
 interface OutletContext {
   onClose: () => void;
@@ -40,15 +41,13 @@ function CardDetails() {
       {isLoading ? (
         <CardSkeleton />
       ) : card ? (
-        <div className={styles.card}>
-          <p>{card.name}</p>
-          <div
-            data-testid="card-image"
-            className={styles.image}
-            style={{ backgroundImage: `url(${card.imageUrl ?? ''})` }}
-          />
-          <p>{card.description}</p>
-        </div>
+        <Card
+          id={card.id}
+          name={card.name}
+          description={card.description}
+          imageUrl={card.imageUrl}
+          className={styles.detailsCard}
+        />
       ) : null}
     </aside>
   );
