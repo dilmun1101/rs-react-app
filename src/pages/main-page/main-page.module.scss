@@ -13,13 +13,7 @@
   }
 
   .aboutLink {
-    font: inherit;
-    border: 1px solid vars.$accent-color;
-    color: vars.$accent-color;
-    cursor: pointer;
-    transition: 1.5s;
-    padding: 10px;
-    text-decoration: none;
+    @include link-button;
 
     &:not(.disabledLink) {
       @include hover-glow-link;

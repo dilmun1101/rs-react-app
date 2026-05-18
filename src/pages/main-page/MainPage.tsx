@@ -11,6 +11,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Pagination from '../../shared/ui/pagination/Pagination';
 import { useSearchParams, useNavigate, Outlet, Link } from 'react-router';
 import { useSearchQuerySync } from '../../shared/hooks/useSearchQuerySync';
+import { useRedirectInvalidPage } from '../../shared/hooks/useRedirectInvalidPage';
 
 const SLIDER_CHUNK_SIZE = 4;
 
@@ -29,40 +30,45 @@ function MainPage() {
   const currentQuery = searchParams.get('q') ?? '';
   const { saveSearchQuery } = useSearchQuerySync();
 
-  const fetchData = useCallback(async (query: string, page: number) => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await scryfallService.searchCards(query, page);
-
-      setItems(response.items);
-      setHasMore(response.hasMore);
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : UI_MESSAGES.UNKNOWN_ERROR;
-
-      setError(errorMessage);
-      setItems([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!isInvalidPage) return;
-
-    const newParams = new URLSearchParams(searchParams);
-    newParams.set('page', '1');
-    void navigate(`/?${newParams.toString()}`, { replace: true });
-  }, [isInvalidPage, searchParams, navigate]);
+  useRedirectInvalidPage({ isInvalidPage, searchParams });
 
   useEffect(() => {
     if (isInvalidPage) return;
+    let didCancel = false;
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    void fetchData(currentQuery, currentPage);
-  }, [isInvalidPage, fetchData, currentQuery, currentPage]);
+    const fetchCards = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const response = await scryfallService.searchCards(
+          currentQuery,
+          currentPage
+        );
+        if (!didCancel) {
+          setItems(response.items);
+          setHasMore(response.hasMore);
+        }
+      } catch (err) {
+        if (!didCancel) {
+          const errorMessage =
+            err instanceof Error ? err.message : UI_MESSAGES.UNKNOWN_ERROR;
+          setError(errorMessage);
+          setItems([]);
+        }
+      } finally {
+        if (!didCancel) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    void fetchCards();
+
+    return () => {
+      didCancel = true;
+    };
+  }, [isInvalidPage, currentQuery, currentPage]);
 
   const handleSearch = useCallback(
     (query: string) => {

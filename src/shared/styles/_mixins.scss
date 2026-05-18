@@ -59,3 +59,14 @@
     text-shadow: 0 0 $text-shadow-size $shadow-color;
   }
 }
+
+@mixin link-button() {
+  font: inherit;
+  background: transparent;
+  border: 1px solid vars.$accent-color;
+  color: vars.$accent-color;
+  cursor: pointer;
+  transition: 1.5s;
+  padding: 10px;
+  text-decoration: none;
+}
