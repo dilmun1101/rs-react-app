@@ -49,10 +49,6 @@ describe('ErrorBoundary', () => {
     expect(
       screen.getByRole('button', { name: UI_MESSAGES.BUTTON_GO_BACK })
     ).toBeInTheDocument();
-
-    expect(
-      screen.getByRole('button', { name: UI_MESSAGES.BUTTON_RELOAD_APP })
-    ).toBeInTheDocument();
   });
 
   it('calls console.error when error occurs', async () => {
@@ -90,27 +86,5 @@ describe('ErrorBoundary', () => {
     expect(
       screen.queryByText(UI_MESSAGES.ERROR_BOUNDARY_FALLBACK)
     ).not.toBeInTheDocument();
-  });
-
-  it('calls window.location.reload when "Reload" button is clicked', async () => {
-    const user = userEvent.setup();
-    const reloadMock = vi.fn();
-    Object.defineProperty(window, 'location', {
-      value: { reload: reloadMock },
-      writable: true,
-    });
-
-    render(
-      <ErrorBoundary>
-        <ErrorTest />
-      </ErrorBoundary>
-    );
-
-    await user.click(screen.getByRole('button', { name: 'Test Error' }));
-    await user.click(
-      screen.getByRole('button', { name: UI_MESSAGES.BUTTON_RELOAD_APP })
-    );
-
-    expect(reloadMock).toHaveBeenCalledTimes(1);
   });
 });

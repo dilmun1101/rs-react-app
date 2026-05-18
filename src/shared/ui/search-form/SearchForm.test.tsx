@@ -6,42 +6,24 @@ import userEvent from '@testing-library/user-event';
 
 describe('SearchForm', () => {
   it('renders search input', () => {
-    render(<SearchForm query="" onQueryChange={vi.fn()} />);
+    render(<SearchForm defaultValue="" onSearch={vi.fn()} />);
 
     expect(screen.getByLabelText('search')).toBeInTheDocument();
   });
 
   it('renders search button', () => {
-    render(<SearchForm query="" onQueryChange={vi.fn()} />);
+    render(<SearchForm defaultValue="" onSearch={vi.fn()} />);
 
     expect(
       screen.getByRole('button', { name: UI_MESSAGES.BUTTON_SEARCH })
     ).toBeInTheDocument();
   });
 
-  it('calls onQueryChange when user types in search input', async () => {
-    const user = userEvent.setup();
-    const handleQueryChange = vi.fn();
-
-    render(<SearchForm query="" onQueryChange={handleQueryChange} />);
-
-    const input = screen.getByLabelText('search');
-    await user.type(input, 'react');
-
-    expect(handleQueryChange).toHaveBeenCalled();
-  });
-
   it('calls onSearch with trimmed query on form submit', async () => {
     const user = userEvent.setup();
     const handleSearch = vi.fn();
 
-    render(
-      <SearchForm
-        query="  react  "
-        onQueryChange={vi.fn()}
-        onSearch={handleSearch}
-      />
-    );
+    render(<SearchForm defaultValue="  react  " onSearch={handleSearch} />);
 
     await user.click(
       screen.getByRole('button', { name: UI_MESSAGES.BUTTON_SEARCH })
@@ -55,9 +37,7 @@ describe('SearchForm', () => {
     const user = userEvent.setup();
     const handleSearch = vi.fn();
 
-    render(
-      <SearchForm query=" " onQueryChange={vi.fn()} onSearch={handleSearch} />
-    );
+    render(<SearchForm defaultValue=" " onSearch={handleSearch} />);
 
     await user.click(
       screen.getByRole('button', { name: UI_MESSAGES.BUTTON_SEARCH })
