@@ -11,7 +11,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate, Outlet, Link } from 'react-router';
 import { useSearchQuerySync } from '../../shared/hooks/useSearchQuerySync';
 import { useRedirectInvalidPage } from '../../shared/hooks/useRedirectInvalidPage';
+import { useLocalStorage } from '../../shared/hooks/useLocalStorage';
 import Pagination from '../../shared/ui/pagination/PaginationControls';
+import { LOCAL_STORAGE_KEYS } from '../../shared/constants/local-storage-keys';
 
 const SLIDER_CHUNK_SIZE = 4;
 
@@ -28,7 +30,13 @@ function MainPage() {
   const isInvalidPage = !Number.isInteger(parsedPage) || parsedPage < 1;
   const currentPage = isInvalidPage ? 1 : parsedPage;
   const currentQuery = searchParams.get('q') ?? '';
-  const { saveSearchQuery } = useSearchQuerySync();
+
+  useSearchQuerySync();
+
+  const { setStoredValue: saveSearchQuery } = useLocalStorage(
+    LOCAL_STORAGE_KEYS.SEARCH_QUERY,
+    ''
+  );
 
   useRedirectInvalidPage({ isInvalidPage, searchParams });
 
@@ -76,7 +84,13 @@ function MainPage() {
 
       const newParams = new URLSearchParams(searchParams);
       newParams.set('page', '1');
-      newParams.set('q', query);
+
+      if (query) {
+        newParams.set('q', query);
+      } else {
+        newParams.delete('q');
+      }
+
       void navigate(`/?${newParams.toString()}`, { replace: true });
     },
     [searchParams, navigate, saveSearchQuery]
