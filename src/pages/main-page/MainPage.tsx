@@ -8,10 +8,10 @@ import CardsSkeletonLoader from '../../shared/ui/card-skeleton-loader/CardSkelet
 import { chunkArrayCards } from '../../shared/utils/chunk-array-cards';
 import CardRowSlider from '../../shared/ui/cards-row-slider/CardRowSlider';
 import { useState, useEffect, useCallback } from 'react';
-import Pagination from '../../shared/ui/pagination/Pagination';
 import { useSearchParams, useNavigate, Outlet, Link } from 'react-router';
 import { useSearchQuerySync } from '../../shared/hooks/useSearchQuerySync';
 import { useRedirectInvalidPage } from '../../shared/hooks/useRedirectInvalidPage';
+import Pagination from '../../shared/ui/pagination/Pagination';
 
 const SLIDER_CHUNK_SIZE = 4;
 
