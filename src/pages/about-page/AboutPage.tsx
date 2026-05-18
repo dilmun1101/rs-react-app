@@ -26,6 +26,13 @@ function AboutPage() {
         </a>
       </p>
       <p className={styles.text}>
+        My name is Anna, and I am a junior frontend developer. I enjoy building
+        user interfaces with React and TypeScript, focusing on clean, readable
+        code and good user experience. I am currently improving my skills
+        through the RS School React course and working on practical projects to
+        grow as a professional.
+      </p>
+      <p className={styles.text}>
         {INFO_PAGE.COURSE_LABEL}{' '}
         <a
           href={INFO_PAGE.RS_SCHOOL_REACT_LINK}
