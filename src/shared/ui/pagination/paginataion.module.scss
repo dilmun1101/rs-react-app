@@ -1,0 +1,24 @@
+@use '../../../shared/styles/variables' as vars;
+@use '../../../shared/styles/mixins' as *;
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  .link {
+    @include link-button;
+
+    &:not(.disabledLink) {
+      @include hover-glow-link;
+    }
+  }
+
+  .disabledLink {
+    opacity: 0.4;
+    cursor: none;
+    pointer-events: none;
+  }
+}

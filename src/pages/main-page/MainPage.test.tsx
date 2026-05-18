@@ -1,11 +1,18 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import MainPage from './MainPage';
-import * as storage from '../../shared/utils/storage';
 import { server } from '../../api/test-utils/server';
 import { http, HttpResponse } from 'msw';
 import { UI_MESSAGES } from '../../shared/constants/messages';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter, Routes, Route } from 'react-router';
+import * as localStorageHook from '../../shared/hooks/useLocalStorage';
+
+const setStoredValueMock = vi.fn();
+
+vi.mock('../../shared/hooks/useLocalStorage', () => ({
+  useLocalStorage: vi.fn(),
+}));
 
 vi.mock('../../shared/ui/error-test/ErrorTest', () => ({
   default: () => <div>ErrorTest</div>,
@@ -34,10 +41,26 @@ vi.mock('../../shared/ui/cards-row-slider/CardRowSlider', () => ({
   ),
 }));
 
+const renderMainPage = (initialEntry = '/?page=1&q=') =>
+  render(
+    <MemoryRouter initialEntries={[initialEntry]}>
+      <Routes>
+        <Route path="/" element={<MainPage />}>
+          <Route path="details/:id" element={<div>Details page</div>} />
+        </Route>
+        <Route path="/about" element={<div>About page</div>} />
+      </Routes>
+    </MemoryRouter>
+  );
+
 beforeEach(() => {
   vi.clearAllMocks();
-  vi.spyOn(storage, 'getSavedSearchQuery').mockReturnValue('');
-  vi.spyOn(storage, 'saveSearchQuery').mockImplementation(() => undefined);
+
+  vi.mocked(localStorageHook.useLocalStorage).mockReturnValue({
+    value: '',
+    setStoredValue: setStoredValueMock,
+    removeStoredValue: vi.fn(),
+  });
 });
 
 afterEach(() => {
@@ -46,7 +69,7 @@ afterEach(() => {
 
 describe('MainPage', () => {
   it('renders fetched cards on mount', async () => {
-    render(<MainPage />);
+    renderMainPage();
 
     expect(screen.getByLabelText('search')).toBeInTheDocument();
 
@@ -64,7 +87,7 @@ describe('MainPage', () => {
       })
     );
 
-    render(<MainPage />);
+    renderMainPage();
 
     expect(await screen.findByText(UI_MESSAGES.NO_RESULTS)).toBeInTheDocument();
   });
@@ -76,32 +99,29 @@ describe('MainPage', () => {
       )
     );
 
-    render(<MainPage />);
+    renderMainPage();
 
     expect(await screen.findByText(/Error:/)).toBeInTheDocument();
   });
 
   it('renders search input on mount', () => {
-    render(<MainPage />);
+    renderMainPage();
     expect(screen.getByLabelText('search')).toBeInTheDocument();
   });
 
   it('shows skeleton while loading', () => {
-    render(<MainPage />);
+    renderMainPage();
 
     expect(screen.getByText('Skeleton')).toBeInTheDocument();
   });
 
-  it('reads saved search query from localStorage on mount', () => {
-    vi.spyOn(storage, 'getSavedSearchQuery').mockReturnValue('dragon');
-
-    render(<MainPage />);
-
+  it('reads search query from URL on mount', () => {
+    renderMainPage('/?page=1&q=dragon');
     expect(screen.getByLabelText('search')).toHaveValue('dragon');
   });
 
   it('saves search query to localStorage when search is submitted', async () => {
-    render(<MainPage />);
+    renderMainPage();
 
     const user = userEvent.setup();
     const input = screen.getByLabelText('search');
@@ -110,11 +130,11 @@ describe('MainPage', () => {
     await user.type(input, 'dragon');
     await user.click(screen.getByRole('button', { name: /search/i }));
 
-    expect(storage.saveSearchQuery).toHaveBeenCalledWith('dragon');
+    expect(setStoredValueMock).toHaveBeenCalledWith('dragon');
   });
 
   it('updates input value when user types', async () => {
-    render(<MainPage />);
+    renderMainPage();
 
     const user = userEvent.setup();
     const input = screen.getByLabelText('search');
@@ -125,7 +145,7 @@ describe('MainPage', () => {
   });
 
   it('fetches new data when search is submitted', async () => {
-    render(<MainPage />);
+    renderMainPage();
 
     const user = userEvent.setup();
     const input = screen.getByLabelText('search');
@@ -135,18 +155,5 @@ describe('MainPage', () => {
     await user.click(screen.getByRole('button', { name: /search/i }));
 
     expect(await screen.findByText('Avatar')).toBeInTheDocument();
-  });
-
-  it('does not fetch again if same query is submitted', async () => {
-    vi.spyOn(storage, 'getSavedSearchQuery').mockReturnValue('dragon');
-
-    render(<MainPage />);
-
-    const user = userEvent.setup();
-    const saveSpyCount = vi.spyOn(storage, 'saveSearchQuery');
-
-    await user.click(screen.getByRole('button', { name: /search/i }));
-
-    expect(saveSpyCount).not.toHaveBeenCalled();
   });
 });

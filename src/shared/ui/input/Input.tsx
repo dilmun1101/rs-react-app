@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import styles from './input.module.scss';
 import cx from 'classnames';
 
@@ -7,28 +6,26 @@ interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   hideLabel?: boolean;
 }
 
-class Input extends Component<IInputProps> {
-  render() {
-    const { label, className, hideLabel = false, id, ...rest } = this.props;
-
-    return (
-      <div className={cx(styles.container, className)}>
-        {label && (
-          <label
-            htmlFor={id}
-            className={cx(
-              styles.label,
-              className,
-              hideLabel && styles.hideLabel
-            )}
-          >
-            {label}
-          </label>
-        )}
-        <input id={id} {...rest} className={cx(styles.input)} />
-      </div>
-    );
-  }
+function Input({
+  label,
+  className,
+  hideLabel = false,
+  id,
+  ...rest
+}: IInputProps) {
+  return (
+    <div className={cx(styles.container, className)}>
+      {label && (
+        <label
+          htmlFor={id}
+          className={cx(styles.label, hideLabel && styles.hideLabel)}
+        >
+          {label}
+        </label>
+      )}
+      <input id={id} {...rest} className={styles.input} />
+    </div>
+  );
 }
 
 export default Input;

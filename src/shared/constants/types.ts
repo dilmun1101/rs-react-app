@@ -2,6 +2,7 @@ export interface CardItem {
   id: string;
   name: string;
   description: string;
+  artist?: string;
   imageUrl?: string;
 }
 

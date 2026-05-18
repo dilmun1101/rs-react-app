@@ -6,5 +6,6 @@ export const mapCardToCardItem = (card: ScryfallCardDTO): CardItem => ({
   id: card.id,
   name: card.name,
   description: card.oracle_text ?? UI_MESSAGES.NO_DESCRIPTION,
+  artist: card.artist,
   imageUrl: card.image_uris?.art_crop,
 });

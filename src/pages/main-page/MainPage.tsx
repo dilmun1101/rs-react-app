@@ -1,125 +1,152 @@
-import { Component } from 'react';
 import SearchForm from '../../shared/ui/search-form/SearchForm';
 import CardsContainer from '../../shared/ui/cards-container/CardsContainer';
 import { scryfallService } from '../../api/service/scryfall-service';
-import {
-  getSavedSearchQuery,
-  saveSearchQuery,
-} from '../../shared/utils/storage';
 import { UI_MESSAGES } from '../../shared/constants/messages';
 import styles from './main-page.module.scss';
 import type { CardItem } from '../../shared/constants/types';
-import ErrorTest from '../../shared/ui/error-test/ErrorTest';
 import CardsSkeletonLoader from '../../shared/ui/card-skeleton-loader/CardSkeletonLoader';
 import { chunkArrayCards } from '../../shared/utils/chunk-array-cards';
 import CardRowSlider from '../../shared/ui/cards-row-slider/CardRowSlider';
+import { useState, useEffect, useCallback } from 'react';
+import { useSearchParams, useNavigate, Outlet, Link } from 'react-router';
+import { useSearchQuerySync } from '../../shared/hooks/useSearchQuerySync';
+import { useRedirectInvalidPage } from '../../shared/hooks/useRedirectInvalidPage';
+import { useLocalStorage } from '../../shared/hooks/useLocalStorage';
+import Pagination from '../../shared/ui/pagination/PaginationControls';
+import { LOCAL_STORAGE_KEYS } from '../../shared/constants/local-storage-keys';
 
-interface IMainPageState {
-  items: CardItem[];
-  isLoading: boolean;
-  error: string | null;
-  currentPage: number;
-  searchQuery: string;
-  hasMore: boolean;
-}
+const SLIDER_CHUNK_SIZE = 4;
 
-class MainPage extends Component<unknown, IMainPageState> {
-  constructor(props: unknown) {
-    super(props);
+function MainPage() {
+  const [items, setItems] = useState<CardItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(false);
 
-    this.state = {
-      items: [],
-      isLoading: false,
-      error: null,
-      currentPage: 1,
-      searchQuery: getSavedSearchQuery(),
-      hasMore: false,
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const pageParam = searchParams.get('page');
+  const parsedPage = Number(pageParam);
+  const isInvalidPage = !Number.isInteger(parsedPage) || parsedPage < 1;
+  const currentPage = isInvalidPage ? 1 : parsedPage;
+  const currentQuery = searchParams.get('q') ?? '';
+
+  useSearchQuerySync();
+
+  const { setStoredValue: saveSearchQuery } = useLocalStorage(
+    LOCAL_STORAGE_KEYS.SEARCH_QUERY,
+    ''
+  );
+
+  useRedirectInvalidPage({ isInvalidPage, searchParams });
+
+  useEffect(() => {
+    if (isInvalidPage) return;
+    let didCancel = false;
+
+    const fetchCards = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const response = await scryfallService.searchCards(
+          currentQuery,
+          currentPage
+        );
+        if (!didCancel) {
+          setItems(response.items);
+          setHasMore(response.hasMore);
+        }
+      } catch (err) {
+        if (!didCancel) {
+          const errorMessage =
+            err instanceof Error ? err.message : UI_MESSAGES.UNKNOWN_ERROR;
+          setError(errorMessage);
+          setItems([]);
+        }
+      } finally {
+        if (!didCancel) {
+          setIsLoading(false);
+        }
+      }
     };
-  }
 
-  componentDidMount() {
-    void this.fetchData(this.state.searchQuery, this.state.currentPage);
-  }
+    void fetchCards();
 
-  fetchData = async (query: string, page: number) => {
-    this.setState({ isLoading: true, error: null });
+    return () => {
+      didCancel = true;
+    };
+  }, [isInvalidPage, currentQuery, currentPage]);
 
-    try {
-      const response = await scryfallService.searchCards(query, page);
+  const handleSearch = useCallback(
+    (query: string) => {
+      saveSearchQuery(query);
 
-      this.setState({
-        items: response.items,
-        hasMore: response.hasMore,
-      });
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : UI_MESSAGES.UNKNOWN_ERROR;
-      this.setState({ error: errorMessage, items: [] });
-    } finally {
-      this.setState({ isLoading: false });
-    }
-  };
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set('page', '1');
 
-  handleSearch = (query: string) => {
-    if (query === getSavedSearchQuery()) {
-      return;
-    }
+      if (query) {
+        newParams.set('q', query);
+      } else {
+        newParams.delete('q');
+      }
 
-    saveSearchQuery(query);
+      void navigate(`/?${newParams.toString()}`, { replace: true });
+    },
+    [searchParams, navigate, saveSearchQuery]
+  );
 
-    this.setState({ searchQuery: query, currentPage: 1 }, () => {
-      void this.fetchData(query, 1);
-    });
-  };
+  const handleCloseDetails = useCallback(() => {
+    const newParams = new URLSearchParams(searchParams);
+    void navigate(`/?${newParams.toString()}`, { replace: true });
+  }, [searchParams, navigate]);
+  const sliderRows = chunkArrayCards<CardItem>(items, SLIDER_CHUNK_SIZE);
 
-  handleQueryChange = (value: string) => {
-    this.setState({ searchQuery: value });
-  };
-
-  render() {
-    const { items, isLoading, error } = this.state;
-    const sliderRows = chunkArrayCards<CardItem>(items, 4);
-
-    return (
-      <main className={styles.mainPage}>
-        <div className={styles.topControls}>
-          <div className={styles.topControlsWrapper}>
-            <SearchForm
-              query={this.state.searchQuery}
-              onQueryChange={this.handleQueryChange}
-              onSearch={this.handleSearch}
-            />
-            <ErrorTest />
-          </div>
+  return (
+    <main className={styles.mainPage}>
+      <div className={styles.topControls}>
+        <div className={styles.topControlsWrapper}>
+          <SearchForm
+            key={currentQuery}
+            defaultValue={currentQuery}
+            onSearch={handleSearch}
+          />
+          <Link to="/about" className={styles.aboutLink}>
+            About
+          </Link>
         </div>
-        <div className={styles.contentArea}>
-          <div className={styles.contentAreaWrapper}>
-            {error && <div className={styles.errorMessage}>Error: {error}</div>}
+      </div>
+      <div className={styles.contentArea}>
+        <div className={styles.contentAreaWrapper}>
+          {error && <div className={styles.errorMessage}>Error: {error}</div>}
 
-            {!error && (
-              <>
-                {isLoading ? (
-                  <CardsSkeletonLoader count={10} />
-                ) : sliderRows.length > 0 ? (
-                  <CardsContainer>
-                    {sliderRows.map((rowCards, rowIndex) => (
-                      <CardRowSlider
-                        key={`row-${String(rowIndex)}`}
-                        cards={rowCards}
-                        rowIndex={rowIndex}
-                      />
-                    ))}
-                  </CardsContainer>
-                ) : (
-                  <p>{UI_MESSAGES.NO_RESULTS}</p>
-                )}
-              </>
-            )}
-          </div>
+          {!error && (
+            <>
+              {isLoading ? (
+                <CardsSkeletonLoader count={SLIDER_CHUNK_SIZE} />
+              ) : sliderRows.length > 0 ? (
+                <CardsContainer>
+                  {sliderRows.map((rowCards, rowIndex) => (
+                    <CardRowSlider
+                      key={`row-${String(rowIndex)}`}
+                      cards={rowCards}
+                      rowIndex={rowIndex}
+                    />
+                  ))}
+                </CardsContainer>
+              ) : (
+                <p>{UI_MESSAGES.NO_RESULTS}</p>
+              )}
+              {!isLoading && sliderRows.length > 0 && (
+                <Pagination hasMore={hasMore} />
+              )}
+            </>
+          )}
         </div>
-      </main>
-    );
-  }
+        <Outlet context={{ onClose: handleCloseDetails }} />
+      </div>
+    </main>
+  );
 }
 
 export default MainPage;

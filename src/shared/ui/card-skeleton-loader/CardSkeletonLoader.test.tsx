@@ -3,11 +3,11 @@ import { describe, it, expect } from 'vitest';
 import CardsSkeletonLoader from './CardSkeletonLoader';
 
 describe('CardsSkeletonLoader', () => {
-  it('renders 10 skeleton cards by default', () => {
+  it('renders 4 skeleton cards by default', () => {
     render(<CardsSkeletonLoader />);
 
     const skeletons = screen.getAllByTestId('skeleton-card');
-    expect(skeletons).toHaveLength(10);
+    expect(skeletons).toHaveLength(4);
   });
 
   it('renders correct number of skeleton cards when count is provided', () => {

@@ -1,30 +1,22 @@
-import { Component } from 'react';
 import CardSkeleton from '../card-skeleton/CardSkeleton';
 
 interface ICardsSkeletonLoaderProps {
   count?: number;
 }
 
-class CardsSkeletonLoader extends Component<ICardsSkeletonLoaderProps> {
-  static defaultProps = {
-    count: 10,
-  };
+function CardsSkeletonLoader({ count = 4 }: ICardsSkeletonLoaderProps) {
+  const skeletonItems = Array.from(
+    { length: count },
+    (_, number) => `skeleton-card-${String(number)}`
+  );
 
-  render() {
-    const { count = 10 } = this.props;
-
-    const skeletonItems = Array.from({ length: count }, (_, number) => {
-      return `skeleton-card-${String(number)}`;
-    });
-
-    return (
-      <>
-        {skeletonItems.map((skeletonId) => (
-          <CardSkeleton key={skeletonId} />
-        ))}
-      </>
-    );
-  }
+  return (
+    <>
+      {skeletonItems.map((skeletonId) => (
+        <CardSkeleton key={skeletonId} />
+      ))}
+    </>
+  );
 }
 
 export default CardsSkeletonLoader;

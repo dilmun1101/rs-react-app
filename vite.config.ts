@@ -45,4 +45,7 @@ export default defineConfig({
       '@common': path.resolve(__dirname, './src/common'),
     },
   },
+  server: {
+    open: true,
+  },
 });

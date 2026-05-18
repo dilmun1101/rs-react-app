@@ -1,0 +1,18 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 20px;
+
+  .title {
+    margin-bottom: 20px;
+    font-size: 32px;
+  }
+
+  .text {
+    margin-bottom: 12px;
+  }
+
+  .link {
+    color: inherit;
+  }
+}
