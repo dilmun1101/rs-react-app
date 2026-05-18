@@ -1,12 +1,18 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import MainPage from './MainPage';
-import * as storage from '../../shared/utils/storage';
 import { server } from '../../api/test-utils/server';
 import { http, HttpResponse } from 'msw';
 import { UI_MESSAGES } from '../../shared/constants/messages';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router';
+import * as localStorageHook from '../../shared/hooks/useLocalStorage';
+
+const setStoredValueMock = vi.fn();
+
+vi.mock('../../shared/hooks/useLocalStorage', () => ({
+  useLocalStorage: vi.fn(),
+}));
 
 vi.mock('../../shared/ui/error-test/ErrorTest', () => ({
   default: () => <div>ErrorTest</div>,
@@ -49,8 +55,12 @@ const renderMainPage = (initialEntry = '/?page=1&q=') =>
 
 beforeEach(() => {
   vi.clearAllMocks();
-  vi.spyOn(storage, 'getSavedSearchQuery').mockReturnValue('');
-  vi.spyOn(storage, 'saveSearchQuery').mockImplementation(() => undefined);
+
+  vi.mocked(localStorageHook.useLocalStorage).mockReturnValue({
+    value: '',
+    setStoredValue: setStoredValueMock,
+    removeStoredValue: vi.fn(),
+  });
 });
 
 afterEach(() => {
@@ -105,16 +115,14 @@ describe('MainPage', () => {
     expect(screen.getByText('Skeleton')).toBeInTheDocument();
   });
 
-  it('reads saved search query from localStorage on mount', () => {
-    vi.spyOn(storage, 'getSavedSearchQuery').mockReturnValue('dragon');
-
-    renderMainPage();
-
+  it('reads search query from URL on mount', () => {
+    renderMainPage('/?page=1&q=dragon');
     expect(screen.getByLabelText('search')).toHaveValue('dragon');
   });
 
   it('saves search query to localStorage when search is submitted', async () => {
     renderMainPage();
+
     const user = userEvent.setup();
     const input = screen.getByLabelText('search');
 
@@ -122,7 +130,7 @@ describe('MainPage', () => {
     await user.type(input, 'dragon');
     await user.click(screen.getByRole('button', { name: /search/i }));
 
-    expect(storage.saveSearchQuery).toHaveBeenCalledWith('dragon');
+    expect(setStoredValueMock).toHaveBeenCalledWith('dragon');
   });
 
   it('updates input value when user types', async () => {
