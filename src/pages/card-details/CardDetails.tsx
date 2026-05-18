@@ -46,7 +46,10 @@ function CardDetails() {
           name={card.name}
           description={card.description}
           imageUrl={card.imageUrl}
+          artist={card.artist}
+          showArtist
           className={styles.detailsCard}
+          imageClassName={styles.detailsImage}
         />
       ) : null}
     </aside>

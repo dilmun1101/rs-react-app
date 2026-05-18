@@ -12,6 +12,8 @@ import Pagination from '../../shared/ui/pagination/Pagination';
 import { useSearchParams, useNavigate, Outlet, Link } from 'react-router';
 import { useSearchQuerySync } from '../../shared/hooks/useSearchQuerySync';
 
+const SLIDER_CHUNK_SIZE = 4;
+
 function MainPage() {
   const [items, setItems] = useState<CardItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -78,7 +80,7 @@ function MainPage() {
     const newParams = new URLSearchParams(searchParams);
     void navigate(`/?${newParams.toString()}`, { replace: true });
   }, [searchParams, navigate]);
-  const sliderRows = chunkArrayCards<CardItem>(items, 4);
+  const sliderRows = chunkArrayCards<CardItem>(items, SLIDER_CHUNK_SIZE);
 
   return (
     <main className={styles.mainPage}>
@@ -101,7 +103,7 @@ function MainPage() {
           {!error && (
             <>
               {isLoading ? (
-                <CardsSkeletonLoader count={4} />
+                <CardsSkeletonLoader count={SLIDER_CHUNK_SIZE} />
               ) : sliderRows.length > 0 ? (
                 <CardsContainer>
                   {sliderRows.map((rowCards, rowIndex) => (

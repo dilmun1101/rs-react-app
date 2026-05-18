@@ -1,13 +1,23 @@
 import styles from './about-page.module.scss';
 
+const INFO_PAGE = {
+  GITHUB_PROFILE_LINK: 'https://github.com/dilmun1101',
+  RS_SCHOOL_REACT_LINK: 'https://rs.school/courses/reactjs',
+  TITLE: 'About',
+  AUTHOR_LABEL: 'Author:',
+  COURSE_LABEL: 'Course:',
+  COURSE_NAME: 'RS School React Course',
+  DESCRIPTION: 'This application was created as a study project.',
+} as const;
+
 function AboutPage() {
   return (
     <main className={styles.container}>
-      <h1 className={styles.title}>About</h1>
+      <h1 className={styles.title}>{INFO_PAGE.TITLE}</h1>
       <p className={styles.text}>
-        Author:{' '}
+        {INFO_PAGE.AUTHOR_LABEL}{' '}
         <a
-          href="https://github.com/dilmun1101"
+          href={INFO_PAGE.GITHUB_PROFILE_LINK}
           target="_blank"
           className={styles.link}
         >
@@ -15,18 +25,16 @@ function AboutPage() {
         </a>
       </p>
       <p className={styles.text}>
-        Course:{' '}
+        {INFO_PAGE.COURSE_LABEL}{' '}
         <a
-          href="https://rs.school/courses/reactjs"
+          href={INFO_PAGE.RS_SCHOOL_REACT_LINK}
           target="_blank"
           className={styles.link}
         >
-          RS School React Course
+          {INFO_PAGE.COURSE_NAME}
         </a>
       </p>
-      <p className={styles.text}>
-        This application was created as a study project.
-      </p>
+      <p className={styles.text}>{INFO_PAGE.DESCRIPTION}</p>
     </main>
   );
 }

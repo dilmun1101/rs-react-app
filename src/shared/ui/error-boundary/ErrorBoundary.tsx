@@ -29,10 +29,6 @@ class ErrorBoundary extends Component<IErrorBoundaryProps, ErrorBoundaryState> {
     this.setState({ hasError: false });
   };
 
-  handleReload = () => {
-    window.location.reload();
-  };
-
   render() {
     if (this.state.hasError) {
       return (
@@ -40,9 +36,6 @@ class ErrorBoundary extends Component<IErrorBoundaryProps, ErrorBoundaryState> {
           <p>{UI_MESSAGES.ERROR_BOUNDARY_FALLBACK}</p>
           <Button onClick={this.handleReset}>
             {UI_MESSAGES.BUTTON_GO_BACK}
-          </Button>
-          <Button onClick={this.handleReload}>
-            {UI_MESSAGES.BUTTON_RELOAD_APP}
           </Button>
         </main>
       );

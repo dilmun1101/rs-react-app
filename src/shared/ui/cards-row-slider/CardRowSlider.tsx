@@ -20,7 +20,6 @@ interface Props {
 function CardRowSlider({ cards, className }: Props) {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [searchParams] = useSearchParams();
-  const dragDistanceRef = useRef(0);
 
   const scroll = (direction: 'left' | 'right') => {
     trackRef.current?.scrollBy({
@@ -52,9 +51,6 @@ function CardRowSlider({ cards, className }: Props) {
             key={card.id}
             to={`/details/${card.id}?${searchParams.toString()}`}
             className={styles.cardLink}
-            onClick={(event) => {
-              if (dragDistanceRef.current > 5) event.preventDefault();
-            }}
           >
             <Card
               key={card.id}

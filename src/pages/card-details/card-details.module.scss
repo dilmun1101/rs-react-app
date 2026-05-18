@@ -13,9 +13,14 @@
   }
 
   .detailsCard {
+    min-height: 350px;
     border: none;
     gap: 16px;
     pointer-events: none;
     cursor: none;
+
+    .detailsImage {
+      height: 250px;
+    }
   }
 }
