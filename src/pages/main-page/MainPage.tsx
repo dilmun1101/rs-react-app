@@ -11,7 +11,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate, Outlet, Link } from 'react-router';
 import { useSearchQuerySync } from '../../shared/hooks/useSearchQuerySync';
 import { useRedirectInvalidPage } from '../../shared/hooks/useRedirectInvalidPage';
-import Pagination from '../../shared/ui/pagination/Pagination';
+import Pagination from '../../shared/ui/pagination/PaginationControls';
 
 const SLIDER_CHUNK_SIZE = 4;
 
