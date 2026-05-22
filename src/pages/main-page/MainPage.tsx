@@ -27,6 +27,7 @@ import {
   selectHasMore,
   selectIsLoading,
 } from '../../store/selectors/selectors';
+import SelectionPanel from '@/shared/ui/selection-panel/SelectionPanel';
 
 const SLIDER_CHUNK_SIZE = 4;
 
@@ -56,8 +57,6 @@ function MainPage() {
 
   useEffect(() => {
     if (isInvalidPage) return;
-    let didCancel = false;
-
     const fetchCards = async () => {
       dispatch(setIsLoading(true));
       dispatch(setError(null));
@@ -67,29 +66,20 @@ function MainPage() {
           currentQuery,
           currentPage
         );
-        if (!didCancel) {
-          dispatch(setItems(response.items));
-          dispatch(setHasMore(response.hasMore));
-        }
+
+        dispatch(setItems(response.items));
+        dispatch(setHasMore(response.hasMore));
       } catch (err) {
-        if (!didCancel) {
-          const errorMessage =
-            err instanceof Error ? err.message : UI_MESSAGES.UNKNOWN_ERROR;
-          dispatch(setError(errorMessage));
-          dispatch(setItems([]));
-        }
+        const errorMessage =
+          err instanceof Error ? err.message : UI_MESSAGES.UNKNOWN_ERROR;
+        dispatch(setError(errorMessage));
+        dispatch(setItems([]));
       } finally {
-        if (!didCancel) {
-          dispatch(setIsLoading(false));
-        }
+        dispatch(setIsLoading(false));
       }
     };
 
     void fetchCards();
-
-    return () => {
-      didCancel = true;
-    };
   }, [isInvalidPage, currentQuery, currentPage, dispatch]);
 
   const handleSearch = useCallback(
@@ -158,6 +148,7 @@ function MainPage() {
           )}
         </div>
         <Outlet context={{ onClose: handleCloseDetails }} />
+        <SelectionPanel />
       </div>
     </main>
   );
