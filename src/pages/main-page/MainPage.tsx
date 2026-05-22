@@ -7,21 +7,29 @@ import type { CardItem } from '../../shared/constants/types';
 import CardsSkeletonLoader from '../../shared/ui/card-skeleton-loader/CardSkeletonLoader';
 import { chunkArrayCards } from '../../shared/utils/chunk-array-cards';
 import CardRowSlider from '../../shared/ui/cards-row-slider/CardRowSlider';
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate, Outlet, Link } from 'react-router';
 import { useSearchQuerySync } from '../../shared/hooks/useSearchQuerySync';
 import { useRedirectInvalidPage } from '../../shared/hooks/useRedirectInvalidPage';
 import { useLocalStorage } from '../../shared/hooks/useLocalStorage';
 import Pagination from '../../shared/ui/pagination/PaginationControls';
 import { LOCAL_STORAGE_KEYS } from '../../shared/constants/local-storage-keys';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import {
+  setItems,
+  setIsLoading,
+  setError,
+  setHasMore,
+} from '../../store/cardsSlice/cardsSlice';
 
 const SLIDER_CHUNK_SIZE = 4;
 
 function MainPage() {
-  const [items, setItems] = useState<CardItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState(false);
+  const dispatch = useAppDispatch();
+  const items = useAppSelector((state) => state.cards.items);
+  const isLoading = useAppSelector((state) => state.cards.isLoading);
+  const error = useAppSelector((state) => state.cards.error);
+  const hasMore = useAppSelector((state) => state.cards.hasMore);
 
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -45,8 +53,8 @@ function MainPage() {
     let didCancel = false;
 
     const fetchCards = async () => {
-      setIsLoading(true);
-      setError(null);
+      dispatch(setIsLoading(true));
+      dispatch(setError(null));
 
       try {
         const response = await scryfallService.searchCards(
@@ -54,19 +62,19 @@ function MainPage() {
           currentPage
         );
         if (!didCancel) {
-          setItems(response.items);
-          setHasMore(response.hasMore);
+          dispatch(setItems(response.items));
+          dispatch(setHasMore(response.hasMore));
         }
       } catch (err) {
         if (!didCancel) {
           const errorMessage =
             err instanceof Error ? err.message : UI_MESSAGES.UNKNOWN_ERROR;
-          setError(errorMessage);
-          setItems([]);
+          dispatch(setError(errorMessage));
+          dispatch(setItems([]));
         }
       } finally {
         if (!didCancel) {
-          setIsLoading(false);
+          dispatch(setIsLoading(false));
         }
       }
     };
@@ -76,7 +84,7 @@ function MainPage() {
     return () => {
       didCancel = true;
     };
-  }, [isInvalidPage, currentQuery, currentPage]);
+  }, [isInvalidPage, currentQuery, currentPage, dispatch]);
 
   const handleSearch = useCallback(
     (query: string) => {
