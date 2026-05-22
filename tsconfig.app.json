@@ -20,16 +20,19 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true
-  },
+    "noFallthroughCasesInSwitch": true,
 
-  /* Alias */
-  "paths": {
-    "@/*": ["./src/*"],
-    "@components/*": ["./src/components/*"],
-    "@pages/*": ["./src/pages/*"],
-    "@assets/*": ["./src/assets/*"],
-    "@common/*": ["./src/common/*"]
+    /* Alias */
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@common/*": ["./src/common/*"],
+      "@store/*": ["./src/store/*"]
+    }
   },
   "include": ["src"]
 }

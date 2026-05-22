@@ -43,6 +43,7 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, './src/pages'),
       '@assets': path.resolve(__dirname, './src/assets'),
       '@common': path.resolve(__dirname, './src/common'),
+      '@store': path.resolve(__dirname, './src/store'),
     },
   },
   server: {
