@@ -14,22 +14,28 @@ import { useRedirectInvalidPage } from '../../shared/hooks/useRedirectInvalidPag
 import { useLocalStorage } from '../../shared/hooks/useLocalStorage';
 import Pagination from '../../shared/ui/pagination/PaginationControls';
 import { LOCAL_STORAGE_KEYS } from '../../shared/constants/local-storage-keys';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
 import {
   setItems,
   setIsLoading,
   setError,
   setHasMore,
-} from '../../store/cardsSlice/cardsSlice';
+} from '../../store/slices/cardsSlice';
+import {
+  selectCards,
+  selectError,
+  selectHasMore,
+  selectIsLoading,
+} from '../../store/selectors/selectors';
 
 const SLIDER_CHUNK_SIZE = 4;
 
 function MainPage() {
   const dispatch = useAppDispatch();
-  const items = useAppSelector((state) => state.cards.items);
-  const isLoading = useAppSelector((state) => state.cards.isLoading);
-  const error = useAppSelector((state) => state.cards.error);
-  const hasMore = useAppSelector((state) => state.cards.hasMore);
+  const items = useAppSelector(selectCards);
+  const isLoading = useAppSelector(selectIsLoading);
+  const error = useAppSelector(selectError);
+  const hasMore = useAppSelector(selectHasMore);
 
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();

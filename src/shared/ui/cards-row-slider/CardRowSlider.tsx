@@ -58,6 +58,7 @@ function CardRowSlider({ cards, className }: Props) {
               name={card.name}
               description={card.description}
               imageUrl={card.imageUrl}
+              showCheckbox
             />
           </Link>
         ))}
