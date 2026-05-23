@@ -28,6 +28,7 @@ import {
   selectIsLoading,
 } from '../../store/selectors/selectors';
 import SelectionPanel from '@/shared/ui/selection-panel/SelectionPanel';
+import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
 
 const SLIDER_CHUNK_SIZE = 4;
 
@@ -109,6 +110,7 @@ function MainPage() {
   return (
     <main className={styles.mainPage}>
       <div className={styles.topControls}>
+        <ThemeToggle />
         <div className={styles.topControlsWrapper}>
           <SearchForm
             key={currentQuery}

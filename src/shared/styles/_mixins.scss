@@ -7,7 +7,7 @@
   $lh: 1,
   $weight: 400,
   $family: 'Cause',
-  $color: vars.$dark-text-color
+  $color: var(--text)
 ) {
   font-family: $family, sans-serif;
   font-size: $size;
