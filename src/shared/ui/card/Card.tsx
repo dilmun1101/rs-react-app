@@ -1,10 +1,6 @@
 import styles from './card.module.scss';
 import cx from 'classnames';
-import type { CSSProperties } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks/hooks';
-import { selectItem, unselectItem } from '../../../store/slices/selectedSlice';
-import type { CardItem } from '../../constants/types';
-import { selectSelectedCards } from '../../../store/selectors/selectors';
+import type { CSSProperties, ChangeEvent, MouseEvent } from 'react';
 
 interface Props {
   id: string;
@@ -16,10 +12,12 @@ interface Props {
   showArtist?: boolean;
   imageClassName?: string;
   showCheckbox?: boolean;
+  isSelected?: boolean;
+  onCheckboxChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onCheckboxClick?: (event: MouseEvent<HTMLInputElement>) => void;
 }
 
 function Card({
-  id,
   name,
   description,
   artist,
@@ -27,24 +25,13 @@ function Card({
   className,
   showArtist,
   imageClassName,
-  showCheckbox = false,
+  showCheckbox,
+  onCheckboxChange,
+  isSelected,
+  onCheckboxClick,
 }: Props) {
   const backgroundStyle: CSSProperties = {
     backgroundImage: `url(${imageUrl ?? ''})`,
-  };
-
-  const dispatch = useAppDispatch();
-  const selectedCards = useAppSelector(selectSelectedCards);
-  const isSelected = selectedCards.some((item) => item.id === id);
-
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.stopPropagation();
-    if (event.target.checked) {
-      const card: CardItem = { id, name, description, imageUrl };
-      dispatch(selectItem(card));
-    } else {
-      dispatch(unselectItem(id));
-    }
   };
 
   const artistElement =
@@ -57,10 +44,8 @@ function Card({
           type="checkbox"
           className={styles.checkbox}
           checked={isSelected}
-          onChange={handleCheckboxChange}
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
+          onChange={onCheckboxChange}
+          onClick={onCheckboxClick}
         />
       )}
       <p className={styles.title}>{name}</p>

@@ -2,6 +2,7 @@
 @use '../../styles/variables' as vars;
 
 .card {
+  position: relative;
   width: 100%;
   height: 240px;
   display: flex;
@@ -13,7 +14,7 @@
   overflow: hidden;
   user-select: none;
   cursor: pointer;
-  @include typography($size: 0.8rem, $lh: 1.2, $color: vars.$light-text-color);
+  @include typography($size: 0.8rem, $lh: 1.2, $color: var(--text));
 
   .title {
     height: 18px;
@@ -31,5 +32,28 @@
   .info {
     margin: 0;
     height: 120px;
+  }
+
+  .checkbox {
+    position: absolute;
+    right: 10px;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--accent);
+    border-radius: 10px;
+    background: var(--background);
+    transition: 1.5s;
+    z-index: 10;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    &:checked {
+      background-color: var(--accent);
+      border-color: var(--accent);
+    }
   }
 }

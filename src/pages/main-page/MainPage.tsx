@@ -20,13 +20,14 @@ import {
   setIsLoading,
   setError,
   setHasMore,
-} from '../../store/slices/cardsSlice';
+} from '../../store/cardsSlice/cardsSlice';
 import {
   selectCards,
   selectError,
   selectHasMore,
   selectIsLoading,
-} from '../../store/selectors/selectors';
+} from '@/store/cardsSlice/selectors/selectors';
+
 import SelectionPanel from '@/shared/ui/selection-panel/SelectionPanel';
 import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
 
