@@ -12,3 +12,8 @@ export const selectSelectedCount = createSelector(
   selectSelectedCards,
   (selectedCards) => selectedCards.length
 );
+
+export const selectIsCardSelected = createSelector(
+  [selectSelectedCards, (_state: RootState, cardId: string) => cardId],
+  (selectedCards, cardId) => selectedCards.some((item) => item.id === cardId)
+);
