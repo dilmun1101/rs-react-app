@@ -1,6 +1,5 @@
 import SearchForm from '../../shared/ui/search-form/SearchForm';
 import CardsContainer from '../../shared/ui/cards-container/CardsContainer';
-import { scryfallService } from '../../api/service/scryfall-service';
 import { UI_MESSAGES } from '../../shared/constants/messages';
 import styles from './main-page.module.scss';
 import type { CardItem } from '../../shared/constants/types';
@@ -15,12 +14,7 @@ import { useLocalStorage } from '../../shared/hooks/useLocalStorage';
 import Pagination from '../../shared/ui/pagination/PaginationControls';
 import { LOCAL_STORAGE_KEYS } from '../../shared/constants/local-storage-keys';
 import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
-import {
-  setItems,
-  setIsLoading,
-  setError,
-  setHasMore,
-} from '../../store/cardsSlice/cardsSlice';
+import { fetchCards } from '@/store/thunks/thunks';
 import {
   selectCards,
   selectError,
@@ -59,29 +53,8 @@ function MainPage() {
 
   useEffect(() => {
     if (isInvalidPage) return;
-    const fetchCards = async () => {
-      dispatch(setIsLoading(true));
-      dispatch(setError(null));
 
-      try {
-        const response = await scryfallService.searchCards(
-          currentQuery,
-          currentPage
-        );
-
-        dispatch(setItems(response.items));
-        dispatch(setHasMore(response.hasMore));
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : UI_MESSAGES.UNKNOWN_ERROR;
-        dispatch(setError(errorMessage));
-        dispatch(setItems([]));
-      } finally {
-        dispatch(setIsLoading(false));
-      }
-    };
-
-    void fetchCards();
+    void dispatch(fetchCards({ query: currentQuery, page: currentPage }));
   }, [isInvalidPage, currentQuery, currentPage, dispatch]);
 
   const handleSearch = useCallback(

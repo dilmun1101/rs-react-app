@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
 import type { CardItem } from '../../shared/constants/types';
+import { fetchCards } from '../thunks/thunks';
 
 interface CardsState {
   items: CardItem[];
@@ -19,22 +19,25 @@ const initialState: CardsState = {
 const cardSlice = createSlice({
   name: 'cards',
   initialState,
-  reducers: {
-    setItems(state, action: PayloadAction<CardItem[]>) {
-      state.items = action.payload;
-    },
-    setIsLoading(state, action: PayloadAction<boolean>) {
-      state.isLoading = action.payload;
-    },
-    setError(state, action: PayloadAction<string | null>) {
-      state.error = action.payload;
-    },
-    setHasMore(state, action: PayloadAction<boolean>) {
-      state.hasMore = action.payload;
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCards.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchCards.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.items = action.payload.items;
+        state.hasMore = action.payload.hasMore;
+      })
+      .addCase(fetchCards.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload ?? action.error.message ?? 'Unknown error';
+        state.items = [];
+        state.hasMore = false;
+      });
   },
 });
 
-export const { setItems, setIsLoading, setError, setHasMore } =
-  cardSlice.actions;
 export default cardSlice.reducer;
