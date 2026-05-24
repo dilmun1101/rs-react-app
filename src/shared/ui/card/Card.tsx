@@ -9,7 +9,6 @@ interface Props {
   artist?: string;
   imageUrl?: string;
   className?: string;
-  showArtist?: boolean;
   imageClassName?: string;
   showCheckbox?: boolean;
   isSelected?: boolean;
@@ -23,7 +22,6 @@ function Card({
   artist,
   imageUrl,
   className,
-  showArtist,
   imageClassName,
   showCheckbox,
   onCheckboxChange,
@@ -33,9 +31,6 @@ function Card({
   const backgroundStyle: CSSProperties = {
     backgroundImage: `url(${imageUrl ?? ''})`,
   };
-
-  const artistElement =
-    showArtist && artist ? <p className={styles.artist}>{artist}</p> : null;
 
   return (
     <div className={cx(styles.card, className)}>
@@ -55,7 +50,7 @@ function Card({
         style={backgroundStyle}
       />
       <p className={styles.info}>{description}</p>
-      {artistElement}
+      {artist && <p className={styles.artist}>{artist}</p>}
     </div>
   );
 }
