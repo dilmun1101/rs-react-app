@@ -4,7 +4,7 @@ import { UI_MESSAGES } from '../../shared/constants/messages';
 import styles from './main-page.module.scss';
 import type { CardItem } from '../../shared/constants/types';
 import CardsSkeletonLoader from '../../shared/ui/card-skeleton-loader/CardSkeletonLoader';
-import { chunkArrayCards } from '../../shared/utils/chunk-array-cards';
+import { chunkArrayCards } from '../../shared/utils/chunk-array-cards/chunk-array-cards';
 import CardRowSlider from '../../shared/ui/cards-row-slider/CardRowSlider';
 import { useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate, Outlet, Link } from 'react-router';

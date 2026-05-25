@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { getSavedSearchQuery, saveSearchQuery } from './storage';
-import { LOCAL_STORAGE_KEYS } from '../constants/local-storage-keys';
+import { LOCAL_STORAGE_KEYS } from '@/shared/constants/local-storage-keys';
 
 const getItemSpy = vi.spyOn(Storage.prototype, 'getItem');
 const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');

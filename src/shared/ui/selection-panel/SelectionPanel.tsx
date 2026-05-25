@@ -7,8 +7,8 @@ import {
 } from '@/store/selectedSlice/selectors/selectors';
 import cx from 'classnames';
 import styles from './selection-panel.module.scss';
-import { convertToCSV } from '@/shared/utils/convert-to-csv';
-import { downloadCsv } from '@/shared/utils/download-csv';
+import { convertToCSV } from '@/shared/utils/convert-to-csv/convert-to-csv';
+import { downloadCsv } from '@/shared/utils/download-csv/download-csv';
 
 interface Props {
   className?: string;

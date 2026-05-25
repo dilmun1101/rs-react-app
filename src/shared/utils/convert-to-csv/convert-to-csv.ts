@@ -1,4 +1,4 @@
-import type { CardItem } from '../constants/types';
+import type { CardItem } from '../../constants/types';
 
 const CSV_HEADERS = [
   'id',

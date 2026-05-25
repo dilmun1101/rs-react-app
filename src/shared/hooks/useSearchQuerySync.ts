@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router';
-import { getSavedSearchQuery, saveSearchQuery } from '../utils/storage';
+import { getSavedSearchQuery, saveSearchQuery } from '../utils/storage/storage';
 
 export const useSearchQuerySync = () => {
   const [, setSearchParams] = useSearchParams();

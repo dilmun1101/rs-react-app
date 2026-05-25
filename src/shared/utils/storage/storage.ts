@@ -1,4 +1,4 @@
-import { LOCAL_STORAGE_KEYS } from '../constants/local-storage-keys';
+import { LOCAL_STORAGE_KEYS } from '@/shared/constants/local-storage-keys';
 
 export const getSavedSearchQuery = (): string => {
   return localStorage.getItem(LOCAL_STORAGE_KEYS.SEARCH_QUERY) ?? '';
