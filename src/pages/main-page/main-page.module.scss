@@ -42,5 +42,11 @@
 
 .selectionPanel {
   position: sticky;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   bottom: 0;
+  background-color: var(--background);
+  padding: 20px 0;
 }
