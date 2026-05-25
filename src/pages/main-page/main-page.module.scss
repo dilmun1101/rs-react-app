@@ -12,14 +12,19 @@
     gap: 10px;
   }
 
-  .aboutLink {
-    @include link-button;
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
-    &:not(.disabledLink) {
-      @include hover-glow-link;
+    .aboutLink {
+      @include link-button;
+
+      &:not(.disabledLink) {
+        @include hover-glow-link;
+      }
     }
   }
-
   .contentArea {
     display: flex;
     align-items: flex-start;
@@ -33,4 +38,15 @@
       padding-top: 10px;
     }
   }
+}
+
+.selectionPanel {
+  position: sticky;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  bottom: 0;
+  background-color: var(--background);
+  padding: 20px 0;
 }

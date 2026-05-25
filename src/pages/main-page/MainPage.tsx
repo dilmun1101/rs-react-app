@@ -1,27 +1,38 @@
 import SearchForm from '../../shared/ui/search-form/SearchForm';
 import CardsContainer from '../../shared/ui/cards-container/CardsContainer';
-import { scryfallService } from '../../api/service/scryfall-service';
 import { UI_MESSAGES } from '../../shared/constants/messages';
 import styles from './main-page.module.scss';
 import type { CardItem } from '../../shared/constants/types';
 import CardsSkeletonLoader from '../../shared/ui/card-skeleton-loader/CardSkeletonLoader';
-import { chunkArrayCards } from '../../shared/utils/chunk-array-cards';
+import { chunkArrayCards } from '../../shared/utils/chunk-array-cards/chunk-array-cards';
 import CardRowSlider from '../../shared/ui/cards-row-slider/CardRowSlider';
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate, Outlet, Link } from 'react-router';
 import { useSearchQuerySync } from '../../shared/hooks/useSearchQuerySync';
 import { useRedirectInvalidPage } from '../../shared/hooks/useRedirectInvalidPage';
 import { useLocalStorage } from '../../shared/hooks/useLocalStorage';
 import Pagination from '../../shared/ui/pagination/PaginationControls';
 import { LOCAL_STORAGE_KEYS } from '../../shared/constants/local-storage-keys';
+import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
+import { fetchCards } from '@/store/cardsSlice/thunks/thunks';
+import {
+  selectCards,
+  selectError,
+  selectHasMore,
+  selectIsLoading,
+} from '@/store/cardsSlice/selectors/selectors';
+
+import SelectionPanel from '@/shared/ui/selection-panel/SelectionPanel';
+import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
 
 const SLIDER_CHUNK_SIZE = 4;
 
 function MainPage() {
-  const [items, setItems] = useState<CardItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState(false);
+  const dispatch = useAppDispatch();
+  const items = useAppSelector(selectCards);
+  const isLoading = useAppSelector(selectIsLoading);
+  const error = useAppSelector(selectError);
+  const hasMore = useAppSelector(selectHasMore);
 
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -42,41 +53,9 @@ function MainPage() {
 
   useEffect(() => {
     if (isInvalidPage) return;
-    let didCancel = false;
 
-    const fetchCards = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const response = await scryfallService.searchCards(
-          currentQuery,
-          currentPage
-        );
-        if (!didCancel) {
-          setItems(response.items);
-          setHasMore(response.hasMore);
-        }
-      } catch (err) {
-        if (!didCancel) {
-          const errorMessage =
-            err instanceof Error ? err.message : UI_MESSAGES.UNKNOWN_ERROR;
-          setError(errorMessage);
-          setItems([]);
-        }
-      } finally {
-        if (!didCancel) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    void fetchCards();
-
-    return () => {
-      didCancel = true;
-    };
-  }, [isInvalidPage, currentQuery, currentPage]);
+    void dispatch(fetchCards({ query: currentQuery, page: currentPage }));
+  }, [isInvalidPage, currentQuery, currentPage, dispatch]);
 
   const handleSearch = useCallback(
     (query: string) => {
@@ -111,9 +90,12 @@ function MainPage() {
             defaultValue={currentQuery}
             onSearch={handleSearch}
           />
-          <Link to="/about" className={styles.aboutLink}>
-            About
-          </Link>
+          <div className={styles.controls}>
+            <Link to="/about" className={styles.aboutLink}>
+              About
+            </Link>
+            <ThemeToggle />
+          </div>
         </div>
       </div>
       <div className={styles.contentArea}>
@@ -145,6 +127,7 @@ function MainPage() {
         </div>
         <Outlet context={{ onClose: handleCloseDetails }} />
       </div>
+      <SelectionPanel className={styles.selectionPanel} />
     </main>
   );
 }

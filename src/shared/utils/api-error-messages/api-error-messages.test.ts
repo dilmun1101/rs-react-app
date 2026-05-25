@@ -3,7 +3,7 @@ import { getErrorMessageByStatus } from './api-error-messages';
 import {
   HTTPS_ERROR_MESSAGES,
   DEFAULT_ERROR_MESSAGE,
-} from '../constants/messages';
+} from '../../constants/messages';
 
 describe('getErrorMessageByStatus', () => {
   it('returns correct message for known HTTP status codes', () => {

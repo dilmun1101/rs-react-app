@@ -1,10 +1,10 @@
-import Card from '../card/Card';
 import type { CardItem } from '../../constants/types';
 import styles from './card-row-slider.module.scss';
 import Button from '../button/Button';
 import cx from 'classnames';
 import { useRef } from 'react';
 import { Link, useSearchParams } from 'react-router';
+import CardWithSelection from '../card-with-selection/CardWithSelection';
 
 const SLIDER_CONFIG = {
   SCROLL_STEP: 320,
@@ -52,12 +52,13 @@ function CardRowSlider({ cards, className }: Props) {
             to={`/details/${card.id}?${searchParams.toString()}`}
             className={styles.cardLink}
           >
-            <Card
+            <CardWithSelection
               key={card.id}
               id={card.id}
               name={card.name}
               description={card.description}
               imageUrl={card.imageUrl}
+              showCheckbox
             />
           </Link>
         ))}

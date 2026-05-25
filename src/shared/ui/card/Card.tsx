@@ -1,7 +1,6 @@
 import styles from './card.module.scss';
 import cx from 'classnames';
-import type { CSSProperties } from 'react';
-import { useSearchParams, useNavigate } from 'react-router';
+import type { CSSProperties, ChangeEvent, MouseEvent } from 'react';
 
 interface Props {
   id: string;
@@ -10,36 +9,40 @@ interface Props {
   artist?: string;
   imageUrl?: string;
   className?: string;
-  showArtist?: boolean;
   imageClassName?: string;
+  showCheckbox?: boolean;
+  isSelected?: boolean;
+  onCheckboxChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onCheckboxClick?: (event: MouseEvent<HTMLInputElement>) => void;
 }
 
 function Card({
-  id,
   name,
   description,
   artist,
   imageUrl,
   className,
-  showArtist,
   imageClassName,
+  showCheckbox,
+  onCheckboxChange,
+  isSelected,
+  onCheckboxClick,
 }: Props) {
   const backgroundStyle: CSSProperties = {
     backgroundImage: `url(${imageUrl ?? ''})`,
   };
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    const newParams = new URLSearchParams(searchParams);
-    void navigate(`/details/${id}?${newParams.toString()}`);
-  };
-
-  const artistElement =
-    showArtist && artist ? <p className={styles.artist}>{artist}</p> : null;
 
   return (
-    <div className={cx(styles.card, className)} onClick={handleClick}>
+    <div className={cx(styles.card, className)}>
+      {showCheckbox && (
+        <input
+          type="checkbox"
+          className={styles.checkbox}
+          checked={isSelected}
+          onChange={onCheckboxChange}
+          onClick={onCheckboxClick}
+        />
+      )}
       <p className={styles.title}>{name}</p>
       <div
         data-testid="card-image"
@@ -47,7 +50,7 @@ function Card({
         style={backgroundStyle}
       />
       <p className={styles.info}>{description}</p>
-      {artistElement}
+      {artist && <p className={styles.artist}>{artist}</p>}
     </div>
   );
 }

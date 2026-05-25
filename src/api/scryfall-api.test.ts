@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { server } from './test-utils/server';
 import { http, HttpResponse } from 'msw';
 import { scryfallApi } from './scryfall-api';
-import { getErrorMessageByStatus } from '../shared/utils/api-error-messages';
+import { getErrorMessageByStatus } from '../shared/utils/api-error-messages/api-error-messages';
 
 describe('scryfallApi.fetchData', () => {
   it('throws an error with status message when response is not ok', async () => {

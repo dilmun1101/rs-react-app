@@ -1,4 +1,4 @@
-import { getErrorMessageByStatus } from '../shared/utils/api-error-messages';
+import { getErrorMessageByStatus } from '../shared/utils/api-error-messages/api-error-messages';
 
 const SCRYFALL_API = 'https://api.scryfall.com';
 
