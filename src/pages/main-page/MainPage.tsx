@@ -14,7 +14,7 @@ import { useLocalStorage } from '../../shared/hooks/useLocalStorage';
 import Pagination from '../../shared/ui/pagination/PaginationControls';
 import { LOCAL_STORAGE_KEYS } from '../../shared/constants/local-storage-keys';
 import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
-import { fetchCards } from '@/store/thunks/thunks';
+import { fetchCards } from '@/store/cardsSlice/thunks/thunks';
 import {
   selectCards,
   selectError,
@@ -84,16 +84,18 @@ function MainPage() {
   return (
     <main className={styles.mainPage}>
       <div className={styles.topControls}>
-        <ThemeToggle />
         <div className={styles.topControlsWrapper}>
           <SearchForm
             key={currentQuery}
             defaultValue={currentQuery}
             onSearch={handleSearch}
           />
-          <Link to="/about" className={styles.aboutLink}>
-            About
-          </Link>
+          <div className={styles.controls}>
+            <Link to="/about" className={styles.aboutLink}>
+              About
+            </Link>
+            <ThemeToggle />
+          </div>
         </div>
       </div>
       <div className={styles.contentArea}>
@@ -124,8 +126,8 @@ function MainPage() {
           )}
         </div>
         <Outlet context={{ onClose: handleCloseDetails }} />
-        <SelectionPanel />
       </div>
+      <SelectionPanel className={styles.selectionPanel} />
     </main>
   );
 }

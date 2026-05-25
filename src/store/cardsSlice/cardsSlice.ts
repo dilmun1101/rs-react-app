@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { CardItem } from '../../shared/constants/types';
-import { fetchCards } from '../thunks/thunks';
+import { fetchCards } from './thunks/thunks';
 
 interface CardsState {
   items: CardItem[];

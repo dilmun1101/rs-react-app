@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { scryfallService } from '../../api/service/scryfall-service';
-import type { SearchCardsResult } from '../../shared/constants/types';
-import { UI_MESSAGES } from '@/shared/constants/messages';
+import { scryfallService } from '@/api/service/scryfall-service';
+import type { SearchCardsResult } from '@/shared/constants/types';
+import { DEFAULT_ERROR_MESSAGE } from '@/shared/constants/messages';
 
 export const fetchCards = createAsyncThunk<
   SearchCardsResult,
@@ -12,7 +12,7 @@ export const fetchCards = createAsyncThunk<
     return await scryfallService.searchCards(query, page);
   } catch (error) {
     return rejectWithValue(
-      error instanceof Error ? error.message : UI_MESSAGES.UNKNOWN_ERROR
+      error instanceof Error ? error.message : DEFAULT_ERROR_MESSAGE
     );
   }
 });
