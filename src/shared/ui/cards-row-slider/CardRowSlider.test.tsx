@@ -1,8 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import CardRowSlider from './CardRowSlider';
-import type { CardItem } from '../../constants/types';
+import type { CardItem } from '@/shared/constants/types';
 import { MemoryRouter } from 'react-router';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import selectedReducer from '@/store/selectedSlice/selectedSlice';
 
 vi.mock('../card/Card', () => ({
   default: ({ name }: { name: string }) => <div>{name}</div>,
@@ -37,12 +40,20 @@ const cards: CardItem[] = [
   },
 ];
 
-const renderComponent = () =>
-  render(
-    <MemoryRouter>
-      <CardRowSlider cards={cards} rowIndex={0} />
-    </MemoryRouter>
+const renderComponent = () => {
+  const store = configureStore({
+    reducer: {
+      selected: selectedReducer,
+    },
+  });
+  return render(
+    <Provider store={store}>
+      <MemoryRouter>
+        <CardRowSlider cards={cards} rowIndex={0} />
+      </MemoryRouter>
+    </Provider>
   );
+};
 
 describe('CardRowSlider', () => {
   it('renders passed cards', () => {

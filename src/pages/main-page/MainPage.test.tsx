@@ -7,6 +7,9 @@ import { UI_MESSAGES } from '../../shared/constants/messages';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import * as localStorageHook from '../../shared/hooks/useLocalStorage';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import cardsReducer from '@/store/cardsSlice/cardsSlice';
 
 const setStoredValueMock = vi.fn();
 
@@ -20,6 +23,14 @@ vi.mock('../../shared/ui/error-test/ErrorTest', () => ({
 
 vi.mock('../../shared/ui/card-skeleton-loader/CardSkeletonLoader', () => ({
   default: () => <div>Skeleton</div>,
+}));
+
+vi.mock('@/shared/ui/theme-toggle/ThemeToggle', () => ({
+  default: () => <button type="button">ThemeToggle</button>,
+}));
+
+vi.mock('@/shared/ui/selection-panel/SelectionPanel', () => ({
+  default: () => <div>SelectionPanel</div>,
 }));
 
 vi.mock('../../shared/ui/cards-row-slider/CardRowSlider', () => ({
@@ -41,17 +52,33 @@ vi.mock('../../shared/ui/cards-row-slider/CardRowSlider', () => ({
   ),
 }));
 
-const renderMainPage = (initialEntry = '/?page=1&q=') =>
+const renderMainPage = (initialEntry = '/?page=1&q=') => {
+  const store = configureStore({
+    reducer: {
+      cards: cardsReducer,
+    },
+    preloadedState: {
+      cards: {
+        items: [],
+        isLoading: false,
+        error: null,
+        hasMore: false,
+      },
+    },
+  });
   render(
-    <MemoryRouter initialEntries={[initialEntry]}>
-      <Routes>
-        <Route path="/" element={<MainPage />}>
-          <Route path="details/:id" element={<div>Details page</div>} />
-        </Route>
-        <Route path="/about" element={<div>About page</div>} />
-      </Routes>
-    </MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter initialEntries={[initialEntry]}>
+        <Routes>
+          <Route path="/" element={<MainPage />}>
+            <Route path="details/:id" element={<div>Details page</div>} />
+          </Route>
+          <Route path="/about" element={<div>About page</div>} />
+        </Routes>
+      </MemoryRouter>
+    </Provider>
   );
+};
 
 beforeEach(() => {
   vi.clearAllMocks();
