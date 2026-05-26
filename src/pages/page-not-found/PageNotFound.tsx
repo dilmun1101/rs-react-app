@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import styles from './404.module.scss';
+import styles from './page-not-found.module.scss';
 
 function PageNotFound() {
   return (

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { MemoryRouter } from 'react-router';
-import PageNotFound from './404';
+import PageNotFound from './PageNotFound';
 
 const renderPageNotFound = () =>
   render(
