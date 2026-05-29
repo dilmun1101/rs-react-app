@@ -6,34 +6,22 @@ import type { CardItem } from '../../shared/constants/types';
 import CardsSkeletonLoader from '../../shared/ui/card-skeleton-loader/CardSkeletonLoader';
 import { chunkArrayCards } from '../../shared/utils/chunk-array-cards/chunk-array-cards';
 import CardRowSlider from '../../shared/ui/cards-row-slider/CardRowSlider';
-import { useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useSearchParams, useNavigate, Outlet, Link } from 'react-router';
 import { useSearchQuerySync } from '../../shared/hooks/useSearchQuerySync';
 import { useRedirectInvalidPage } from '../../shared/hooks/useRedirectInvalidPage';
 import { useLocalStorage } from '../../shared/hooks/useLocalStorage';
 import Pagination from '../../shared/ui/pagination/PaginationControls';
 import { LOCAL_STORAGE_KEYS } from '../../shared/constants/local-storage-keys';
-import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
-import { fetchCards } from '@/store/cardsSlice/thunks/thunks';
-import {
-  selectCards,
-  selectError,
-  selectHasMore,
-  selectIsLoading,
-} from '@/store/cardsSlice/selectors/selectors';
 
 import SelectionPanel from '@/shared/ui/selection-panel/SelectionPanel';
 import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
+import { useSearchCardsQuery } from '@/api/scryfall-api';
+import { getRtkQueryErrorMessage } from '@/api/utils/rtk-query-error';
 
 const SLIDER_CHUNK_SIZE = 4;
 
 function MainPage() {
-  const dispatch = useAppDispatch();
-  const items = useAppSelector(selectCards);
-  const isLoading = useAppSelector(selectIsLoading);
-  const error = useAppSelector(selectError);
-  const hasMore = useAppSelector(selectHasMore);
-
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const pageParam = searchParams.get('page');
@@ -51,11 +39,14 @@ function MainPage() {
 
   useRedirectInvalidPage({ isInvalidPage, searchParams });
 
-  useEffect(() => {
-    if (isInvalidPage) return;
+  const { data, isLoading, error } = useSearchCardsQuery(
+    { query: currentQuery, page: currentPage },
+    { skip: isInvalidPage }
+  );
 
-    void dispatch(fetchCards({ query: currentQuery, page: currentPage }));
-  }, [isInvalidPage, currentQuery, currentPage, dispatch]);
+  const items = data?.items ?? [];
+  const hasMore = data?.hasMore ?? false;
+  const errorMessage = getRtkQueryErrorMessage(error);
 
   const handleSearch = useCallback(
     (query: string) => {
@@ -100,7 +91,9 @@ function MainPage() {
       </div>
       <div className={styles.contentArea}>
         <div className={styles.contentAreaWrapper}>
-          {error && <div className={styles.errorMessage}>Error: {error}</div>}
+          {errorMessage && (
+            <div className={styles.errorMessage}>Error: {errorMessage}</div>
+          )}
 
           {!error && (
             <>
