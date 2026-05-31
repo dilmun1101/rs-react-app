@@ -5,6 +5,7 @@ import styles from './card-details.module.scss';
 import Card from '../../shared/ui/card/Card';
 import { useGetCardByIdQuery } from '@/api/scryfall-api';
 import { getRtkQueryErrorMessage } from '@/api/utils/rtk-query-error';
+import RefreshDetailsButton from '@/shared/ui/refresh-details-button/RefreshDetailsButton';
 
 interface OutletContext {
   onClose: () => void;
@@ -18,6 +19,7 @@ function CardDetails() {
     data: card,
     isLoading,
     error,
+    refetch,
   } = useGetCardByIdQuery(cardId ?? '', {
     skip: !cardId,
   });
@@ -26,9 +28,12 @@ function CardDetails() {
 
   return (
     <aside className={styles.detailsPanel}>
-      <Button className={styles.button} onClick={onClose}>
-        X
-      </Button>
+      <div className={styles.actions}>
+        {cardId && <RefreshDetailsButton cardId={cardId} onRefetch={refetch} />}
+        <Button className={styles.button} onClick={onClose}>
+          X
+        </Button>
+      </div>
       {isLoading ? (
         <CardSkeleton />
       ) : errorMessage ? (

@@ -18,6 +18,7 @@ import SelectionPanel from '@/shared/ui/selection-panel/SelectionPanel';
 import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
 import { useSearchCardsQuery } from '@/api/scryfall-api';
 import { getRtkQueryErrorMessage } from '@/api/utils/rtk-query-error';
+import RefreshListButton from '@/shared/ui/refresh-list-button/RefreshListButton';
 
 const SLIDER_CHUNK_SIZE = 4;
 
@@ -39,7 +40,7 @@ function MainPage() {
 
   useRedirectInvalidPage({ isInvalidPage, searchParams });
 
-  const { data, isLoading, error } = useSearchCardsQuery(
+  const { data, isLoading, error, refetch } = useSearchCardsQuery(
     { query: currentQuery, page: currentPage },
     { skip: isInvalidPage }
   );
@@ -85,6 +86,7 @@ function MainPage() {
             <Link to="/about" className={styles.aboutLink}>
               About
             </Link>
+            <RefreshListButton onRefetch={refetch} />
             <ThemeToggle />
           </div>
         </div>
