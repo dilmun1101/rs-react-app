@@ -11,7 +11,7 @@ import { LOCAL_STORAGE_KEYS } from '../../shared/constants/local-storage-keys';
 
 import SelectionPanel from '@/shared/ui/selection-panel/SelectionPanel';
 import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
-import { useSearchCardsQuery } from '@/api/scryfall-api';
+import { useGetAllCardsQuery } from '@/api/scryfall-api';
 import { getRtkQueryErrorMessage } from '@/api/utils/rtk-query-error';
 import RefreshListButton from '@/shared/ui/refresh-list-button/RefreshListButton';
 import ContentState from '@/shared/ui/content-state/ContentState';
@@ -39,7 +39,7 @@ function MainPage() {
 
   useRedirectInvalidPage({ isInvalidPage, searchParams });
 
-  const { data, isLoading, isFetching, error, refetch } = useSearchCardsQuery(
+  const { data, isLoading, isFetching, error, refetch } = useGetAllCardsQuery(
     { query: currentQuery, page: currentPage },
     { skip: isInvalidPage }
   );
@@ -94,8 +94,8 @@ function MainPage() {
         <div className={styles.contentAreaWrapper}>
           <ContentState
             errorMessage={errorMessage}
-            isLoading={isLoading}
-            isFetching={isFetching}
+            isLoadingState={isLoading || isFetching}
+            skeletonCount={SLIDER_CHUNK_SIZE}
           >
             <CardsContainer>
               {sliderRows.map((rowCards, rowIndex) => (

@@ -4,7 +4,7 @@ import MainPage from './MainPage';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import { useLocalStorage } from '../../shared/hooks/useLocalStorage';
-import { useSearchCardsQuery } from '@/api/scryfall-api';
+import { useGetAllCardsQuery } from '@/api/scryfall-api';
 import { getRtkQueryErrorMessage } from '@/api/utils/rtk-query-error';
 
 const setStoredValueMock = vi.fn();
@@ -36,7 +36,7 @@ vi.mock('../../shared/hooks/useRedirectInvalidPage', () => ({
 }));
 
 vi.mock('@/api/scryfall-api', () => ({
-  useSearchCardsQuery: vi.fn(),
+  useGetAllCardsQuery: vi.fn(),
 }));
 
 vi.mock('@/api/utils/rtk-query-error', () => ({
@@ -66,28 +66,43 @@ vi.mock('../../shared/ui/search-form/SearchForm', () => ({
   ),
 }));
 
-vi.mock('@/shared/ui/main-page-content/MainPageContent', () => ({
+vi.mock('@/shared/ui/content-state/ContentState', () => ({
   default: ({
     errorMessage,
-    isLoading,
-    isFetching,
-    sliderRows,
-    hasMore,
+    isLoadingState,
+    children,
   }: {
-    errorMessage: string;
-    isLoading: boolean;
-    isFetching: boolean;
-    sliderRows: unknown[];
-    hasMore: boolean;
+    errorMessage: string | null;
+    isLoadingState: boolean;
+    children?: React.ReactNode;
   }) => (
     <div>
-      <div>MainPageContent</div>
-      <div>errorMessage:{errorMessage}</div>
-      <div>isLoading:{String(isLoading)}</div>
-      <div>isFetching:{String(isFetching)}</div>
-      <div>hasMore:{String(hasMore)}</div>
-      <div>sliderRowsLength:{sliderRows.length}</div>
+      <div>ContentState</div>
+      <div>errorMessage:{errorMessage ?? ''}</div>
+      <div>isLoadingState:{String(isLoadingState)}</div>
+      {children}
     </div>
+  ),
+}));
+
+vi.mock('@/shared/ui/cards-container/CardsContainer', () => ({
+  default: ({ children }: { children?: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+}));
+
+vi.mock('@/shared/ui/cards-row-slider/CardRowSlider', () => ({
+  default: ({ rowIndex, cards }: { rowIndex: number; cards: unknown[] }) => (
+    <div>
+      row:{rowIndex}
+      cards:{cards.length}
+    </div>
+  ),
+}));
+
+vi.mock('@/shared/ui/pagination/PaginationControls', () => ({
+  default: ({ hasMore }: { hasMore: boolean }) => (
+    <div>Pagination hasMore:{String(hasMore)}</div>
   ),
 }));
 
@@ -137,7 +152,7 @@ describe('MainPage', () => {
 
     vi.mocked(getRtkQueryErrorMessage).mockReturnValue('');
 
-    vi.mocked(useSearchCardsQuery).mockReturnValue({
+    vi.mocked(useGetAllCardsQuery).mockReturnValue({
       data: {
         items: [],
         hasMore: false,
@@ -149,10 +164,10 @@ describe('MainPage', () => {
     });
   });
 
-  it('passes query and page from URL to useSearchCardsQuery', () => {
+  it('passes query and page from URL to useGetAllCardsQuery', () => {
     renderMainPage('/?page=3&q=dragon');
 
-    expect(useSearchCardsQuery).toHaveBeenCalledWith(
+    expect(useGetAllCardsQuery).toHaveBeenCalledWith(
       { query: 'dragon', page: 3 },
       { skip: false }
     );
@@ -161,7 +176,7 @@ describe('MainPage', () => {
   it('uses page 1 and skips query when page param is invalid', () => {
     renderMainPage('/?page=0&q=elf');
 
-    expect(useSearchCardsQuery).toHaveBeenCalledWith(
+    expect(useGetAllCardsQuery).toHaveBeenCalledWith(
       { query: 'elf', page: 1 },
       { skip: true }
     );
@@ -206,5 +221,34 @@ describe('MainPage', () => {
     await user.click(screen.getByRole('button', { name: 'RefreshListButton' }));
 
     expect(refetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('passes loading state to ContentState', () => {
+    vi.mocked(useGetAllCardsQuery).mockReturnValue({
+      data: {
+        items: [],
+        hasMore: false,
+      },
+      isLoading: true,
+      isFetching: false,
+      error: undefined,
+      refetch: refetchMock,
+    });
+
+    renderMainPage();
+
+    expect(screen.getByText('ContentState')).toBeInTheDocument();
+    expect(screen.getByText('isLoadingState:true')).toBeInTheDocument();
+  });
+
+  it('passes error message to ContentState', () => {
+    vi.mocked(getRtkQueryErrorMessage).mockReturnValue('Test error message');
+
+    renderMainPage();
+
+    expect(screen.getByText('ContentState')).toBeInTheDocument();
+    expect(
+      screen.getByText('errorMessage:Test error message')
+    ).toBeInTheDocument();
   });
 });

@@ -34,8 +34,26 @@ vi.mock('../../shared/ui/button/Button', () => ({
   ),
 }));
 
-vi.mock('../../shared/ui/card-skeleton/CardSkeleton', () => ({
-  default: () => <div>CardSkeleton</div>,
+vi.mock('@/shared/ui/content-state/ContentState', () => ({
+  default: ({
+    errorMessage,
+    isLoadingState,
+    skeletonCount,
+    children,
+  }: {
+    errorMessage: string | null;
+    isLoadingState: boolean;
+    skeletonCount?: number;
+    children?: React.ReactNode;
+  }) => (
+    <div>
+      <div>ContentState</div>
+      <div>errorMessage:{errorMessage ?? ''}</div>
+      <div>isLoadingState:{String(isLoadingState)}</div>
+      <div>skeletonCount:{String(skeletonCount)}</div>
+      {children}
+    </div>
+  ),
 }));
 
 vi.mock('../../shared/ui/card/Card', () => ({
@@ -102,6 +120,7 @@ describe('CardDetails', () => {
     vi.mocked(useGetCardByIdQuery).mockReturnValue({
       data: undefined,
       isLoading: false,
+      isFetching: false,
       error: undefined,
       refetch: refetchMock,
     });
@@ -111,6 +130,7 @@ describe('CardDetails', () => {
     vi.mocked(useGetCardByIdQuery).mockReturnValue({
       data: cardMock,
       isLoading: false,
+      isFetching: false,
       error: undefined,
       refetch: refetchMock,
     });
@@ -126,6 +146,7 @@ describe('CardDetails', () => {
     vi.mocked(useGetCardByIdQuery).mockReturnValue({
       data: undefined,
       isLoading: false,
+      isFetching: false,
       error: undefined,
       refetch: refetchMock,
     });
@@ -135,19 +156,6 @@ describe('CardDetails', () => {
     await user.click(screen.getByRole('button', { name: 'X' }));
 
     expect(onCloseMock).toHaveBeenCalledTimes(1);
-  });
-
-  it('renders skeleton while loading', () => {
-    vi.mocked(useGetCardByIdQuery).mockReturnValue({
-      data: cardMock,
-      isLoading: true,
-      error: undefined,
-      refetch: refetchMock,
-    });
-
-    renderComponent();
-
-    expect(screen.getByText('CardSkeleton')).toBeInTheDocument();
   });
 
   it('calls hook with card id from params', () => {
@@ -180,5 +188,21 @@ describe('CardDetails', () => {
     await user.click(screen.getByRole('button', { name: 'Refresh 123' }));
 
     expect(refetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('passes loading state to ContentState', () => {
+    vi.mocked(useGetCardByIdQuery).mockReturnValue({
+      data: cardMock,
+      isLoading: true,
+      isFetching: false,
+      error: undefined,
+      refetch: refetchMock,
+    });
+
+    renderComponent();
+
+    expect(screen.getByText('ContentState')).toBeInTheDocument();
+    expect(screen.getByText('isLoadingState:true')).toBeInTheDocument();
+    expect(screen.getByText('skeletonCount:1')).toBeInTheDocument();
   });
 });

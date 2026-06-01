@@ -87,7 +87,7 @@ describe('scryfallApi', () => {
     const store = createTestStore();
 
     const result = await store.dispatch(
-      scryfallApi.endpoints.searchCards.initiate({
+      scryfallApi.endpoints.getAllCards.initiate({
         query: '*',
         page: 1,
       })
@@ -114,7 +114,7 @@ describe('scryfallApi', () => {
     const store = createTestStore();
 
     const result = await store.dispatch(
-      scryfallApi.endpoints.searchCards.initiate({
+      scryfallApi.endpoints.getAllCards.initiate({
         query: '*',
         page: 1,
       })
@@ -124,5 +124,167 @@ describe('scryfallApi', () => {
     expect(result.error).toMatchObject({
       status: 'PARSING_ERROR',
     });
+  });
+
+  it('reuses cached search result for the same query and page', async () => {
+    let requestCount = 0;
+
+    server.use(
+      http.get('https://api.scryfall.com/cards/search', () => {
+        requestCount += 1;
+
+        return HttpResponse.json({
+          data: [
+            {
+              id: 'test-id-1',
+              name: 'Test Card 1',
+              oracle_text: 'Test description 1',
+              artist: 'Test Artist 1',
+              image_uris: {
+                art_crop: 'test-image-1',
+              },
+            },
+          ],
+          has_more: false,
+        });
+      })
+    );
+
+    const store = createTestStore();
+
+    const firstResult = await store.dispatch(
+      scryfallApi.endpoints.getAllCards.initiate({
+        query: 'test',
+        page: 1,
+      })
+    );
+
+    const secondResult = await store.dispatch(
+      scryfallApi.endpoints.getAllCards.initiate({
+        query: 'test',
+        page: 1,
+      })
+    );
+
+    expect(firstResult.isSuccess).toBe(true);
+    expect(secondResult.isSuccess).toBe(true);
+    expect(secondResult.data).toEqual(firstResult.data);
+    expect(requestCount).toBe(1);
+  });
+
+  it('makes a new search request after invalidating Cards tag', async () => {
+    let requestCount = 0;
+
+    server.use(
+      http.get('https://api.scryfall.com/cards/search', () => {
+        requestCount += 1;
+
+        return HttpResponse.json({
+          data: [
+            {
+              id: 'test-id-1',
+              name: 'Test Card 1',
+              oracle_text: 'Test description 1',
+              artist: 'Test Artist 1',
+              image_uris: {
+                art_crop: 'test-image-1',
+              },
+            },
+          ],
+          has_more: false,
+        });
+      })
+    );
+
+    const store = createTestStore();
+
+    await store.dispatch(
+      scryfallApi.endpoints.getAllCards.initiate({
+        query: 'test',
+        page: 1,
+      })
+    );
+
+    store.dispatch(scryfallApi.util.invalidateTags(['Cards']));
+
+    await store.dispatch(
+      scryfallApi.endpoints.getAllCards.initiate({
+        query: 'test',
+        page: 1,
+      })
+    );
+
+    expect(requestCount).toBe(2);
+  });
+
+  it('reuses cached card details for the same id', async () => {
+    let requestCount = 0;
+
+    server.use(
+      http.get('https://api.scryfall.com/cards/:id', ({ params }) => {
+        requestCount += 1;
+
+        return HttpResponse.json({
+          id: params.id,
+          name: 'Test Card',
+          oracle_text: 'Test rules text.',
+          artist: 'Test Artist',
+          image_uris: {
+            art_crop: 'test-art-url',
+          },
+        });
+      })
+    );
+
+    const store = createTestStore();
+
+    const firstResult = await store.dispatch(
+      scryfallApi.endpoints.getCardById.initiate('test-id-3')
+    );
+
+    const secondResult = await store.dispatch(
+      scryfallApi.endpoints.getCardById.initiate('test-id-3')
+    );
+
+    expect(firstResult.isSuccess).toBe(true);
+    expect(secondResult.isSuccess).toBe(true);
+    expect(secondResult.data).toEqual(firstResult.data);
+    expect(requestCount).toBe(1);
+  });
+
+  it('makes a new card details request after invalidating Card tag', async () => {
+    let requestCount = 0;
+
+    server.use(
+      http.get('https://api.scryfall.com/cards/:id', ({ params }) => {
+        requestCount += 1;
+
+        return HttpResponse.json({
+          id: params.id,
+          name: 'Test Card',
+          oracle_text: 'Test rules text.',
+          artist: 'Test Artist',
+          image_uris: {
+            art_crop: 'test-art-url',
+          },
+        });
+      })
+    );
+
+    const store = createTestStore();
+
+    await store.dispatch(
+      scryfallApi.endpoints.getCardById.initiate('test-id-4')
+    );
+
+    store.dispatch(
+      scryfallApi.util.invalidateTags([{ type: 'Card', id: 'test-id-4' }])
+    );
+
+    await store.dispatch(
+      scryfallApi.endpoints.getCardById.initiate('test-id-4')
+    );
+
+    expect(requestCount).toBe(2);
   });
 });

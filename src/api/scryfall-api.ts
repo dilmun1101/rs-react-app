@@ -22,7 +22,7 @@ export const scryfallApi = createApi({
   tagTypes: ['Cards', 'Card'],
 
   endpoints: (builder) => ({
-    searchCards: builder.query<
+    getAllCards: builder.query<
       SearchCardsResult,
       { query: string; page: number }
     >({
@@ -42,4 +42,4 @@ export const scryfallApi = createApi({
   }),
 });
 
-export const { useSearchCardsQuery, useGetCardByIdQuery } = scryfallApi;
+export const { useGetAllCardsQuery, useGetCardByIdQuery } = scryfallApi;

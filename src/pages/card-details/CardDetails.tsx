@@ -1,12 +1,13 @@
 import Button from '../../shared/ui/button/Button';
 import { useParams, useOutletContext } from 'react-router';
-import CardSkeleton from '../../shared/ui/card-skeleton/CardSkeleton';
 import styles from './card-details.module.scss';
 import Card from '../../shared/ui/card/Card';
 import { useGetCardByIdQuery } from '@/api/scryfall-api';
 import { getRtkQueryErrorMessage } from '@/api/utils/rtk-query-error';
 import RefreshDetailsButton from '@/shared/ui/refresh-details-button/RefreshDetailsButton';
 import ContentState from '@/shared/ui/content-state/ContentState';
+
+const SKELETON_COUNT = 1;
 
 interface OutletContext {
   onClose: () => void;
@@ -39,9 +40,8 @@ function CardDetails() {
 
       <ContentState
         errorMessage={errorMessage}
-        isLoading={isLoading}
-        isFetching={isFetching}
-        loader={<CardSkeleton />}
+        isLoadingState={isLoading || isFetching}
+        skeletonCount={SKELETON_COUNT}
       >
         {card && (
           <Card
