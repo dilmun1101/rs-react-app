@@ -6,6 +6,7 @@ import Card from '../../shared/ui/card/Card';
 import { useGetCardByIdQuery } from '@/api/scryfall-api';
 import { getRtkQueryErrorMessage } from '@/api/utils/rtk-query-error';
 import RefreshDetailsButton from '@/shared/ui/refresh-details-button/RefreshDetailsButton';
+import ContentState from '@/shared/ui/content-state/ContentState';
 
 interface OutletContext {
   onClose: () => void;
@@ -18,6 +19,7 @@ function CardDetails() {
   const {
     data: card,
     isLoading,
+    isFetching,
     error,
     refetch,
   } = useGetCardByIdQuery(cardId ?? '', {
@@ -34,21 +36,25 @@ function CardDetails() {
           X
         </Button>
       </div>
-      {isLoading ? (
-        <CardSkeleton />
-      ) : errorMessage ? (
-        <div className={styles.errorMessage}>Error: {errorMessage}</div>
-      ) : card ? (
-        <Card
-          id={card.id}
-          name={card.name}
-          description={card.description}
-          imageUrl={card.imageUrl}
-          artist={card.artist}
-          className={styles.detailsCard}
-          imageClassName={styles.detailsImage}
-        />
-      ) : null}
+
+      <ContentState
+        errorMessage={errorMessage}
+        isLoading={isLoading}
+        isFetching={isFetching}
+        loader={<CardSkeleton />}
+      >
+        {card && (
+          <Card
+            id={card.id}
+            name={card.name}
+            description={card.description}
+            imageUrl={card.imageUrl}
+            artist={card.artist}
+            className={styles.detailsCard}
+            imageClassName={styles.detailsImage}
+          />
+        )}
+      </ContentState>
     </aside>
   );
 }

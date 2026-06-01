@@ -96,7 +96,6 @@ function MainPage() {
             errorMessage={errorMessage}
             isLoading={isLoading}
             isFetching={isFetching}
-            sliderRows={sliderRows}
           >
             <CardsContainer>
               {sliderRows.map((rowCards, rowIndex) => (
