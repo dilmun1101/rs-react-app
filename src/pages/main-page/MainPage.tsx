@@ -1,17 +1,12 @@
 import SearchForm from '../../shared/ui/search-form/SearchForm';
-import CardsContainer from '../../shared/ui/cards-container/CardsContainer';
-import { UI_MESSAGES } from '../../shared/constants/messages';
 import styles from './main-page.module.scss';
 import type { CardItem } from '../../shared/constants/types';
-import CardsSkeletonLoader from '../../shared/ui/card-skeleton-loader/CardSkeletonLoader';
 import { chunkArrayCards } from '../../shared/utils/chunk-array-cards/chunk-array-cards';
-import CardRowSlider from '../../shared/ui/cards-row-slider/CardRowSlider';
 import { useCallback } from 'react';
 import { useSearchParams, useNavigate, Outlet, Link } from 'react-router';
 import { useSearchQuerySync } from '../../shared/hooks/useSearchQuerySync';
 import { useRedirectInvalidPage } from '../../shared/hooks/useRedirectInvalidPage';
 import { useLocalStorage } from '../../shared/hooks/useLocalStorage';
-import Pagination from '../../shared/ui/pagination/PaginationControls';
 import { LOCAL_STORAGE_KEYS } from '../../shared/constants/local-storage-keys';
 
 import SelectionPanel from '@/shared/ui/selection-panel/SelectionPanel';
@@ -19,6 +14,7 @@ import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
 import { useSearchCardsQuery } from '@/api/scryfall-api';
 import { getRtkQueryErrorMessage } from '@/api/utils/rtk-query-error';
 import RefreshListButton from '@/shared/ui/refresh-list-button/RefreshListButton';
+import MainPageContent from '@/shared/ui/main-page-content/MainPageContent';
 
 const SLIDER_CHUNK_SIZE = 4;
 
@@ -40,7 +36,7 @@ function MainPage() {
 
   useRedirectInvalidPage({ isInvalidPage, searchParams });
 
-  const { data, isLoading, error, refetch } = useSearchCardsQuery(
+  const { data, isLoading, isFetching, error, refetch } = useSearchCardsQuery(
     { query: currentQuery, page: currentPage },
     { skip: isInvalidPage }
   );
@@ -93,32 +89,13 @@ function MainPage() {
       </div>
       <div className={styles.contentArea}>
         <div className={styles.contentAreaWrapper}>
-          {errorMessage && (
-            <div className={styles.errorMessage}>Error: {errorMessage}</div>
-          )}
-
-          {!error && (
-            <>
-              {isLoading ? (
-                <CardsSkeletonLoader count={SLIDER_CHUNK_SIZE} />
-              ) : sliderRows.length > 0 ? (
-                <CardsContainer>
-                  {sliderRows.map((rowCards, rowIndex) => (
-                    <CardRowSlider
-                      key={`row-${String(rowIndex)}`}
-                      cards={rowCards}
-                      rowIndex={rowIndex}
-                    />
-                  ))}
-                </CardsContainer>
-              ) : (
-                <p>{UI_MESSAGES.NO_RESULTS}</p>
-              )}
-              {!isLoading && sliderRows.length > 0 && (
-                <Pagination hasMore={hasMore} />
-              )}
-            </>
-          )}
+          <MainPageContent
+            errorMessage={errorMessage}
+            isLoading={isLoading}
+            isFetching={isFetching}
+            sliderRows={sliderRows}
+            hasMore={hasMore}
+          />
         </div>
         <Outlet context={{ onClose: handleCloseDetails }} />
       </div>
