@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { SearchCardsResult, CardItem } from '@/shared/constants/types';
-import type { ScryfallCardDTO, ScryfallListResponseDTO } from './api-types';
 import { mapSearchCardsResponse } from './utils/map-search-card-response';
 import { mapCardToCardItem } from './utils/map-card-to-card-item';
 
@@ -31,15 +30,13 @@ export const scryfallApi = createApi({
         const searchQuery = query || '*';
         return `/cards/search?q=${searchQuery}&page=${String(page)}`;
       },
-      transformResponse: (response: ScryfallListResponseDTO) =>
-        mapSearchCardsResponse(response),
+      transformResponse: mapSearchCardsResponse,
       providesTags: ['Cards'],
     }),
 
     getCardById: builder.query<CardItem, string>({
       query: (id) => `/cards/${id}`,
-      transformResponse: (response: ScryfallCardDTO) =>
-        mapCardToCardItem(response),
+      transformResponse: mapCardToCardItem,
       providesTags: (_result, _error, id) => [{ type: 'Card', id }],
     }),
   }),

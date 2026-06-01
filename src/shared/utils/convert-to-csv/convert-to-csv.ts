@@ -1,6 +1,12 @@
 import type { CardItem } from '../../constants/types';
 
-const CSV_HEADERS = ['id', 'name', 'description', 'imageUrl'] as const;
+const CSV_HEADERS = [
+  'id',
+  'name',
+  'description',
+  'artist',
+  'imageUrl',
+] as const;
 
 function formatCSVValue(value: string): string {
   const shouldBeQuoted =
