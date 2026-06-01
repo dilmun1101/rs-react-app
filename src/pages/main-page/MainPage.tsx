@@ -14,7 +14,10 @@ import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
 import { useSearchCardsQuery } from '@/api/scryfall-api';
 import { getRtkQueryErrorMessage } from '@/api/utils/rtk-query-error';
 import RefreshListButton from '@/shared/ui/refresh-list-button/RefreshListButton';
-import MainPageContent from '@/shared/ui/main-page-content/MainPageContent';
+import ContentState from '@/shared/ui/content-state/ContentState';
+import CardsContainer from '@/shared/ui/cards-container/CardsContainer';
+import CardRowSlider from '@/shared/ui/cards-row-slider/CardRowSlider';
+import Pagination from '@/shared/ui/pagination/PaginationControls';
 
 const SLIDER_CHUNK_SIZE = 4;
 
@@ -89,13 +92,24 @@ function MainPage() {
       </div>
       <div className={styles.contentArea}>
         <div className={styles.contentAreaWrapper}>
-          <MainPageContent
+          <ContentState
             errorMessage={errorMessage}
             isLoading={isLoading}
             isFetching={isFetching}
             sliderRows={sliderRows}
-            hasMore={hasMore}
-          />
+          >
+            <CardsContainer>
+              {sliderRows.map((rowCards, rowIndex) => (
+                <CardRowSlider
+                  key={`row-${String(rowIndex)}`}
+                  cards={rowCards}
+                  rowIndex={rowIndex}
+                />
+              ))}
+            </CardsContainer>
+
+            <Pagination hasMore={hasMore} />
+          </ContentState>
         </div>
         <Outlet context={{ onClose: handleCloseDetails }} />
       </div>
