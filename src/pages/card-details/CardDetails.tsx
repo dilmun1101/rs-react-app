@@ -1,11 +1,13 @@
 import Button from '../../shared/ui/button/Button';
 import { useParams, useOutletContext } from 'react-router';
-import { useState, useEffect } from 'react';
-import { scryfallService } from '../../api/service/scryfall-service';
-import CardSkeleton from '../../shared/ui/card-skeleton/CardSkeleton';
 import styles from './card-details.module.scss';
-import type { CardItem } from '../../shared/constants/types';
 import Card from '../../shared/ui/card/Card';
+import { useGetCardByIdQuery } from '@/api/scryfall-api';
+import { getRtkQueryErrorMessage } from '@/api/utils/rtk-query-error';
+import RefreshDetailsButton from '@/shared/ui/refresh-details-button/RefreshDetailsButton';
+import ContentState from '@/shared/ui/content-state/ContentState';
+
+const SKELETON_COUNT = 1;
 
 interface OutletContext {
   onClose: () => void;
@@ -14,43 +16,45 @@ interface OutletContext {
 function CardDetails() {
   const { cardId } = useParams<{ cardId: string }>();
   const { onClose } = useOutletContext<OutletContext>();
-  const [card, setCard] = useState<CardItem | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    if (!cardId) return;
+  const {
+    data: card,
+    isLoading,
+    isFetching,
+    error,
+    refetch,
+  } = useGetCardByIdQuery(cardId ?? '', {
+    skip: !cardId,
+  });
 
-    const fetchCard = async () => {
-      setIsLoading(true);
-      try {
-        const data = await scryfallService.getCardById(cardId);
-        setCard(data);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    void fetchCard();
-  }, [cardId]);
+  const errorMessage = getRtkQueryErrorMessage(error);
 
   return (
     <aside className={styles.detailsPanel}>
-      <Button className={styles.button} onClick={onClose}>
-        X
-      </Button>
-      {isLoading ? (
-        <CardSkeleton />
-      ) : card ? (
-        <Card
-          id={card.id}
-          name={card.name}
-          description={card.description}
-          imageUrl={card.imageUrl}
-          artist={card.artist}
-          className={styles.detailsCard}
-          imageClassName={styles.detailsImage}
-        />
-      ) : null}
+      <div className={styles.actions}>
+        {cardId && <RefreshDetailsButton cardId={cardId} onRefetch={refetch} />}
+        <Button className={styles.button} onClick={onClose}>
+          X
+        </Button>
+      </div>
+
+      <ContentState
+        errorMessage={errorMessage}
+        isLoadingState={isLoading || isFetching}
+        skeletonCount={SKELETON_COUNT}
+      >
+        {card && (
+          <Card
+            id={card.id}
+            name={card.name}
+            description={card.description}
+            imageUrl={card.imageUrl}
+            artist={card.artist}
+            className={styles.detailsCard}
+            imageClassName={styles.detailsImage}
+          />
+        )}
+      </ContentState>
     </aside>
   );
 }
