@@ -1,12 +1,22 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route, Outlet } from 'react-router';
 import CardDetails from './CardDetails';
-import { scryfallService } from '../../api/service/scryfall-service';
 import type { CardItem } from '../../shared/constants/types';
+import { useGetCardByIdQuery } from '@/api/scryfall-api';
+import { getRtkQueryErrorMessage } from '@/api/utils/rtk-query-error';
 
 const onCloseMock = vi.fn();
+const refetchMock = vi.fn();
+
+vi.mock('@/api/scryfall-api', () => ({
+  useGetCardByIdQuery: vi.fn(),
+}));
+
+vi.mock('@/api/utils/rtk-query-error', () => ({
+  getRtkQueryErrorMessage: vi.fn(),
+}));
 
 vi.mock('../../shared/ui/button/Button', () => ({
   default: ({
@@ -46,6 +56,20 @@ vi.mock('../../shared/ui/card/Card', () => ({
   ),
 }));
 
+vi.mock('@/shared/ui/refresh-details-button/RefreshDetailsButton', () => ({
+  default: ({
+    onRefetch,
+    cardId,
+  }: {
+    onRefetch: () => void;
+    cardId: string;
+  }) => (
+    <button type="button" onClick={onRefetch}>
+      Refresh {cardId}
+    </button>
+  ),
+}));
+
 function OutletWrapper() {
   return <Outlet context={{ onClose: onCloseMock }} />;
 }
@@ -72,14 +96,24 @@ const cardMock: CardItem = {
 describe('CardDetails', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
+    vi.mocked(getRtkQueryErrorMessage).mockReturnValue('');
+
+    vi.mocked(useGetCardByIdQuery).mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      error: undefined,
+      refetch: refetchMock,
+    });
   });
 
   it('renders fetched card details', async () => {
-    vi.spyOn(scryfallService, 'getCardById').mockResolvedValue(cardMock);
+    vi.mocked(useGetCardByIdQuery).mockReturnValue({
+      data: cardMock,
+      isLoading: false,
+      error: undefined,
+      refetch: refetchMock,
+    });
 
     renderComponent();
 
@@ -89,8 +123,12 @@ describe('CardDetails', () => {
   });
 
   it('calls onClose when close button is clicked', async () => {
-    vi.spyOn(scryfallService, 'getCardById').mockResolvedValue(cardMock);
-
+    vi.mocked(useGetCardByIdQuery).mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      error: undefined,
+      refetch: refetchMock,
+    });
     renderComponent();
 
     const user = userEvent.setup();
@@ -99,15 +137,63 @@ describe('CardDetails', () => {
     expect(onCloseMock).toHaveBeenCalledTimes(1);
   });
 
-  it('calls service with card id from params', async () => {
-    const getCardByIdSpy = vi
-      .spyOn(scryfallService, 'getCardById')
-      .mockResolvedValue(cardMock);
+  it('renders skeleton while loading', () => {
+    vi.mocked(useGetCardByIdQuery).mockReturnValue({
+      data: cardMock,
+      isLoading: true,
+      error: undefined,
+      refetch: refetchMock,
+    });
 
+    renderComponent();
+
+    expect(screen.getByText('CardSkeleton')).toBeInTheDocument();
+  });
+
+  it('renders error message', () => {
+    vi.mocked(useGetCardByIdQuery).mockReturnValue({
+      data: cardMock,
+      isLoading: false,
+      error: undefined,
+      refetch: refetchMock,
+    });
+
+    vi.mocked(getRtkQueryErrorMessage).mockReturnValue('Not found');
+
+    renderComponent();
+
+    expect(screen.getByText('Error: Not found')).toBeInTheDocument();
+  });
+
+  it('calls hook with card id from params', () => {
     renderComponent('/details/999');
 
-    await waitFor(() => {
-      expect(getCardByIdSpy).toHaveBeenCalledWith('999');
+    expect(useGetCardByIdQuery).toHaveBeenCalledWith('999', {
+      skip: false,
     });
+  });
+
+  it('renders refresh button when cardId exists', () => {
+    renderComponent('/details/999');
+
+    expect(
+      screen.getByRole('button', { name: 'Refresh 999' })
+    ).toBeInTheDocument();
+  });
+
+  it('calls refetch when refresh button is clicked', async () => {
+    vi.mocked(useGetCardByIdQuery).mockReturnValue({
+      data: cardMock,
+      isLoading: false,
+      error: undefined,
+      refetch: refetchMock,
+    });
+
+    renderComponent('/details/123');
+
+    const user = userEvent.setup();
+    await user.click(screen.getByRole('button', { name: 'Refresh 123' }));
+
+    expect(refetchMock).toHaveBeenCalledTimes(1);
   });
 });
