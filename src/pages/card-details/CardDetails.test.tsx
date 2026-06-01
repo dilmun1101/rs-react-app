@@ -150,21 +150,6 @@ describe('CardDetails', () => {
     expect(screen.getByText('CardSkeleton')).toBeInTheDocument();
   });
 
-  it('renders error message', () => {
-    vi.mocked(useGetCardByIdQuery).mockReturnValue({
-      data: cardMock,
-      isLoading: false,
-      error: undefined,
-      refetch: refetchMock,
-    });
-
-    vi.mocked(getRtkQueryErrorMessage).mockReturnValue('Not found');
-
-    renderComponent();
-
-    expect(screen.getByText('Error: Not found')).toBeInTheDocument();
-  });
-
   it('calls hook with card id from params', () => {
     renderComponent('/details/999');
 

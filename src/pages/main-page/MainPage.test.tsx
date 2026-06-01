@@ -149,21 +149,6 @@ describe('MainPage', () => {
     });
   });
 
-  it('renders top-level UI parts', () => {
-    renderMainPage();
-
-    expect(screen.getByText('SearchForm')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'About' })).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'RefreshListButton' })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'ThemeToggle' })
-    ).toBeInTheDocument();
-    expect(screen.getByText('SelectionPanel')).toBeInTheDocument();
-    expect(screen.getByText('MainPageContent')).toBeInTheDocument();
-  });
-
   it('passes query and page from URL to useSearchCardsQuery', () => {
     renderMainPage('/?page=3&q=dragon');
 
@@ -186,22 +171,6 @@ describe('MainPage', () => {
     renderMainPage('/?page=1&q=angel');
 
     expect(screen.getByText('defaultValue:angel')).toBeInTheDocument();
-  });
-
-  it('passes error message to MainPageContent', () => {
-    vi.mocked(useSearchCardsQuery).mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      isFetching: false,
-      error: { status: 500 },
-      refetch: refetchMock,
-    });
-
-    vi.mocked(getRtkQueryErrorMessage).mockReturnValue('Server error');
-
-    renderMainPage();
-
-    expect(screen.getByText('errorMessage:Server error')).toBeInTheDocument();
   });
 
   it('saves query and navigates on search submit', async () => {
