@@ -6,7 +6,13 @@ interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   hideLabel?: boolean;
 }
 
-function Input({ label, className, hideLabel = false, id }: IInputProps) {
+function Input({
+  label,
+  className,
+  hideLabel = false,
+  id,
+  ...rest
+}: IInputProps) {
   return (
     <div className={cx(styles.container, className)}>
       {label && (
@@ -17,7 +23,7 @@ function Input({ label, className, hideLabel = false, id }: IInputProps) {
           {label}
         </label>
       )}
-      <input id={id} className={styles.input} />
+      <input id={id} className={styles.input} {...rest} />
     </div>
   );
 }

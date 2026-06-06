@@ -8,58 +8,49 @@ import cx from 'classnames';
 const modalRoot = document.getElementById('modal-root');
 
 interface Props {
-  isActive: boolean;
   onClose: () => void;
   children: React.ReactNode;
 }
 
-function Modal({ isActive, onClose, children }: Props) {
-  const dialogRef = useRef<HTMLDivElement | null>(null);
-  const previouslyFocusedElement = useRef<HTMLElement | null>(null);
+function Modal({ onClose, children }: Props) {
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
 
   useEffect(() => {
-    if (!isActive) return;
-    previouslyFocusedElement.current = document.activeElement as HTMLElement;
-    dialogRef.current?.focus();
+    const dialog = dialogRef.current;
+    if (!dialog) return;
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.stopPropagation();
-        onClose();
-      }
+    dialog.showModal();
+
+    const handleCancel = (event: Event) => {
+      event.preventDefault();
+      onClose();
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-
+    dialog.addEventListener('cancel', handleCancel);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      previouslyFocusedElement.current?.focus();
+      dialog.removeEventListener('cancel', handleCancel);
     };
-  }, [isActive, onClose]);
+  }, [onClose]);
 
-  const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleOverlayClick = (event: React.MouseEvent<HTMLDialogElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
     }
   };
 
-  if (!isActive || !modalRoot) return null;
+  if (!modalRoot) return null;
 
   return ReactDOM.createPortal(
-    <div className={styles.overlay} onClick={handleOverlayClick}>
-      <div
-        className={cx(styles.modal)}
-        role="dialog"
-        aria-modal="true"
-        ref={dialogRef}
-        tabIndex={-1}
-      >
-        <Button className={styles.closeButton} onClick={onClose} type="button">
-          <X size={20} />
-        </Button>
-        {children}
-      </div>
-    </div>,
+    <dialog
+      className={cx(styles.modal)}
+      ref={dialogRef}
+      onClick={handleOverlayClick}
+    >
+      <Button className={styles.closeButton} onClick={onClose} type="button">
+        <X size={20} />
+      </Button>
+      {children}
+    </dialog>,
     modalRoot
   );
 }
