@@ -5,9 +5,9 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
 }
 
-function Button({ children, className, ...rest }: Props) {
+function Button({ children, className, type = 'button', ...rest }: Props) {
   return (
-    <button type="submit" className={cx(styles.button, className)} {...rest}>
+    <button type={type} className={cx(styles.button, className)} {...rest}>
       {children}
     </button>
   );
