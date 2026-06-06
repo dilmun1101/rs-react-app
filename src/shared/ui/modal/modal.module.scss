@@ -1,0 +1,14 @@
+.overlay {
+  width: 100%;
+  height: calc(100dvh - 40px);
+  background-color: rgba(167, 241, 186, 0.5);
+
+  .modal {
+    display: flex;
+    justify-content: space-between;
+
+    .closeButton {
+      order: 2;
+    }
+  }
+}

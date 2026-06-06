@@ -1,0 +1,21 @@
+@use './mixins.scss' as *;
+@use './variables.scss' as vars;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  @include theme(vars.$dark-theme);
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+}
+
+[data-theme='light'] {
+  @include theme(vars.$light-theme);
+}
