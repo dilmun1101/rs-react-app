@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Modal from '@/shared/ui/modal/Modal';
 import Button from '@/shared/ui/button/Button';
-import BasicForm from '@/shared/ui/basic-form/BasicForm';
+import UncontrolledBasicForm from '@/shared/ui/uncotrolled-basic-form/UncontrolledBasicForm';
 
 function MainPage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +20,7 @@ function MainPage() {
 
       {isOpen && (
         <Modal onClose={handleClose}>
-          <BasicForm />
+          <UncontrolledBasicForm onClose={handleClose} />
         </Modal>
       )}
     </main>

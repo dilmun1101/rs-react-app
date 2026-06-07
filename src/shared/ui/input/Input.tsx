@@ -1,9 +1,10 @@
 import styles from './input.module.scss';
 import cx from 'classnames';
 
-interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   hideLabel?: boolean;
+  error?: string;
 }
 
 function Input({
@@ -11,8 +12,11 @@ function Input({
   className,
   hideLabel = false,
   id,
+  error,
   ...rest
-}: IInputProps) {
+}: Props) {
+  const errorId = id ? `${id}-error` : undefined;
+
   return (
     <div className={cx(styles.container, className)}>
       {label && (
@@ -24,6 +28,13 @@ function Input({
         </label>
       )}
       <input id={id} className={styles.input} {...rest} />
+
+      <span
+        id={errorId}
+        className={cx(styles.error, !error && styles.errorStyle)}
+      >
+        {error ?? ' '}
+      </span>
     </div>
   );
 }
