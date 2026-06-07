@@ -3,7 +3,7 @@ import Button from '@/shared/ui/button/Button';
 import { INPUT_TYPES, BUTTON_TYPES } from '@/shared/constants/enums';
 import { FORM } from '@/shared/constants/constants';
 
-function UncontrolledForm() {
+function BasicForm() {
   return (
     <form>
       <Input name={FORM.FIELDS.NAME} label={FORM.LABELS.NAME} />
@@ -48,4 +48,4 @@ function UncontrolledForm() {
   );
 }
 
-export default UncontrolledForm;
+export default BasicForm;

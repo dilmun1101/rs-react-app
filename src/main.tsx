@@ -2,6 +2,8 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './shared/styles/globals.scss';
 import App from './app/App.tsx';
+import { Provider } from 'react-redux';
+import { store } from './store/store.ts';
 
 const rootElement = document.getElementById('root');
 
@@ -11,6 +13,8 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </StrictMode>
 );
