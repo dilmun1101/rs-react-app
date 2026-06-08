@@ -22,15 +22,17 @@ function Input({
 
   return (
     <div className={cx(styles.container, className)}>
-      {label && (
-        <label
-          htmlFor={id}
-          className={cx(styles.label, hideLabel && styles.hideLabel)}
-        >
-          {label}
-        </label>
-      )}
-      <input id={id} ref={ref} className={styles.input} {...rest} />
+      <div className={cx(styles.containerInput)}>
+        {label && (
+          <label
+            htmlFor={id}
+            className={cx(styles.label, hideLabel && styles.hideLabel)}
+          >
+            {label}
+          </label>
+        )}
+        <input id={id} ref={ref} className={styles.input} {...rest} />
+      </div>
 
       <span
         id={errorId}

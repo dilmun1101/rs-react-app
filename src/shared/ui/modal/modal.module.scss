@@ -1,14 +1,22 @@
+@use '../../styles/mixins' as *;
+
 .overlay {
+  position: relative;
+  top: 0;
+  display: flex;
+  align-items: center;
   width: 100%;
-  height: calc(100dvh - 40px);
-  background-color: rgba(167, 241, 186, 0.5);
+  height: 100dvh;
+  background-color: var(--background);
 
   .modal {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-
-    .closeButton {
-      order: 2;
-    }
+    background-color: var(--background);
+    color: var(--text);
+    border: 1px solid var(--accent);
+    gap: 20px;
+    padding: 5px;
   }
 }

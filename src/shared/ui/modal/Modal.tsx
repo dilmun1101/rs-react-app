@@ -41,16 +41,18 @@ function Modal({ onClose, children }: Props) {
   if (!modalRoot) return null;
 
   return ReactDOM.createPortal(
-    <dialog
-      className={cx(styles.modal)}
-      ref={dialogRef}
-      onClick={handleOverlayClick}
-    >
-      <Button className={styles.closeButton} onClick={onClose} type="button">
-        <X size={20} />
-      </Button>
-      {children}
-    </dialog>,
+    <div className={cx(styles.overlay)}>
+      <dialog
+        className={cx(styles.modal)}
+        ref={dialogRef}
+        onClick={handleOverlayClick}
+      >
+        <Button className={styles.closeButton} onClick={onClose} type="button">
+          <X size={20} />
+        </Button>
+        {children}
+      </dialog>
+    </div>,
     modalRoot
   );
 }

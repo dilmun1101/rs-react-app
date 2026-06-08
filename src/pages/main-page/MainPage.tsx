@@ -3,6 +3,7 @@ import Modal from '@/shared/ui/modal/Modal';
 import Button from '@/shared/ui/button/Button';
 import UncontrolledForm from '@/shared/ui/uncotrolled-form/UncontrolledForm';
 import RHFForm from '@/shared/ui/rhf-form/RhfForm';
+import RecordsList from '@/shared/ui/record-list/RecordsList';
 
 type OpenedFormType = 'uncontrolled' | 'rhf' | null;
 
@@ -42,6 +43,11 @@ function MainPage() {
           )}
         </Modal>
       )}
+
+      <div aria-labelledby="submissions-title">
+        <p id="submissions-title">Submitted data</p>
+        <RecordsList />
+      </div>
     </main>
   );
 }

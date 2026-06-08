@@ -4,6 +4,7 @@ import { FORM } from '@/shared/constants/constants';
 import type { FormFieldErrors } from '@/store/formSlice/types/types';
 import type { UseFormRegister } from 'react-hook-form';
 import type { FormSchemaInput } from '@/shared/zod-schema/zodSchema';
+import styles from './basic-form-fields.module.scss';
 
 interface Props {
   errors?: FormFieldErrors;
@@ -19,7 +20,7 @@ function BasicFormFields({ errors = {}, register }: Props) {
     : { name: FORM.FIELDS.AGE };
 
   return (
-    <>
+    <div className={styles.containerForm}>
       <Input
         id="name"
         {...registerField(FORM.FIELDS.NAME)}
@@ -66,7 +67,7 @@ function BasicFormFields({ errors = {}, register }: Props) {
         id="terms"
         error={errors.terms}
       />
-    </>
+    </div>
   );
 }
 
