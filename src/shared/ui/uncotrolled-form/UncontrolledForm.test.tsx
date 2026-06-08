@@ -209,7 +209,7 @@ describe('UncontrolledForm', () => {
         password: 'StrongPass1!',
         confirmPassword: 'StrongPass1!',
         country: 'Kazakhstan',
-        avatar: [file],
+        avatar: file,
       },
     });
 

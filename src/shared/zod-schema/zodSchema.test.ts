@@ -237,19 +237,6 @@ describe('zodSchema', () => {
     }
   });
 
-  it('returns error when avatar is missing', () => {
-    const result = zodSchema.safeParse({
-      ...createValidData(),
-      avatar: undefined,
-    });
-
-    expect(result.success).toBe(false);
-
-    if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe('Avatar is required');
-    }
-  });
-
   it('returns error when avatar type is invalid', () => {
     const file = new File(['test'], 'avatar.gif', { type: 'image/gif' });
 

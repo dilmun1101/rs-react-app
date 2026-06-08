@@ -48,7 +48,12 @@ function RHFForm({ onClose }: Props) {
 
   const onSubmit: SubmitHandler<FormSchemaInput> = async (data) => {
     const parsedData = zodSchema.parse(data);
-    const avatarFile = parsedData.avatar[0];
+    const avatarFile = parsedData.avatar;
+
+    if (!avatarFile) {
+      return;
+    }
+
     const imageBase64 = await convertFileToBase64(avatarFile);
 
     dispatch(

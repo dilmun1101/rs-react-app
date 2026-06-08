@@ -66,7 +66,12 @@ function UncontrolledForm({ onClose }: Props) {
       return;
     }
 
-    const avatarFile = result.data.avatar[0];
+    const avatarFile = result.data.avatar;
+
+    if (!avatarFile) {
+      return;
+    }
+
     const imageBase64 = await convertFileToBase64(avatarFile);
 
     dispatch(

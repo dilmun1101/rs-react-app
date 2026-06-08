@@ -7,7 +7,10 @@ import { useAppDispatch } from '@/store/hooks/hooks';
 import { addRecord } from '@/store/formSlice/formSlice';
 import { convertFileToBase64 } from '@/shared/utils/covert-file-to-base64';
 import { FORM } from '@/shared/constants/constants';
-import type { FormSchemaInput } from '@/shared/zod-schema/zodSchema';
+import type {
+  FormSchema,
+  FormSchemaInput,
+} from '@/shared/zod-schema/zodSchema';
 
 interface AddRecordPayload {
   name: string;
@@ -136,12 +139,19 @@ describe('RHFForm', () => {
       password: 'StrongPass1!',
       confirmPassword: 'StrongPass1!',
       country: 'Kazakhstan',
-      avatar: [file] as unknown as FileList,
+      avatar: file,
     };
 
-    const parsedData = {
-      ...formData,
-      avatar: [file],
+    const parsedData: FormSchema = {
+      name: 'Test',
+      age: 30,
+      email: 'test@test.com',
+      gender: 'male',
+      terms: true,
+      password: 'StrongPass1!',
+      confirmPassword: 'StrongPass1!',
+      country: 'Kazakhstan',
+      avatar: file,
     };
 
     mockHandleSubmit.mockImplementation((onSubmit) => {
@@ -162,7 +172,9 @@ describe('RHFForm', () => {
       expect(parseMock).toHaveBeenCalledWith(formData);
     });
 
-    expect(convertFileToBase64).toHaveBeenCalledWith(file);
+    await waitFor(() => {
+      expect(convertFileToBase64).toHaveBeenCalledWith(file);
+    });
 
     expect(addRecord).toHaveBeenCalledWith({
       name: 'Test',

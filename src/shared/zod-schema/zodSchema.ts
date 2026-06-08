@@ -85,13 +85,31 @@ export const zodSchema = z.object({
   }),
 
   avatar: z
-    .instanceof(FileList, { error: MESSAGES.avatar.required })
-    .refine((files) => files.length > 0, { error: MESSAGES.avatar.required })
-    .refine((files) => ['image/png', 'image/jpeg'].includes(files[0].type), {
-      error: MESSAGES.avatar.type,
-    })
-    .refine((files) => files[0].size <= 2 * 1024 * 1024, {
-      error: MESSAGES.avatar.size,
+    .unknown()
+    .transform((value) => value as FileList | null | undefined)
+    .transform((files) => files?.item(0))
+    .superRefine((file, ctx) => {
+      if (!file) {
+        ctx.addIssue({
+          code: 'custom',
+          message: MESSAGES.avatar.required,
+        });
+        return;
+      }
+
+      if (!['image/png', 'image/jpeg'].includes(file.type)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: MESSAGES.avatar.type,
+        });
+      }
+
+      if (file.size > 2 * 1024 * 1024) {
+        ctx.addIssue({
+          code: 'custom',
+          message: MESSAGES.avatar.size,
+        });
+      }
     }),
 });
 
