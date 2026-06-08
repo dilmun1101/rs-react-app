@@ -9,6 +9,10 @@ export const FORM = {
       MALE: 'male',
       FEMALE: 'female',
     },
+    PASSWORD: 'password',
+    CONFIRM_PASSWORD: 'confirmPassword',
+    AVATAR: 'avatar',
+    COUNTRY: 'country',
   },
   LABELS: {
     NAME: 'Name',
@@ -19,5 +23,9 @@ export const FORM = {
     FEMALE: 'Female',
     TERMS: 'Accept Terms & Conditions',
     SUBMIT: 'Submit',
+    PASSWORD: 'Password',
+    CONFIRM_PASSWORD: 'Confirm Password',
+    AVATAR: 'Avatar',
+    COUNTRY: 'Country',
   },
 } as const;

@@ -10,4 +10,5 @@ export const INPUT_TYPES = {
   RADIO: 'radio',
   CHECKBOX: 'checkbox',
   NUMBER: 'number',
+  FILE: 'file',
 } as const;

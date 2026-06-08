@@ -1,10 +1,12 @@
 import styles from './input.module.scss';
 import cx from 'classnames';
+import type { Ref } from 'react';
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   hideLabel?: boolean;
   error?: string;
+  ref?: Ref<HTMLInputElement>;
 }
 
 function Input({
@@ -13,6 +15,7 @@ function Input({
   hideLabel = false,
   id,
   error,
+  ref,
   ...rest
 }: Props) {
   const errorId = id ? `${id}-error` : undefined;
@@ -27,7 +30,7 @@ function Input({
           {label}
         </label>
       )}
-      <input id={id} className={styles.input} {...rest} />
+      <input id={id} ref={ref} className={styles.input} {...rest} />
 
       <span
         id={errorId}
