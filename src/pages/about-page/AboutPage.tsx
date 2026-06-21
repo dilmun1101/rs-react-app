@@ -1,5 +1,5 @@
 import styles from './about-page.module.scss';
-import { Link } from 'react-router';
+import { Link } from '@/i18n/navigation';
 
 const INFO_PAGE = {
   GITHUB_PROFILE_LINK: 'https://github.com/dilmun1101',
@@ -43,7 +43,7 @@ function AboutPage() {
         </a>
       </p>
       <p className={styles.text}>{INFO_PAGE.DESCRIPTION}</p>
-      <Link to="/" className={styles.link}>
+      <Link href="/" className={styles.link}>
         Return to main page
       </Link>
     </main>

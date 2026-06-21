@@ -1,10 +1,10 @@
 import Button from '../button/Button';
-import { useAppDispatch, useAppSelector } from '@store/hooks/hooks';
-import { unselectAll } from '@/store/selectedSlice/selectedSlice';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks/hooks';
+import { unselectAll } from '@/lib/selectedSlice/selectedSlice';
 import {
   selectSelectedCards,
   selectSelectedCount,
-} from '@/store/selectedSlice/selectors/selectors';
+} from '@/lib/selectedSlice/selectors/selectors';
 import cx from 'classnames';
 import styles from './selection-panel.module.scss';
 import { convertToCSV } from '@/shared/utils/convert-to-csv/convert-to-csv';

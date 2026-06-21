@@ -1,7 +1,7 @@
 import type { ChangeEvent, MouseEvent } from 'react';
-import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
-import { selectItem, unselectItem } from '@/store/selectedSlice/selectedSlice';
-import { selectIsCardSelected } from '@/store/selectedSlice/selectors/selectors';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks/hooks';
+import { selectItem, unselectItem } from '@/lib/selectedSlice/selectedSlice';
+import { selectIsCardSelected } from '@/lib/selectedSlice/selectors/selectors';
 import type { CardItem } from '@/shared/constants/types';
 import Card from '../card/Card';
 

@@ -1,29 +1,18 @@
 import { useEffect } from 'react';
-import { useSearchParams } from 'react-router';
-import { getSavedSearchQuery, saveSearchQuery } from '../utils/storage/storage';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { getSavedSearchQuery } from '../utils/storage/storage';
 
 export const useSearchQuerySync = () => {
-  const [, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
-    setSearchParams(
-      (prevParams) => {
-        if (prevParams.get('q')) {
-          return prevParams;
-        }
+    if (searchParams?.get('q')) return;
 
-        const savedQuery = getSavedSearchQuery();
-        if (!savedQuery) {
-          return prevParams;
-        }
+    const savedQuery = getSavedSearchQuery();
 
-        const nextParams = new URLSearchParams(prevParams);
-        nextParams.set('q', savedQuery);
-        return nextParams;
-      },
-      { replace: true }
-    );
-  }, [setSearchParams]);
-
-  return { saveSearchQuery };
+    const nextParams = new URLSearchParams(searchParams?.toString() ?? '');
+    nextParams.set('q', savedQuery);
+    router.replace(`/?${nextParams.toString()}`);
+  }, []);
 };

@@ -1,5 +1,5 @@
 import Button from '@/shared/ui/button/Button';
-import { useAppDispatch } from '@/store/hooks/hooks';
+import { useAppDispatch } from '@/lib/hooks/hooks';
 import { scryfallApi } from '@/api/scryfall-api';
 
 interface Props {

@@ -3,7 +3,8 @@ import styles from './main-page.module.scss';
 import type { CardItem } from '../../shared/constants/types';
 import { chunkArrayCards } from '../../shared/utils/chunk-array-cards/chunk-array-cards';
 import { useCallback } from 'react';
-import { useSearchParams, useNavigate, Outlet, Link } from 'react-router';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { Link } from '@/i18n/navigation';
 import { useSearchQuerySync } from '../../shared/hooks/useSearchQuerySync';
 import { useRedirectInvalidPage } from '../../shared/hooks/useRedirectInvalidPage';
 import { useLocalStorage } from '../../shared/hooks/useLocalStorage';
@@ -22,13 +23,14 @@ import Pagination from '@/shared/ui/pagination/PaginationControls';
 const SLIDER_CHUNK_SIZE = 4;
 
 function MainPage() {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const pageParam = searchParams.get('page');
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const pageParam = searchParams?.get('page') ?? null;
   const parsedPage = Number(pageParam);
   const isInvalidPage = !Number.isInteger(parsedPage) || parsedPage < 1;
   const currentPage = isInvalidPage ? 1 : parsedPage;
-  const currentQuery = searchParams.get('q') ?? '';
+  const currentQuery = searchParams?.get('q') ?? '';
 
   useSearchQuerySync();
 
@@ -52,7 +54,7 @@ function MainPage() {
     (query: string) => {
       saveSearchQuery(query);
 
-      const newParams = new URLSearchParams(searchParams);
+      const newParams = new URLSearchParams(searchParams?.toString() ?? '');
       newParams.set('page', '1');
 
       if (query) {
@@ -61,15 +63,11 @@ function MainPage() {
         newParams.delete('q');
       }
 
-      void navigate(`/?${newParams.toString()}`, { replace: true });
+      router.replace(`/?${newParams.toString()}`);
     },
-    [searchParams, navigate, saveSearchQuery]
+    [searchParams, router, saveSearchQuery]
   );
 
-  const handleCloseDetails = useCallback(() => {
-    const newParams = new URLSearchParams(searchParams);
-    void navigate(`/?${newParams.toString()}`, { replace: true });
-  }, [searchParams, navigate]);
   const sliderRows = chunkArrayCards<CardItem>(items, SLIDER_CHUNK_SIZE);
 
   return (
@@ -82,7 +80,7 @@ function MainPage() {
             onSearch={handleSearch}
           />
           <div className={styles.controls}>
-            <Link to="/about" className={styles.aboutLink}>
+            <Link href="/about" className={styles.aboutLink}>
               About
             </Link>
             <RefreshListButton onRefetch={refetch} />
@@ -110,7 +108,6 @@ function MainPage() {
             <Pagination hasMore={hasMore} />
           </ContentState>
         </div>
-        <Outlet context={{ onClose: handleCloseDetails }} />
       </div>
       <SelectionPanel className={styles.selectionPanel} />
     </main>

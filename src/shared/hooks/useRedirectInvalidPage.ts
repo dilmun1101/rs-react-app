@@ -1,19 +1,20 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useRouter } from 'next/navigation';
+import type { ReadonlyURLSearchParams } from 'next/navigation';
 
 interface Props {
   isInvalidPage: boolean;
-  searchParams: URLSearchParams;
+  searchParams: ReadonlyURLSearchParams | null;
 }
 
 export function useRedirectInvalidPage({ isInvalidPage, searchParams }: Props) {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     if (!isInvalidPage) return;
 
-    const newParams = new URLSearchParams(searchParams);
+    const newParams = new URLSearchParams(searchParams?.toString() ?? '');
     newParams.set('page', '1');
-    void navigate(`/?${newParams.toString()}`, { replace: true });
-  }, [isInvalidPage, searchParams, navigate]);
+    router.replace(`/?${newParams.toString()}`);
+  }, [isInvalidPage, searchParams, router]);
 }
