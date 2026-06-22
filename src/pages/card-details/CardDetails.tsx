@@ -1,5 +1,6 @@
 import Button from '../../shared/ui/button/Button';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import styles from './card-details.module.scss';
 import Card from '../../shared/ui/card/Card';
 import { useGetCardByIdQuery } from '@/api/scryfall-api';
@@ -13,7 +14,6 @@ const SKELETON_COUNT = 1;
 function CardDetails() {
   const params = useParams<{ cardId: string }>();
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const cardId = params?.cardId;
 
@@ -29,11 +29,10 @@ function CardDetails() {
 
   const errorMessage = getRtkQueryErrorMessage(error);
 
-  const handleClose = () => {
-    const newParams = new URLSearchParams(searchParams?.toString() ?? '');
-    const query = newParams.toString();
-
-    router.replace(query ? `/?${query}` : '/');
+  const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    router.back();
   };
 
   return (

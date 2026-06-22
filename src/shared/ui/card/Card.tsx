@@ -1,6 +1,7 @@
 import styles from './card.module.scss';
 import cx from 'classnames';
-import type { CSSProperties, ChangeEvent, MouseEvent } from 'react';
+import type { ChangeEvent, MouseEvent } from 'react';
+import Image from 'next/image';
 
 interface Props {
   id: string;
@@ -28,10 +29,6 @@ function Card({
   isSelected,
   onCheckboxClick,
 }: Props) {
-  const backgroundStyle: CSSProperties = {
-    backgroundImage: `url(${imageUrl ?? ''})`,
-  };
-
   return (
     <div className={cx(styles.card, className)}>
       {showCheckbox && (
@@ -46,9 +43,20 @@ function Card({
       <p className={styles.title}>{name}</p>
       <div
         data-testid="card-image"
-        className={cx(styles.image, imageClassName)}
-        style={backgroundStyle}
-      />
+        className={cx(styles.imageWrapper, imageClassName)}
+      >
+        {imageUrl ? (
+          <Image
+            src={imageUrl}
+            alt={name}
+            width={300}
+            height={300}
+            className={styles.image}
+          />
+        ) : (
+          <div className={styles.imagePlaceholder} />
+        )}
+      </div>
       <p className={styles.info}>{description}</p>
       {artist && <p className={styles.artist}>{artist}</p>}
     </div>

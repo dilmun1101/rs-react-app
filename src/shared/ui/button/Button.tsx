@@ -1,9 +1,7 @@
 import styles from './button.module.scss';
 import cx from 'classnames';
 
-interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  onClick?: () => void;
-}
+type IButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 function Button({ className, ...rest }: IButtonProps) {
   return <button className={cx(styles.button, className)} {...rest} />;

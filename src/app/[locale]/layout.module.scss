@@ -1,0 +1,15 @@
+.pageLayout {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.mainColumn {
+  flex: 1;
+  min-width: 0;
+}
+
+.detailsColumn {
+  width: 320px;
+  flex-shrink: 0;
+}
