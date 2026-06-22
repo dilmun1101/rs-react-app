@@ -28,24 +28,18 @@ async function AboutPage() {
           dilmun1101
         </a>
       </p>
+      <p className={styles.text}>{t('bio')}</p>
       <p className={styles.text}>
-        My name is Anna, and I am a junior frontend developer. I enjoy building
-        user interfaces with React and TypeScript, focusing on clean, readable
-        code and good user experience. I am currently improving my skills
-        through the RS School React course and working on practical projects to
-        grow as a professional.
-      </p>
-      <p className={styles.text}>
-        {INFO_PAGE.COURSE_LABEL}{' '}
+        {t('courseLabel')}{' '}
         <a
           href={INFO_PAGE.RS_SCHOOL_REACT_LINK}
           target="_blank"
           className={styles.link}
         >
-          {INFO_PAGE.COURSE_NAME}
+          {t('courseName')}
         </a>
       </p>
-      <p className={styles.text}>{INFO_PAGE.DESCRIPTION}</p>
+      <p className={styles.text}>{t('description')}</p>
       <Link href="/" className={styles.link}>
         {t('returnLink')}
       </Link>

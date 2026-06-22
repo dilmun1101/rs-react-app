@@ -5,7 +5,8 @@
     "courseLabel": "Course:",
     "courseName": "RS School React Course",
     "description": "This application was created as a study project.",
-    "returnLink": "Return to main page"
+    "returnLink": "Return to main page",
+    "bio": "My name is Anna, and I am a junior frontend developer. I enjoy building user interfaces with React and TypeScript, focusing on clean, readable code and good user experience. I am currently improving my skills through the RS School React course and working on practical projects to grow as a professional."
   },
   "MainPage": {
     "aboutLink": "About",
