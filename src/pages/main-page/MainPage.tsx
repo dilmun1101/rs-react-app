@@ -3,12 +3,10 @@ import styles from './main-page.module.scss';
 import type { CardItem } from '../../shared/constants/types';
 import { chunkArrayCards } from '../../shared/utils/chunk-array-cards/chunk-array-cards';
 import { useCallback } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { Link } from '@/i18n/navigation';
+import { useSearchParams } from 'next/navigation';
+import { Link, useRouter, usePathname } from '@/i18n/navigation';
 import { useSearchQuerySync } from '../../shared/hooks/useSearchQuerySync';
 import { useRedirectInvalidPage } from '../../shared/hooks/useRedirectInvalidPage';
-import { useLocalStorage } from '../../shared/hooks/useLocalStorage';
-import { LOCAL_STORAGE_KEYS } from '../../shared/constants/local-storage-keys';
 
 import SelectionPanel from '@/shared/ui/selection-panel/SelectionPanel';
 import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
@@ -19,12 +17,16 @@ import ContentState from '@/shared/ui/content-state/ContentState';
 import CardsContainer from '@/shared/ui/cards-container/CardsContainer';
 import CardRowSlider from '@/shared/ui/cards-row-slider/CardRowSlider';
 import Pagination from '@/shared/ui/pagination/PaginationControls';
+import { useTranslations } from 'next-intl';
+import LanguageToggle from '@/shared/ui/language-toggle/LanguageToggle';
 
 const SLIDER_CHUNK_SIZE = 4;
 
 function MainPage() {
+  const t = useTranslations('MainPage');
   const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
 
   const pageParam = searchParams?.get('page') ?? null;
   const parsedPage = Number(pageParam);
@@ -33,11 +35,6 @@ function MainPage() {
   const currentQuery = searchParams?.get('q') ?? '';
 
   useSearchQuerySync();
-
-  const { setStoredValue: saveSearchQuery } = useLocalStorage(
-    LOCAL_STORAGE_KEYS.SEARCH_QUERY,
-    ''
-  );
 
   useRedirectInvalidPage({ isInvalidPage, searchParams });
 
@@ -52,8 +49,6 @@ function MainPage() {
 
   const handleSearch = useCallback(
     (query: string) => {
-      saveSearchQuery(query);
-
       const newParams = new URLSearchParams(searchParams?.toString() ?? '');
       newParams.set('page', '1');
 
@@ -63,9 +58,9 @@ function MainPage() {
         newParams.delete('q');
       }
 
-      router.replace(`/?${newParams.toString()}`);
+      router.replace(`${pathname}?${newParams.toString()}`);
     },
-    [searchParams, router, saveSearchQuery]
+    [searchParams, router, pathname]
   );
 
   const sliderRows = chunkArrayCards<CardItem>(items, SLIDER_CHUNK_SIZE);
@@ -81,10 +76,11 @@ function MainPage() {
           />
           <div className={styles.controls}>
             <Link href="/about" className={styles.aboutLink}>
-              About
+              {t('aboutLink')}
             </Link>
             <RefreshListButton onRefetch={refetch} />
             <ThemeToggle />
+            <LanguageToggle />
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import styles from './about-page.module.scss';
 import { Link } from '@/i18n/navigation';
+import { getTranslations } from 'next-intl/server';
 
 const INFO_PAGE = {
   GITHUB_PROFILE_LINK: 'https://github.com/dilmun1101',
@@ -11,12 +12,14 @@ const INFO_PAGE = {
   DESCRIPTION: 'This application was created as a study project.',
 } as const;
 
-function AboutPage() {
+async function AboutPage() {
+  const t = await getTranslations('AboutPage');
+
   return (
     <main className={styles.container}>
-      <h1 className={styles.title}>{INFO_PAGE.TITLE}</h1>
+      <h1 className={styles.title}>{t('title')}</h1>
       <p className={styles.text}>
-        {INFO_PAGE.AUTHOR_LABEL}{' '}
+        {t('authorLabel')}
         <a
           href={INFO_PAGE.GITHUB_PROFILE_LINK}
           target="_blank"
@@ -44,7 +47,7 @@ function AboutPage() {
       </p>
       <p className={styles.text}>{INFO_PAGE.DESCRIPTION}</p>
       <Link href="/" className={styles.link}>
-        Return to main page
+        {t('returnLink')}
       </Link>
     </main>
   );

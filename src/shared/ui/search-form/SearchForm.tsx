@@ -1,9 +1,11 @@
+'use client';
+
 import Input from '../input/Input';
 import Button from '../button/Button';
-import { UI_MESSAGES } from '../../constants/messages';
 import styles from './search-form.module.scss';
 import cx from 'classnames';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface Props extends React.FormHTMLAttributes<HTMLFormElement> {
   defaultValue: string;
@@ -14,6 +16,7 @@ const trimSearchValue = (value: string) => value.trim();
 
 function SearchForm({ onSearch, defaultValue, className, ...rest }: Props) {
   const [query, setQuery] = useState(defaultValue);
+  const t = useTranslations('SearchForm');
 
   const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -41,7 +44,7 @@ function SearchForm({ onSearch, defaultValue, className, ...rest }: Props) {
           hideLabel
         />
         <Button type="submit" className={styles.button}>
-          {UI_MESSAGES.BUTTON_SEARCH}
+          {t('buttonSearch')}
         </Button>
       </div>
     </form>

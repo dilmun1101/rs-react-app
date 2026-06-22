@@ -1,0 +1,41 @@
+{
+  "AboutPage": {
+    "title": "О проекте",
+    "authorLabel": "Автор:",
+    "courseLabel": "Курс:",
+    "courseName": "RS School React Курс",
+    "description": "Это приложение создано как учебный проект.",
+    "returnLink": "Вернуться на главную"
+  },
+  "MainPage": {
+    "aboutLink": "О проекте",
+    "noResults": "Результаты не найдены",
+    "loading": "Загрузка...",
+    "noDescription": "Описание отсутствует",
+    "errorBoundary": "Что-то пошло не так",
+    "defaultError": "Что-то пошло не так. Попробуйте ещё раз.",
+    "unknownError": "Неизвестная ошибка",
+    "buttonSearch": "Найти",
+    "buttonRefresh": "Обновить"
+  },
+  "SelectionPanel": {
+    "selected": "Выбрано: {count} карточек",
+    "unselectAll": "Снять все",
+    "download": "Скачать"
+  },
+  "Pagination": {
+    "next": "Вперёд",
+    "prev": "Назад"
+  },
+  "ErrorTest": {
+    "buttonTestError": "Тест ошибки",
+    "testError": "Тест ошибки"
+  },
+  "SearchForm": {
+    "buttonSearch": "Поиск",
+    "label": "Поиск"
+  },
+  "RefreshListButton": {
+    "refresh": "Обновить список"
+  }
+}

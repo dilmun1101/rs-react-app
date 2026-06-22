@@ -1,8 +1,8 @@
 import { useSearchParams } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
-import { UI_MESSAGES } from '../../constants/messages';
 import styles from './paginataion.module.scss';
 import cx from 'classnames';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   hasMore: boolean;
@@ -12,6 +12,7 @@ interface Props {
 function Pagination({ className, hasMore }: Props) {
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams?.get('page') ?? '1');
+  const t = useTranslations('Pagination');
 
   const prevParams = new URLSearchParams(searchParams?.toString() ?? '');
   prevParams.delete('details');
@@ -34,7 +35,7 @@ function Pagination({ className, hasMore }: Props) {
         className={cx(styles.link, { [styles.disabledLink]: isPrevDisabled })}
         onClick={isPrevDisabled ? preventClick : undefined}
       >
-        {UI_MESSAGES.BUTTON_PREV}
+        {t('prev')}
       </Link>
 
       <span>{currentPage}</span>
@@ -44,7 +45,7 @@ function Pagination({ className, hasMore }: Props) {
         className={cx(styles.link, { [styles.disabledLink]: isNextDisabled })}
         onClick={isNextDisabled ? preventClick : undefined}
       >
-        {UI_MESSAGES.BUTTON_NEXT}
+        {t('next')}
       </Link>
     </div>
   );

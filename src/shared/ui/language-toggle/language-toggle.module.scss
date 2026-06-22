@@ -1,0 +1,20 @@
+@use '../../../shared/styles/mixins' as *;
+@use '../../../shared/styles/variables' as vars;
+
+.toggleLanguage {
+  display: flex;
+  gap: 8px;
+
+  .inactive {
+    border-color: vars.$inactive-text;
+    color: vars.$inactive-text;
+    transition: 1.5s;
+
+    &:hover,
+    &:focus,
+    &:active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+  }
+}
