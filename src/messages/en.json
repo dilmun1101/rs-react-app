@@ -1,0 +1,45 @@
+{
+  "AboutPage": {
+    "title": "About",
+    "authorLabel": "Author:",
+    "courseLabel": "Course:",
+    "courseName": "RS School React Course",
+    "description": "This application was created as a study project.",
+    "returnLink": "Return to main page",
+    "bio": "My name is Anna, and I am a junior frontend developer. I enjoy building user interfaces with React and TypeScript, focusing on clean, readable code and good user experience. I am currently improving my skills through the RS School React course and working on practical projects to grow as a professional."
+  },
+  "MainPage": {
+    "aboutLink": "About",
+    "noResults": "No results found",
+    "loading": "Loading...",
+    "noDescription": "No description available",
+    "errorBoundary": "Something went wrong",
+    "defaultError": "Something went wrong. Please try again.",
+    "unknownError": "Unknown error occurred",
+    "buttonSearch": "Search",
+    "buttonRefresh": "Refresh"
+  },
+  "SelectionPanel": {
+    "selected": "Selected: {count} cards",
+    "unselectAll": "Unselect all",
+    "download": "Download"
+  },
+  "Pagination": {
+    "next": "Next",
+    "prev": "Previous"
+  },
+  "ErrorTest": {
+    "buttonTestError": "Test Error",
+    "testError": "Test Error"
+  },
+  "SearchForm": {
+    "buttonSearch": "Search",
+    "label": "Search"
+  },
+  "RefreshListButton": {
+    "refresh": "Refresh List"
+  },
+  "RefreshDetailsButton": {
+    "refresh": "Refresh details"
+  }
+}

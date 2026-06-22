@@ -24,3 +24,5 @@ coverage
 *.sln
 *.sw?
 .env
+next-env.d.ts
+.next

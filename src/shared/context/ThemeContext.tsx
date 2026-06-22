@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { ThemeContext } from './hooks/use-theme';
 import type { Theme } from './hooks/use-theme';

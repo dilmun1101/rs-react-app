@@ -3,11 +3,10 @@ import styles from './main-page.module.scss';
 import type { CardItem } from '../../shared/constants/types';
 import { chunkArrayCards } from '../../shared/utils/chunk-array-cards/chunk-array-cards';
 import { useCallback } from 'react';
-import { useSearchParams, useNavigate, Outlet, Link } from 'react-router';
+import { useSearchParams } from 'next/navigation';
+import { Link, useRouter, usePathname } from '@/i18n/navigation';
 import { useSearchQuerySync } from '../../shared/hooks/useSearchQuerySync';
 import { useRedirectInvalidPage } from '../../shared/hooks/useRedirectInvalidPage';
-import { useLocalStorage } from '../../shared/hooks/useLocalStorage';
-import { LOCAL_STORAGE_KEYS } from '../../shared/constants/local-storage-keys';
 
 import SelectionPanel from '@/shared/ui/selection-panel/SelectionPanel';
 import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
@@ -18,24 +17,24 @@ import ContentState from '@/shared/ui/content-state/ContentState';
 import CardsContainer from '@/shared/ui/cards-container/CardsContainer';
 import CardRowSlider from '@/shared/ui/cards-row-slider/CardRowSlider';
 import Pagination from '@/shared/ui/pagination/PaginationControls';
+import { useTranslations } from 'next-intl';
+import LanguageToggle from '@/shared/ui/language-toggle/LanguageToggle';
 
 const SLIDER_CHUNK_SIZE = 4;
 
 function MainPage() {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const pageParam = searchParams.get('page');
+  const t = useTranslations('MainPage');
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const pageParam = searchParams?.get('page') ?? null;
   const parsedPage = Number(pageParam);
   const isInvalidPage = !Number.isInteger(parsedPage) || parsedPage < 1;
   const currentPage = isInvalidPage ? 1 : parsedPage;
-  const currentQuery = searchParams.get('q') ?? '';
+  const currentQuery = searchParams?.get('q') ?? '';
 
   useSearchQuerySync();
-
-  const { setStoredValue: saveSearchQuery } = useLocalStorage(
-    LOCAL_STORAGE_KEYS.SEARCH_QUERY,
-    ''
-  );
 
   useRedirectInvalidPage({ isInvalidPage, searchParams });
 
@@ -50,9 +49,7 @@ function MainPage() {
 
   const handleSearch = useCallback(
     (query: string) => {
-      saveSearchQuery(query);
-
-      const newParams = new URLSearchParams(searchParams);
+      const newParams = new URLSearchParams(searchParams?.toString() ?? '');
       newParams.set('page', '1');
 
       if (query) {
@@ -61,15 +58,11 @@ function MainPage() {
         newParams.delete('q');
       }
 
-      void navigate(`/?${newParams.toString()}`, { replace: true });
+      router.replace(`${pathname}?${newParams.toString()}`);
     },
-    [searchParams, navigate, saveSearchQuery]
+    [searchParams, router, pathname]
   );
 
-  const handleCloseDetails = useCallback(() => {
-    const newParams = new URLSearchParams(searchParams);
-    void navigate(`/?${newParams.toString()}`, { replace: true });
-  }, [searchParams, navigate]);
   const sliderRows = chunkArrayCards<CardItem>(items, SLIDER_CHUNK_SIZE);
 
   return (
@@ -82,11 +75,12 @@ function MainPage() {
             onSearch={handleSearch}
           />
           <div className={styles.controls}>
-            <Link to="/about" className={styles.aboutLink}>
-              About
+            <Link href="/about" className={styles.aboutLink}>
+              {t('aboutLink')}
             </Link>
             <RefreshListButton onRefetch={refetch} />
             <ThemeToggle />
+            <LanguageToggle />
           </div>
         </div>
       </div>
@@ -110,7 +104,6 @@ function MainPage() {
             <Pagination hasMore={hasMore} />
           </ContentState>
         </div>
-        <Outlet context={{ onClose: handleCloseDetails }} />
       </div>
       <SelectionPanel className={styles.selectionPanel} />
     </main>

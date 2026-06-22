@@ -17,7 +17,7 @@ export const scryfallApi = createApi({
     },
   }),
 
-  keepUnusedDataFor: Number(import.meta.env.VITE_CACHE_TTL_SECONDS ?? 60),
+  keepUnusedDataFor: Number(process.env.NEXT_PUBLIC_CACHE_TTL_SECONDS ?? 60),
 
   tagTypes: ['Cards', 'Card'],
 

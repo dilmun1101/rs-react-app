@@ -1,0 +1,45 @@
+{
+  "AboutPage": {
+    "title": "О проекте",
+    "authorLabel": "Автор:",
+    "courseLabel": "Курс:",
+    "courseName": "RS School React Курс",
+    "description": "Это приложение создано как учебный проект.",
+    "returnLink": "Вернуться на главную",
+    "bio": "Меня зовут Анна, и я junior frontend developer. Мне нравится создавать пользовательские интерфейсы с помощью React и TypeScript, уделяя внимание чистому, читаемому коду и хорошему пользовательскому опыту. Сейчас я развиваю свои навыки на курсе RS School React и работаю над практическими проектами, чтобы расти как специалист."
+  },
+  "MainPage": {
+    "aboutLink": "О проекте",
+    "noResults": "Результаты не найдены",
+    "loading": "Загрузка...",
+    "noDescription": "Описание отсутствует",
+    "errorBoundary": "Что-то пошло не так",
+    "defaultError": "Что-то пошло не так. Попробуйте ещё раз.",
+    "unknownError": "Неизвестная ошибка",
+    "buttonSearch": "Найти",
+    "buttonRefresh": "Обновить"
+  },
+  "SelectionPanel": {
+    "selected": "Выбрано: {count} карточек",
+    "unselectAll": "Снять все",
+    "download": "Скачать"
+  },
+  "Pagination": {
+    "next": "Вперёд",
+    "prev": "Назад"
+  },
+  "ErrorTest": {
+    "buttonTestError": "Тест ошибки",
+    "testError": "Тест ошибки"
+  },
+  "SearchForm": {
+    "buttonSearch": "Поиск",
+    "label": "Поиск"
+  },
+  "RefreshListButton": {
+    "refresh": "Обновить список"
+  },
+  "RefreshDetailsButton": {
+    "refresh": "Обновить детали"
+  }
+}

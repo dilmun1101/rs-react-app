@@ -3,7 +3,8 @@ import styles from './card-row-slider.module.scss';
 import Button from '../button/Button';
 import cx from 'classnames';
 import { useRef } from 'react';
-import { Link, useSearchParams } from 'react-router';
+import { useSearchParams } from 'next/navigation';
+import { Link } from '@/i18n/navigation';
 import CardWithSelection from '../card-with-selection/CardWithSelection';
 
 const SLIDER_CONFIG = {
@@ -19,7 +20,8 @@ interface Props {
 
 function CardRowSlider({ cards, className }: Props) {
   const trackRef = useRef<HTMLDivElement | null>(null);
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const search = searchParams?.toString() ?? '';
 
   const scroll = (direction: 'left' | 'right') => {
     trackRef.current?.scrollBy({
@@ -49,7 +51,9 @@ function CardRowSlider({ cards, className }: Props) {
         {cards.map((card) => (
           <Link
             key={card.id}
-            to={`/details/${card.id}?${searchParams.toString()}`}
+            href={
+              search ? `/details/${card.id}?${search}` : `/details/${card.id}`
+            }
             className={styles.cardLink}
           >
             <CardWithSelection
